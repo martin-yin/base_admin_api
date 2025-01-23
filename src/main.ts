@@ -1,20 +1,35 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import {
+  AllExceptionsFilter,
+  HttpExceptionFilter,
+  QueryFailedExceptionFilter,
+} from './common/filters';
 import { LoggerService } from './common/logger/logger.service';
-import { AllExceptionsFilter } from './common/filters/all-exception.filter';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import {
+  LoggingInterceptor,
+  TransformInterceptor,
+} from './common/interceptors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // const configService: ConfigService = app.get(ConfigService);
+  const configService: ConfigService = app.get(ConfigService);
   const loggerService = app.get(LoggerService);
-  // 全局过滤器
+
+  app.useGlobalInterceptors(
+    new TransformInterceptor(),
+    new LoggingInterceptor(loggerService),
+  );
+
+  // 全局拦截器
   app.useGlobalFilters(
     new AllExceptionsFilter(loggerService),
     new HttpExceptionFilter(loggerService),
-    // new QueryFailedExceptionFilter(loggerService),
+    new QueryFailedExceptionFilter(loggerService),
   );
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(configService.get('PORT'));
 }
+
 bootstrap();

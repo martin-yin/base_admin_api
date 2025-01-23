@@ -11,7 +11,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    this.logger.info('Error, 不知道报什么错了！');
     return this.appService.getHello();
   }
 }

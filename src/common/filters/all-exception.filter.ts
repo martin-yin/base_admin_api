@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { LoggerService } from '../logger/logger.service';
-import { get_currentTime } from '../utils';
+import { get_current_time } from '../utils';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -24,7 +24,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const data = {
       code,
       status: false,
-      time: get_currentTime(),
+      time: get_current_time(),
       path: req.url,
       error: exception.message,
     };

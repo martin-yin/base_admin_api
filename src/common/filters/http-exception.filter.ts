@@ -5,9 +5,9 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { ThrottlerException } from '@nestjs/throttler';
-import { ApiException } from '../exception/api.exception';
+import { ApiException } from '../exceptions/api.exception';
 import { LoggerService } from '../logger/logger.service';
-import { get_currentTime } from '../utils';
+import { get_current_time } from '../utils';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -23,7 +23,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         exception instanceof ApiException ? exception?.Code || status : status,
       status: false,
       message: exception.message,
-      time: get_currentTime(),
+      time: get_current_time(),
       path: req.url,
     };
 
