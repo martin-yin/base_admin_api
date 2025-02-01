@@ -1,14 +1,13 @@
-import { IsEmpty } from 'class-validator';
+import { IsIn, IsNumber, IsString } from 'class-validator';
 
 export class CreateMenuDto {
-  @IsEmpty({
+  @IsString({
     message: '名称不能为空',
   })
   name: string;
 
-  @IsEmpty({
-    message: '类型不能为空',
-  })
+  @IsNumber({}, { message: '类型不能为空' })
+  @IsIn([0, 1, 2], { message: '类型错误' })
   menuType: number;
 
   url: string;

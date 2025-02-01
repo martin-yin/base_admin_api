@@ -76,26 +76,24 @@ export class UserService {
       if (!userEntity) {
         throw new Error('用户不存在');
       }
-      userEntity.userName = user.userName;
-      userEntity.password = user.password;
-      userEntity.avatar = '';
-      userEntity.hashSlat = 'hash_slat';
-      await manager.save(userEntity);
+      await manager.save(UserEntity, { ...userEntity, ...user });
       await manager.delete(UserRoleEntity, { user_id: id });
       const userRoles = this.createRoleEntities(userEntity.id, user.roleIds);
-      await manager.save(userRoles);
+      await manager.save(UserRoleEntity, userRoles);
       return userEntity;
     });
   }
 
-  async deleteUser(id: number): Promise<void> {
-    return await this.entityManager.transaction(async (manager) => {
-      const userEntity = await manager.findOne(UserEntity, { where: { id } });
-      if (!userEntity) {
-        throw new Error('用户不存在');
-      }
-      userEntity.status = 0;
-      await manager.save(UserEntity);
+  async deleteUser(id: number): Promise<UserEntity> {
+    const userEntity = await this.userRepository.findOne({
+      where: { id },
+    });
+    if (!userEntity) {
+      throw new Error('用户不存在');
+    }
+    return await this.userRepository.save({
+      ...userEntity,
+      status: 0,
     });
   }
 }

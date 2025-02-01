@@ -14,13 +14,22 @@ export class MenuService {
     private menuRepository: Repository<MenuEntity>,
   ) {}
 
-  async getMenuTree(parentId: number = 0): Promise<MenuEntity[]> {
+  async getMenuTree(): Promise<MenuEntity[]> {
     const menus = await this.menuRepository.find({
-      where: { parentId },
-      order: { sort: 'ASC' },
+      where: {
+        status: 1,
+      },
     });
+    return this.buildTree(menus);
+  }
 
-    return menus;
+  private buildTree(menus: MenuEntity[], parentId: number = 0): MenuEntity[] {
+    return menus
+      .filter((menu) => menu.parentId === parentId)
+      .map((menu) => ({
+        ...menu,
+        children: this.buildTree(menus, menu.id),
+      }));
   }
 
   async createMenu(menu: CreateMenuDto): Promise<MenuEntity> {
@@ -33,14 +42,14 @@ export class MenuService {
 
   async updateMenu(id: number, menu: UpdateMenuDto): Promise<MenuEntity> {
     const menuEntity = await this.menuRepository.findOne({
-      where: { id },
+      where: {
+        id,
+      },
     });
     if (!menuEntity) {
       throw new Error('菜单不存在');
     }
-    return await this.menuRepository.merge(menuEntity, {
-      ...menu,
-    });
+    return await this.menuRepository.save({ ...menuEntity, ...menu });
   }
 
   async deleteMenu(id: number): Promise<boolean> {

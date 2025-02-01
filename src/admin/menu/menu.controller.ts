@@ -16,7 +16,7 @@ export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   @Get()
-  async getMenuTree(): Promise<MenuEntity[]> {
+  async getMenuTree(): Promise<any> {
     return await this.menuService.getMenuTree();
   }
 

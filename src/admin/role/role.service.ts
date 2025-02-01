@@ -26,9 +26,10 @@ export class RoleService {
 
   async updateRole(id: number, role: UpdateRoleDto): Promise<RoleEntity> {
     const roleEntity = await this.roleRepository.findOne({ where: { id } });
-    roleEntity.roleName = role.roleName;
-    roleEntity.desc = role.desc;
-    return await this.roleRepository.save(roleEntity);
+    if (!roleEntity) {
+      throw Error('菜单不存在！');
+    }
+    return await this.roleRepository.save({ ...roleEntity, ...role });
   }
 
   async deleteRole(id: number): Promise<void> {
