@@ -38,7 +38,7 @@ export class LoggingInterceptor implements NestInterceptor {
       map((data: Result) => {
         let content = JSON.stringify(data);
         const maxSize = 2000;
-        if (content.length > maxSize)
+        if (content?.length > maxSize)
           content = `${content.substring(0, maxSize)}...`;
 
         const logFormat = `响应内容: ${content}\n 结束... ${'耗时: ' + (Date.now() - now) + 'ms'}`;
