@@ -9,6 +9,7 @@ import { ValidationProvider } from './common/validation/validation.provider';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity, UserRoleEntity } from './admin/user/entity/user.entity';
 import { MenuEntity } from './admin/menu/entity';
+import { RoleEntity, RoleMenuEntity } from './admin/role/entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -21,7 +22,13 @@ import { MenuEntity } from './admin/menu/entity';
       dateStrings: true, // 日期以字符串形式返回
       charset: 'utf8mb4',
       database: 'base_admin',
-      entities: [UserEntity, UserRoleEntity, MenuEntity],
+      entities: [
+        UserEntity,
+        UserRoleEntity,
+        MenuEntity,
+        RoleEntity,
+        RoleMenuEntity,
+      ],
       synchronize: true,
     }),
     CommonModule,
