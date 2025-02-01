@@ -7,8 +7,9 @@ export class UserEntity extends BaseEntity {
     length: 16,
     type: 'varchar',
     unique: true,
+    name: 'user_name',
   })
-  user_name: string;
+  userName: string;
 
   @Column({
     length: 16,
@@ -24,8 +25,9 @@ export class UserEntity extends BaseEntity {
 
   @Column({
     comment: '密码哈希加盐值',
+    name: 'hash_slat',
   })
-  hash_slat: string;
+  hashSlat: string;
 }
 
 @Entity('user_role')
@@ -42,8 +44,9 @@ export class UserRoleEntity {
   @Column({
     type: 'int',
     comment: '角色ID',
+    name: 'role_id',
   })
-  role_id: number;
+  roleId: number;
 }
 
 @Entity('role')
@@ -51,8 +54,9 @@ export class RoleEntity extends BaseEntity {
   @Column({
     length: 16,
     type: 'varchar',
+    name: 'role_name',
   })
-  role_name: string;
+  roleName: string;
 
   @Column({
     type: 'varchar',
@@ -68,12 +72,14 @@ export class RoleMenuEntity extends BaseEntity {
   @Column({
     type: 'int',
     comment: '角色ID',
+    name: 'role_id',
   })
-  role_id: number;
+  roleId: number;
 
   @Column({
     type: 'int',
     comment: '菜单ID',
+    name: 'menu_id',
   })
-  menu_id: number;
+  menuId: number;
 }

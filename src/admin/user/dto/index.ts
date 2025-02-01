@@ -4,7 +4,7 @@ export class CreateUserDto {
   @IsString({
     message: '用户名不能为空',
   })
-  username: string;
+  userName: string;
 
   @IsString({
     message: '密码不能为空',

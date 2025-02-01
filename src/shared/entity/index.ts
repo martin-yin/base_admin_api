@@ -13,21 +13,26 @@ export class BaseEntity {
 
   @Column({
     type: 'int',
-    comment: '是否删除',
-    default: 0,
+    comment: '是否删除, 1 启动，0： 停用',
+    default: 1,
+    name: 'is_delete',
   })
-  is_delete: number;
+  isDelete: number;
 
   @Column({
     type: 'int',
-    comment: '状态',
-    default: 0,
+    comment: '状态 1: 启用 0: 停用',
+    default: 1,
   })
   status: number;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({
+    name: 'created_at',
+  })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @UpdateDateColumn({
+    name: 'updated_at',
+  })
+  updatedAt: Date;
 }

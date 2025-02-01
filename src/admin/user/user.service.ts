@@ -13,12 +13,11 @@ export class UserService {
     private userRepository: Repository<UserEntity>,
   ) {}
 
-  // 辅助方法
   private createUserEntity(user: CreateUserDto): UserEntity {
     const userEntity = new UserEntity();
-    userEntity.user_name = user.username;
+    userEntity.userName = user.userName;
     userEntity.password = user.password;
-    userEntity.hash_slat = 'hash_slat';
+    userEntity.hashSlat = 'hash_slat';
     userEntity.avatar = '';
     return userEntity;
   }
@@ -30,7 +29,7 @@ export class UserService {
     return roleIds.map((roleId) => {
       const userRoleEntity = new UserRoleEntity();
       userRoleEntity.user_id = user_id;
-      userRoleEntity.role_id = roleId;
+      userRoleEntity.roleId = roleId;
       return userRoleEntity;
     });
   }
@@ -49,10 +48,10 @@ export class UserService {
     }
   }
 
-  async findOneByUsername(username: string): Promise<UserEntity> {
+  async findOneByUsername(userName: string): Promise<UserEntity> {
     try {
       return this.userRepository.findOne({
-        where: { user_name: username },
+        where: { userName },
       });
     } catch {
       throw new Error('用户不存在');
@@ -61,7 +60,7 @@ export class UserService {
 
   async createUser(user: CreateUserDto): Promise<UserEntity> {
     return await this.entityManager.transaction(async (manager) => {
-      if (await this.findOneByUsername(user.username)) {
+      if (await this.findOneByUsername(user.userName)) {
         throw new Error('用户名已存在, 请更换用户名');
       }
       const userEntity = await manager.save(this.createUserEntity(user));
@@ -77,15 +76,26 @@ export class UserService {
       if (!userEntity) {
         throw new Error('用户不存在');
       }
-      userEntity.user_name = user.username;
+      userEntity.userName = user.userName;
       userEntity.password = user.password;
       userEntity.avatar = '';
-      userEntity.hash_slat = 'hash_slat';
+      userEntity.hashSlat = 'hash_slat';
       await manager.save(userEntity);
       await manager.delete(UserRoleEntity, { user_id: id });
       const userRoles = this.createRoleEntities(userEntity.id, user.roleIds);
       await manager.save(userRoles);
       return userEntity;
+    });
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    return await this.entityManager.transaction(async (manager) => {
+      const userEntity = await manager.findOne(UserEntity, { where: { id } });
+      if (!userEntity) {
+        throw new Error('用户不存在');
+      }
+      userEntity.status = 0;
+      await manager.save(UserEntity);
     });
   }
 }

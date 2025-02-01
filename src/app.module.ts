@@ -8,19 +8,20 @@ import { CommonModule } from './common/common.module';
 import { ValidationProvider } from './common/validation/validation.provider';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity, UserRoleEntity } from './admin/user/entity/user.entity';
+import { MenuEntity } from './admin/menu/entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
-      port: 32768,
+      port: 32769,
       username: 'root',
       password: '123456',
       timezone: '+08:00',
       dateStrings: true, // 日期以字符串形式返回
       charset: 'utf8mb4',
       database: 'base_admin',
-      entities: [UserEntity, UserRoleEntity],
+      entities: [UserEntity, UserRoleEntity, MenuEntity],
       synchronize: true,
     }),
     CommonModule,
