@@ -15,11 +15,7 @@ export class MenuService {
   ) {}
 
   async getMenuTree(): Promise<MenuEntity[]> {
-    const menus = await this.menuRepository.find({
-      where: {
-        status: 1,
-      },
-    });
+    const menus = await this.menuRepository.find();
     return this.buildTree(menus);
   }
 
@@ -33,10 +29,11 @@ export class MenuService {
   }
 
   async createMenu(menu: CreateMenuDto): Promise<MenuEntity> {
-    const menuEntity = this.menuRepository.create({
-      ...menu,
-    });
-    const result = await this.menuRepository.save(menuEntity);
+    const result = await this.menuRepository.save(
+      this.menuRepository.create({
+        ...menu,
+      }),
+    );
     return result;
   }
 
