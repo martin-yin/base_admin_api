@@ -22,6 +22,7 @@ export const AUTHORIZE_ROLE_GETALL = 'api:role:getAll';
 // user 控制器
 export const AUTHORIZE_USER_GET = 'api:user:get';
 export const AUTHORIZE_USER_GETALL = 'api:user:getAll';
+export const AUTHORIZE_USER_CREATE = 'api:user:create';
 
 // dictionary 控制器 AUTHORIZEDICTIONARY
 export const AUTHORIZE_DICTIONARY_CREATE = 'api:dictionary:create';

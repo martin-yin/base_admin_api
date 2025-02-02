@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { AUTHORIZE_METADATA } from '../constants/api-authorize';
 import { ApiException } from '../exceptions';
-import { AuthService } from 'src/admin/auth/auth.service';
+import { AuthService } from '@/app/admin/auth/auth.service';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
@@ -25,11 +25,9 @@ export class PermissionGuard implements CanActivate {
     if (!permissionList) {
       return true;
     }
-    if (await this.authService.validatePerm(permissionList, userId)) {
+    if (await this.authService.validatePerm(userId, permissionList)) {
       return true;
     }
-    // return true;
-
     throw new ApiException('您没有权限访问该接口', HttpStatus.FORBIDDEN);
   }
 }
