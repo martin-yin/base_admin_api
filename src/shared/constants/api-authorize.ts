@@ -6,16 +6,9 @@ export const AUTHORIZE_MENU_GET = 'api:menu:get';
 export const AUTHORIZE_MENU_CREATE = 'api:menu:create';
 export const AUTHORIZE_MENU_EDIT = 'api:menu:edit';
 export const AUTHORIZE_MENU_DELETE = 'api:menu:delete';
-// api 控制器
-export const AUTHORIZE_API_GETALL = 'api:api:getAll';
-export const AUTHORIZE_API_GET = 'api:api:get';
-export const AUTHORIZE_API_CREATE = 'api:api:create';
-export const AUTHORIZE_API_EDIT = 'api:api:edit';
-export const AUTHORIZE_API_DELETE = 'api:api:delete';
 // role 控制器
 export const AUTHORIZE_ROLE_CREATE = 'api:role:create';
 export const AUTHORIZE_ROLE_SAVEROLEMENUS = 'api:role:saveRoleMenus';
-// export const AUTHORIZE_ROLE_SAVEROLEAPIS = 'api:role:saveRoleApis';
 export const AUTHORIZE_ROLE_GET = 'api:role:get';
 export const AUTHORIZE_ROLE_GETALL = 'api:role:getAll';
 
@@ -23,6 +16,8 @@ export const AUTHORIZE_ROLE_GETALL = 'api:role:getAll';
 export const AUTHORIZE_USER_GET = 'api:user:get';
 export const AUTHORIZE_USER_GETALL = 'api:user:getAll';
 export const AUTHORIZE_USER_CREATE = 'api:user:create';
+export const AUTHORIZE_USER_UPDATE = 'api:user:update';
+export const AUTHORIZE_USER_DELETE = 'api:user:delete';
 
 // dictionary 控制器 AUTHORIZEDICTIONARY
 export const AUTHORIZE_DICTIONARY_CREATE = 'api:dictionary:create';

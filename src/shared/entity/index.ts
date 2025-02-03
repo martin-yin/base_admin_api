@@ -35,4 +35,7 @@ export class BaseEntity {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @Column({ type: 'int', comment: '排序', default: 0 })
+  sort: number;
 }

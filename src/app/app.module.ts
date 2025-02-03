@@ -12,8 +12,8 @@ import { DatabaseModule } from '@/shared/module/database.module';
     DatabaseModule,
     ThrottlerModule.forRoot([
       {
-        ttl: 60000,
-        limit: 10,
+        ttl: 6000,
+        limit: 1000,
       },
     ]),
     AdminModule,

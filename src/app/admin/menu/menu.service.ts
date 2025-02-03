@@ -18,17 +18,27 @@ export class MenuService extends DataBaseService<MenuEntity> {
   }
 
   async getMenuTree(): Promise<MenuEntity[]> {
-    const menus = await this.menuRepository.find();
+    const menus = await this.menuRepository.find({
+      order: {
+        sort: 'ASC',
+      },
+    });
     return this.buildTree(menus);
   }
 
   private buildTree(menus: MenuEntity[], parentId: number = 0): MenuEntity[] {
     return menus
       .filter((menu) => menu.parentId === parentId)
-      .map((menu) => ({
-        ...menu,
-        children: this.buildTree(menus, menu.id),
-      }));
+      .map((menu) => {
+        const item = {
+          ...menu,
+          children: this.buildTree(menus, menu.id),
+        };
+        if (item.children.length === 0) {
+          delete item.children;
+        }
+        return item;
+      });
   }
 
   async createMenu(menu: CreateMenuDto): Promise<MenuEntity> {

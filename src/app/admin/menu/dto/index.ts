@@ -1,4 +1,4 @@
-import { IsIn, IsNumber, IsString } from 'class-validator';
+import { IsIn, IsString } from 'class-validator';
 
 export class CreateMenuDto {
   @IsString({
@@ -6,7 +6,6 @@ export class CreateMenuDto {
   })
   name: string;
 
-  @IsNumber({}, { message: '类型不能为空' })
   @IsIn([0, 1, 2], { message: '类型错误' })
   menuType: number;
 

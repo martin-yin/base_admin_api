@@ -43,7 +43,6 @@ export class AuthService {
     id: number,
     permissionList: Array<Array<string | null> | string>,
   ) {
-    console.log(permissionList, '=====');
     const user = await this.userService.findOne(id);
     const userPermission = await this.roleService.getRolePermissionList(
       user.id,

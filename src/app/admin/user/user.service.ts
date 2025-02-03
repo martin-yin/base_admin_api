@@ -65,7 +65,10 @@ export class UserService extends DataBaseService<UserEntity> {
 
   async login(userName: string, password: string): Promise<UserEntity> {
     const userEntity = await this.findOneByUsername(userName);
-    if (!verifyPassword(password, userEntity.hashSlat, userEntity.password)) {
+    if (
+      !userEntity ||
+      !verifyPassword(password, userEntity.hashSlat, userEntity.password)
+    ) {
       throw new ApiException(`账号或密码错误`, HttpStatus.UNAUTHORIZED);
     }
     return userEntity;

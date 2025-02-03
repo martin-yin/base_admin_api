@@ -15,7 +15,7 @@ export class MenuEntity extends BaseEntity {
   name: string;
 
   @Column({ type: 'varchar', length: 255, default: '' })
-  url: string;
+  path: string;
 
   @Column({ type: 'varchar', length: 255, default: '' })
   component: string;
@@ -34,9 +34,6 @@ export class MenuEntity extends BaseEntity {
   @Column({ type: 'varchar', length: 255, default: '' })
   icon: string;
 
-  @Column({ type: 'int', comment: '排序', default: 0 })
-  sort: number;
-
   @Column({ type: 'int', comment: '是否缓存', default: 0, name: 'keep_alive' })
   keepAlive: number; // 是否缓存，缓存后下次进入会自动加载
 
@@ -49,7 +46,7 @@ export class MenuEntity extends BaseEntity {
     default: 0,
     name: 'open_type',
   })
-  openType: number; // 打开方式 0 当前页 1 外部链接
+  openType: number;
 
   @Column({ type: 'int', comment: '上级菜单', default: 0, name: 'parent_id' })
   parentId: number; // 上级菜单
