@@ -1,15 +1,15 @@
 import { BaseEntity } from '@/shared/entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('user')
-export class UserEntity extends BaseEntity {
+@Entity('managements')
+export class ManagementEntity extends BaseEntity {
   @Column({
     length: 16,
     type: 'varchar',
     unique: true,
-    name: 'user_name',
+    name: 'username',
   })
-  userName: string;
+  username: string;
 
   @Column({
     length: 64,
@@ -30,16 +30,17 @@ export class UserEntity extends BaseEntity {
   hashSlat: string;
 }
 
-@Entity('user_role')
-export class UserRoleEntity {
+@Entity('management_roles')
+export class ManagementRoleEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'int',
     comment: '用户ID',
+    name: 'management_id',
   })
-  user_id: number;
+  managementId: number;
 
   @Column({
     type: 'int',

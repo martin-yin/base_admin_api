@@ -1,10 +1,10 @@
 import { IsArray, IsString } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateManagementDto {
   @IsString({
     message: '用户名不能为空',
   })
-  userName: string;
+  username: string;
 
   @IsString({
     message: '密码不能为空',
@@ -17,4 +17,4 @@ export class CreateUserDto {
   roleIds: number[];
 }
 
-export class UpdateUserDto extends CreateUserDto {}
+export class UpdateManagementDto extends CreateManagementDto {}

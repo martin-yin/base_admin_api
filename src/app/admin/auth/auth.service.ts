@@ -1,34 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as _ from 'lodash';
-import { UserEntity } from '../user/entity/user.entity';
 import { RoleService } from '../role/role.service';
+import { ManagementService } from '../management/management.service';
+import { ManagementEntity } from '../management/entity/management.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private managementService: ManagementService,
     private roleService: RoleService,
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.userService.findByUserName(username);
-    if (user && user.password === pass) {
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.managementService.findByUserName(username);
+    if (user && user.password === password) {
       delete user.password;
       return user;
     }
     return null;
   }
 
-  async login(user: UserEntity) {
-    const userEntity = await this.userService.login(
-      user.userName,
+  async login(user: ManagementEntity) {
+    const managementEntity = await this.managementService.login(
+      user.username,
       user.password,
     );
-    const { userName, id } = userEntity;
-    const payload = { userName, sub: id };
+    const { username, id } = managementEntity;
+    const payload = { username, sub: id };
     return {
       token: this.jwtService.sign(payload),
     };
@@ -43,7 +43,7 @@ export class AuthService {
     id: number,
     permissionList: Array<Array<string | null> | string>,
   ) {
-    const user = await this.userService.findOne(id);
+    const user = await this.managementService.findOne(id);
     const userPermission = await this.roleService.getRolePermissionList(
       user.id,
     );

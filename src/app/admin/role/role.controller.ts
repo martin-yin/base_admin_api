@@ -7,13 +7,19 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { RoleService } from './role.service';
-import { RoleEntity } from './entity';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
+import { RoleEntity } from './entity';
+import { RoleService } from './role.service';
+import { RoleInfo } from './types';
 
 @Controller('role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
+
+  @Get(':id')
+  async getRoleById(@Param('id') id: number): Promise<RoleInfo> {
+    return await this.roleService.getRoleById(id);
+  }
 
   @Get()
   async getRoleList(): Promise<RoleEntity[]> {

@@ -13,8 +13,8 @@ export class BaseEntity {
 
   @Column({
     type: 'int',
-    comment: '是否删除, 1 启动，0： 停用',
-    default: 1,
+    comment: '是否删除, 1 是，0： 否',
+    default: 0,
     name: 'is_delete',
   })
   isDelete: number;
@@ -26,13 +26,23 @@ export class BaseEntity {
   })
   status: number;
 
+  @Column({
+    type: 'varchar',
+    comment: '备注',
+    length: 255,
+    default: '',
+  })
+  remark: string;
+
   @CreateDateColumn({
     name: 'created_at',
+    type: 'timestamp',
   })
   createdAt: Date;
 
-  @UpdateDateColumn({
+  @CreateDateColumn({
     name: 'updated_at',
+    type: 'timestamp',
   })
   updatedAt: Date;
 

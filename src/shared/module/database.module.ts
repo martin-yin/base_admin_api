@@ -1,11 +1,28 @@
+import { MenuEntity } from '@/app/admin/menu/entity';
+import { RoleEntity, RoleMenuEntity } from '@/app/admin/role/entity';
+import {
+  ManagementEntity,
+  ManagementRoleEntity,
+} from '@/app/admin/management/entity/management.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmConfigService } from '../service/typeorm.service';
-
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '123456789',
+      database: 'base_admin',
+      entities: [
+        RoleEntity,
+        RoleMenuEntity,
+        ManagementEntity,
+        ManagementRoleEntity,
+        MenuEntity,
+      ],
+      synchronize: true,
     }),
   ],
   providers: [],

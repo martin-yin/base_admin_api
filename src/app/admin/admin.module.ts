@@ -7,10 +7,16 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { MenuModule } from './menu/menu.module';
 import { RoleModule } from './role/role.module';
-import { UserModule } from './user/user.module';
+import { ManagementModule } from './management/management.module';
 
 @Module({
-  imports: [AdminJwtModule, AuthModule, UserModule, MenuModule, RoleModule],
+  imports: [
+    AdminJwtModule,
+    AuthModule,
+    ManagementModule,
+    MenuModule,
+    RoleModule,
+  ],
   controllers: [],
   providers: [
     AdminJwtStrategy,

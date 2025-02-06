@@ -1,22 +1,17 @@
 import { BaseEntity } from '@/shared/entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('role')
+@Entity('roles')
 export class RoleEntity extends BaseEntity {
   @Column({
     length: 16,
     type: 'varchar',
-    name: 'role_name',
+    name: 'name',
   })
-  roleName: string;
-
-  @Column({
-    type: 'varchar',
-  })
-  desc: string;
+  name: string;
 }
 
-@Entity('role_menu')
+@Entity('role_menus')
 export class RoleMenuEntity {
   @PrimaryGeneratedColumn()
   id: number;

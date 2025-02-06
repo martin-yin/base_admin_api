@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { RoleEntity, RoleMenuEntity } from './entity';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { DataBaseService } from '@/shared/service/base.service';
+import { ApiException } from '@/shared/exceptions';
+import { RoleInfo } from './types';
 
 @Injectable()
 export class RoleService extends DataBaseService<RoleEntity> {
@@ -12,6 +14,8 @@ export class RoleService extends DataBaseService<RoleEntity> {
     private entityManager: EntityManager,
     @InjectRepository(RoleEntity)
     private roleRepository: Repository<RoleEntity>,
+    @InjectRepository(RoleMenuEntity)
+    private roleMenuRepository: Repository<RoleMenuEntity>,
   ) {
     super(roleRepository);
   }
@@ -26,6 +30,21 @@ export class RoleService extends DataBaseService<RoleEntity> {
       roleMenuEntity.menuId = menuId;
       return roleMenuEntity;
     });
+  }
+
+  async getRoleById(id: number): Promise<RoleInfo> {
+    const roleEntity = await this.findOne(id);
+    if (!roleEntity) {
+      throw new ApiException(`角色不存在！`, HttpStatus.NOT_FOUND);
+    }
+    const roleMenu = await this.roleMenuRepository.find({
+      where: { roleId: id },
+    });
+    const menuIds = roleMenu.map((item) => item.menuId);
+    return {
+      ...roleEntity,
+      menuIds,
+    };
   }
 
   async createRole(role: CreateRoleDto): Promise<RoleEntity> {
@@ -43,18 +62,17 @@ export class RoleService extends DataBaseService<RoleEntity> {
   }
 
   async getRoleList(): Promise<RoleEntity[]> {
-    return await this.roleRepository.find();
-  }
-
-  async getRoleById(id: number): Promise<RoleEntity> {
-    return await this.findOne(id);
+    return await this.roleRepository.find({
+      where: { isDelete: 0 },
+      order: { sort: 'ASC' },
+    });
   }
 
   async updateRole(id: number, role: UpdateRoleDto): Promise<RoleEntity> {
     return await this.entityManager.transaction(async (manager) => {
       let roleEntity = await this.findOne(id);
       if (!roleEntity) {
-        throw Error('角色不存在！');
+        throw new ApiException(`角色不存在！`, HttpStatus.NOT_FOUND);
       }
       roleEntity = await this.roleRepository.save({ ...roleEntity, ...role });
       await manager.delete(RoleMenuEntity, { roleId: id });
