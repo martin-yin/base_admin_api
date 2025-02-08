@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { MenuService } from './menu.service';
 import { MenuEntity } from './entity';
@@ -16,8 +17,10 @@ export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   @Get()
-  async getMenuTree(): Promise<any> {
-    return await this.menuService.getMenuTree();
+  async getMenuTree(
+    @Query('buildTree') buildTree: boolean = false,
+  ): Promise<any> {
+    return await this.menuService.getMenuList(buildTree);
   }
 
   @Post()

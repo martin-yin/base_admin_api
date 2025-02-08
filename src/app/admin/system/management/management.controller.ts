@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiAuthorize } from '@/shared/decorators';
 import {
@@ -15,7 +16,11 @@ import {
   AUTHORIZE_USER_UPDATE,
 } from '@/shared/constants/api-authorize';
 import { ManagementService } from './management.service';
-import { CreateManagementDto, UpdateManagementDto } from './dto';
+import {
+  CreateManagementDto,
+  QueryManagementDto,
+  UpdateManagementDto,
+} from './dto';
 
 @Controller('management')
 export class ManagementController {
@@ -23,8 +28,10 @@ export class ManagementController {
 
   @Get()
   @ApiAuthorize(AUTHORIZE_USER_GETALL)
-  async get() {
-    return await this.managementService.findAll();
+  async get(@Query() query: QueryManagementDto) {
+    query.page = query.page ? query.page : 1;
+    query.limit = query.limit ? query.limit : 10;
+    return await this.managementService.findAll(query);
   }
 
   @Get(':id')

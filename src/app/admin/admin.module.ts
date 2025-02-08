@@ -4,10 +4,10 @@ import { AdminJwtModule } from '@/shared/module/admin.jwt.module';
 import { AdminJwtStrategy } from '@/shared/service/admin.jwt.strategy';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthModule } from './auth/auth.module';
-import { MenuModule } from './menu/menu.module';
-import { RoleModule } from './role/role.module';
-import { ManagementModule } from './management/management.module';
+import { AuthModule } from './system/auth/auth.module';
+import { MenuModule } from './system/menu/menu.module';
+import { RoleModule } from './system/role/role.module';
+import { ManagementModule } from './system/management/management.module';
 
 @Module({
   imports: [
@@ -24,10 +24,10 @@ import { ManagementModule } from './management/management.module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: PermissionGuard,
+    // },
   ],
 })
 export class AdminModule {}

@@ -80,12 +80,13 @@ export abstract class DataBaseService<T> {
     }
     try {
       if (softDelete) {
-        entity.is_delete = 0;
+        entity.isDelete = 1;
         return await this.baseUpdate(criteria, entity);
       } else {
         return await this.repository.delete(criteria);
       }
-    } catch {
+    } catch (e) {
+      console.log(e, '=');
       throw new ApiException(`删除数据失败`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -96,7 +97,8 @@ export abstract class DataBaseService<T> {
   ): Promise<UpdateResult | T> {
     try {
       return await this.repository.update(id, partialEntity);
-    } catch {
+    } catch (e) {
+      console.log(e, '==');
       throw new ApiException('修改数据失败', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

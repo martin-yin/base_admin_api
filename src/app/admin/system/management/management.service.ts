@@ -6,7 +6,11 @@ import { DataBaseService } from '@/shared/service/base.service';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
-import { CreateManagementDto, UpdateManagementDto } from './dto';
+import {
+  CreateManagementDto,
+  QueryManagementDto,
+  UpdateManagementDto,
+} from './dto';
 import {
   ManagementEntity,
   ManagementRoleEntity,
@@ -28,7 +32,7 @@ export class ManagementService extends DataBaseService<ManagementEntity> {
     managesEntity.username = manager.username;
     managesEntity.hashSlat = generateSalt();
     managesEntity.password = hashPassword(
-      managesEntity.password,
+      manager.password,
       managesEntity.hashSlat,
     );
     managesEntity.avatar = '';
@@ -59,8 +63,14 @@ export class ManagementService extends DataBaseService<ManagementEntity> {
    * @description 查询所有的管理员
    * @returns ManagesEntity[]
    */
-  async findAll(): Promise<ManagementEntity[]> {
-    return await this.managementRepository
+  async findAll(params: QueryManagementDto): Promise<{
+    list: ManagementEntity[];
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    const { username, page, limit } = params;
+    const queryBuilder = this.managementRepository
       .createQueryBuilder('managements')
       .select([
         'managements.id as id',
@@ -69,24 +79,51 @@ export class ManagementService extends DataBaseService<ManagementEntity> {
         'managements.sort as sort',
         'managements.status as status',
         'managements.remark as remark',
-        'managements.created_at as created_at',
-        'managements.updated_at as updated_at',
-        'GROUP_CONCAT(role.name) as role_names', // 聚合角色名称
+        'managements.created_at as createdAt',
+        'managements.updated_at as updatedAt',
+        'GROUP_CONCAT(roles.name) as roleNames', // 聚合角色名称
+        'GROUP_CONCAT(roles.id) as roleIds', // 聚合角色ID
       ])
       .leftJoin(
         'management_roles',
         'management_roles',
-        'manager.id = management_roles.user_id',
+        'managements.id = management_roles.management_id',
       )
-      .leftJoin('role', 'role', 'management_roles.role_id = role.id')
+      .leftJoin('roles', 'roles', 'management_roles.role_id = roles.id')
       .where('managements.is_delete = :isDelete', { isDelete: 0 })
-      .groupBy('managements.id') // 按用户ID分组
+      .where('managements.is_delete = :isDelete', { isDelete: 0 })
+      .andWhere('managements.status = :status', { status: 1 })
+      .andWhere('roles.status = :status', { status: 1 })
+      .andWhere('roles.is_delete = :isDelete', { isDelete: 0 })
+      .groupBy('managements.id');
+
+    console.log('username', username);
+
+    if (username) {
+      queryBuilder.andWhere('managements.username LIKE :username', {
+        username: `%${username}%`, // 模糊查询
+      });
+    }
+    // 获取总数
+    const total = await queryBuilder.getCount();
+
+    // 分页查询
+    const data = await queryBuilder
+      .offset((page - 1) * limit)
+      .limit(limit)
       .getRawMany();
+
+    return {
+      list: data,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOneByusername(username: string): Promise<ManagementEntity> {
     const user = await this.managementRepository.findOne({
-      where: { username },
+      where: { username, isDelete: 0, status: 1 },
     });
     if (!user) {
       return null;
@@ -100,7 +137,10 @@ export class ManagementService extends DataBaseService<ManagementEntity> {
       !managesEntity ||
       !verifyPassword(password, managesEntity.hashSlat, managesEntity.password)
     ) {
-      throw new ApiException(`账号或密码错误`, HttpStatus.UNAUTHORIZED);
+      throw new ApiException(
+        `账号、密码错误或账号已被禁用`,
+        HttpStatus.UNAUTHORIZED,
+      );
     }
     return managesEntity;
   }
@@ -142,7 +182,7 @@ export class ManagementService extends DataBaseService<ManagementEntity> {
         ...managementEntity,
         ...managementDto,
       });
-      await manager.delete(ManagementRoleEntity, { manager_id: id });
+      await manager.delete(ManagementRoleEntity, { managementId: id });
       const managerRoles = this.createManagerRoleEntities(
         managementEntity.id,
         managementDto.roleIds,

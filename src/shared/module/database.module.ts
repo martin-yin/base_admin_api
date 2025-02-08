@@ -1,9 +1,9 @@
-import { MenuEntity } from '@/app/admin/menu/entity';
-import { RoleEntity, RoleMenuEntity } from '@/app/admin/role/entity';
+import { MenuEntity } from '@/app/admin/system/menu/entity';
+import { RoleEntity, RoleMenuEntity } from '@/app/admin/system/role/entity';
 import {
   ManagementEntity,
   ManagementRoleEntity,
-} from '@/app/admin/management/entity/management.entity';
+} from '@/app/admin/system/management/entity/management.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({

@@ -1,4 +1,4 @@
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class CreateManagementDto {
   @IsString({
@@ -18,3 +18,13 @@ export class CreateManagementDto {
 }
 
 export class UpdateManagementDto extends CreateManagementDto {}
+
+export class QueryManagementDto {
+  @IsOptional()
+  @IsString()
+  username?: string; // 用户名过滤条件（可选）
+
+  page: number; // 当前页码
+
+  limit: number; // 每页条数
+}
