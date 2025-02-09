@@ -8,6 +8,7 @@ import { AuthModule } from './system/auth/auth.module';
 import { MenuModule } from './system/menu/menu.module';
 import { RoleModule } from './system/role/role.module';
 import { ManagementModule } from './system/management/management.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -16,14 +17,15 @@ import { ManagementModule } from './system/management/management.module';
     ManagementModule,
     MenuModule,
     RoleModule,
+    UploadModule,
   ],
   controllers: [],
   providers: [
     AdminJwtStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
     // {
     //   provide: APP_GUARD,
     //   useClass: PermissionGuard,

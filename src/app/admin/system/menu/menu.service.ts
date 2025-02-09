@@ -1,16 +1,13 @@
+import { DataBaseService } from '@/shared/service/base.service';
 import { Injectable } from '@nestjs/common';
-import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateMenuDto, UpdateMenuDto } from './dto';
 import { MenuEntity } from './entity';
-import { DataBaseService } from '@/shared/service/base.service';
 
 @Injectable()
 export class MenuService extends DataBaseService<MenuEntity> {
   constructor(
-    @InjectEntityManager()
-    private entityManager: EntityManager,
-
     @InjectRepository(MenuEntity)
     private menuRepository: Repository<MenuEntity>,
   ) {
