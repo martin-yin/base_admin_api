@@ -5,7 +5,10 @@ import { CommonModule } from '../common/common.module';
 import { ValidationProvider } from '../common/validation/validation.provider';
 import { AdminModule } from './admin/admin.module';
 import { DatabaseModule } from '@/shared/module/database.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
+console.log(join(__dirname, '..', '..', 'upload'));
 @Module({
   imports: [
     CommonModule,
@@ -17,6 +20,10 @@ import { DatabaseModule } from '@/shared/module/database.module';
       },
     ]),
     AdminModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'upload'),
+      serveRoot: '/upload',
+    }),
   ],
   providers: [
     ValidationProvider,

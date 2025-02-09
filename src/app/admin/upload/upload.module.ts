@@ -4,6 +4,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { UploadController } from './upload.controller';
 import { mkdirSync, existsSync } from 'node:fs';
+import { v4 as uuidv4 } from 'uuid';
 @Module({
   imports: [
     MulterModule.registerAsync({
@@ -12,7 +13,8 @@ import { mkdirSync, existsSync } from 'node:fs';
           fileSize: 1024 * 1024 * 1,
         },
         storage: diskStorage({
-          destination: (_, file, cb) => {
+          destination: (req, file, cb) => {
+            console.log(req);
             const allowedImageTypes = [
               'gif',
               'png',
@@ -29,7 +31,7 @@ import { mkdirSync, existsSync } from 'node:fs';
             if (allowedImageTypes.includes(fileExtension)) {
               temp = 'image';
             }
-            const filePath = `./public/upload/${temp}`;
+            const filePath = `./upload/${temp}`;
             // 判断是否存在，并且创建
             if (!existsSync(filePath)) {
               mkdirSync(filePath, { recursive: true });
@@ -37,9 +39,7 @@ import { mkdirSync, existsSync } from 'node:fs';
             return cb(null, `./${filePath}`);
           },
           filename: (_, file, cb) => {
-            // const filename = `${file.mimetype.split('/')[1]}`;
-            // console.log(, '===');
-            return cb(null, file.originalname);
+            return cb(null, `${uuidv4()}-${file.originalname}`);
           },
         }),
       }),

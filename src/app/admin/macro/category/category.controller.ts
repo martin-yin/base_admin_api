@@ -7,8 +7,8 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import { CategoryService } from './category.service';
 
 @Controller('macro/category')
 export class CategoryController {
@@ -16,7 +16,7 @@ export class CategoryController {
 
   @Get()
   async getCategoryList() {
-    return await this.categoryService.getCategoryList(0);
+    return await this.categoryService.getCategoryList();
   }
 
   @Get(':id')

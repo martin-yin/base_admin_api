@@ -9,6 +9,7 @@ import { MenuModule } from './system/menu/menu.module';
 import { RoleModule } from './system/role/role.module';
 import { ManagementModule } from './system/management/management.module';
 import { UploadModule } from './upload/upload.module';
+import { MacroModule } from './macro/macro.moduel';
 
 @Module({
   imports: [
@@ -18,18 +19,19 @@ import { UploadModule } from './upload/upload.module';
     MenuModule,
     RoleModule,
     UploadModule,
+    MacroModule,
   ],
   controllers: [],
   providers: [
     AdminJwtStrategy,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: PermissionGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
   ],
 })
 export class AdminModule {}

@@ -14,10 +14,11 @@ export class MacroCategoryEntity extends BaseEntity {
 
   @Column({
     type: 'varchar',
-    length: 50,
-    comment: '分类描述',
+    comment: '图标',
+    length: 1000,
+    default: '',
   })
-  desc: string;
+  icon: string;
 
   @Column({
     type: 'int',
@@ -26,12 +27,4 @@ export class MacroCategoryEntity extends BaseEntity {
     name: 'parent_id',
   })
   parentId: number;
-
-  @Column({
-    type: 'varchar',
-    length: 255,
-    comment: '图标',
-    default: '',
-  })
-  icon: string;
 }

@@ -3,16 +3,18 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
 import { MacroCategoryEntity } from './entity';
 import { success } from '@/helper/handle';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CategoryService extends DataBaseService<MacroCategoryEntity> {
   constructor(
+    @InjectRepository(MacroCategoryEntity)
     private readonly categoryRepository: Repository<MacroCategoryEntity>,
   ) {
     super(categoryRepository);
   }
 
-  async findOne(id: string | number | FindOneOptions<MacroCategoryEntity>) {
+  async find(id: string | number | FindOneOptions<MacroCategoryEntity>) {
     const category = await this.findOne(id);
     if (!category) {
       throw new BadRequestException('分类不存在');
@@ -25,13 +27,14 @@ export class CategoryService extends DataBaseService<MacroCategoryEntity> {
    * @param parent_id
    * @returns
    */
-  async getCategoryList(parent_id: number) {
+  async getCategoryList() {
     const category = await this.categoryRepository.find({
       where: {
-        parentId: parent_id,
+        status: 1,
+        isDelete: 0,
       },
     });
-    return success('获取成功', category);
+    return category;
   }
 
   async createCategory(category: Partial<MacroCategoryEntity>) {
