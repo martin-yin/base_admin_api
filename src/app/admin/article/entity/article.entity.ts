@@ -112,6 +112,7 @@ export class ArticleEntity extends BaseRichEntity {
     type: 'text',
     comment: '文章来源',
     name: 'source',
+    default: '',
   })
   source: string;
 
@@ -119,6 +120,7 @@ export class ArticleEntity extends BaseRichEntity {
     type: 'int',
     comment: '浏览量',
     name: 'view_count',
+    default: 0,
   })
   viewCount: number;
 
@@ -126,6 +128,7 @@ export class ArticleEntity extends BaseRichEntity {
     type: 'int',
     comment: '收藏数',
     name: 'collect_count',
+    default: 0,
   })
   collectCount: number;
 }
