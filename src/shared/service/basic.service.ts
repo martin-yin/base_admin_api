@@ -96,6 +96,7 @@ export abstract class DataBasicService<T> {
     partialEntity: QueryDeepPartialEntity<T>,
   ): Promise<UpdateResult | T> {
     try {
+      console.log(id, partialEntity, '===');
       return await this.repository.update(id, partialEntity);
     } catch (e) {
       console.log(e, '==');

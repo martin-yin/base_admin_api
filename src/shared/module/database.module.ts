@@ -6,7 +6,15 @@ import {
 } from '@/app/admin/system/management/entity/management.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TagEntity } from '@/app/admin/articles/entity/tag.entity';
+import { TagEntity } from '@/app/admin/system/tag/entity/index.entity';
+import { CategoryEntity } from '@/app/admin/system/category/entity';
+import {
+  ArticleEntity,
+  ArticleTagEntity,
+  ArticleVersionEntity,
+  MacroCodeEntity,
+} from '@/app/admin/article/entity/article.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -23,6 +31,11 @@ import { TagEntity } from '@/app/admin/articles/entity/tag.entity';
         ManagementRoleEntity,
         MenuEntity,
         TagEntity,
+        CategoryEntity,
+        ArticleVersionEntity,
+        ArticleEntity,
+        ArticleTagEntity,
+        MacroCodeEntity,
       ],
       synchronize: true,
     }),

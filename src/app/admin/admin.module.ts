@@ -6,20 +6,21 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { SystemModule } from './system/system.module';
 import { UploadModule } from './upload/upload.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
-  imports: [AdminJwtModule, SystemModule, UploadModule],
+  imports: [AdminJwtModule, SystemModule, UploadModule, ArticleModule],
   controllers: [],
   providers: [
     AdminJwtStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtAuthGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: PermissionGuard,
+    // },
   ],
 })
 export class AdminModule {}

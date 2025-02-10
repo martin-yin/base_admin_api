@@ -2,7 +2,7 @@ import { BaseRichEntity } from '@/shared/entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity({
-  name: 'tag',
+  name: 'tags',
 })
 export class TagEntity extends BaseRichEntity {
   @Column({
