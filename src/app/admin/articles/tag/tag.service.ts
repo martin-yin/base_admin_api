@@ -1,20 +1,20 @@
-import { DataBaseService } from '@/shared/service/base.service';
+import { DataBasicService } from '@/shared/service/basic.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
-import { MacroCategoryEntity } from './entity';
 import { success } from '@/helper/handle';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TagEntity } from '../entity/tag.entity';
 
 @Injectable()
-export class CategoryService extends DataBaseService<MacroCategoryEntity> {
+export class TagService extends DataBasicService<TagEntity> {
   constructor(
-    @InjectRepository(MacroCategoryEntity)
-    private readonly categoryRepository: Repository<MacroCategoryEntity>,
+    @InjectRepository(TagEntity)
+    private readonly tagRepository: Repository<TagEntity>,
   ) {
-    super(categoryRepository);
+    super(tagRepository);
   }
 
-  async find(id: string | number | FindOneOptions<MacroCategoryEntity>) {
+  async find(id: string | number | FindOneOptions<TagEntity>) {
     const category = await this.findOne(id);
     if (!category) {
       throw new BadRequestException('分类不存在');
@@ -28,7 +28,7 @@ export class CategoryService extends DataBaseService<MacroCategoryEntity> {
    * @returns
    */
   async getCategoryList() {
-    const category = await this.categoryRepository.find({
+    const category = await this.tagRepository.find({
       where: {
         status: 1,
         isDelete: 0,
@@ -37,18 +37,18 @@ export class CategoryService extends DataBaseService<MacroCategoryEntity> {
     return category;
   }
 
-  async createCategory(category: Partial<MacroCategoryEntity>) {
-    const newCategory = this.categoryRepository.create(category);
-    await this.categoryRepository.save(newCategory);
+  async createCategory(category: Partial<TagEntity>) {
+    const newCategory = this.tagRepository.create(category);
+    await this.tagRepository.save(newCategory);
     return success('创建成功', newCategory);
   }
 
-  async editCategory(id: number, category: Partial<MacroCategoryEntity>) {
+  async editCategory(id: number, category: Partial<TagEntity>) {
     const oldCategory = await this.findOne(id);
     if (!oldCategory) {
       throw new BadRequestException('分类不存在');
     }
-    await this.categoryRepository.update(id, category);
+    await this.tagRepository.update(id, category);
     return success('编辑成功', category);
   }
 
@@ -57,7 +57,7 @@ export class CategoryService extends DataBaseService<MacroCategoryEntity> {
     if (!oldCategory) {
       throw new BadRequestException('分类不存在');
     }
-    await this.categoryRepository.delete(id);
+    await this.tagRepository.delete(id);
     return success('删除成功', oldCategory);
   }
 }

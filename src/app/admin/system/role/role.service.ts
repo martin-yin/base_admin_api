@@ -3,12 +3,12 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { RoleEntity, RoleMenuEntity } from './entity';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
-import { DataBaseService } from '@/shared/service/base.service';
+import { DataBasicService } from '@/shared/service/basic.service';
 import { ApiException } from '@/shared/exceptions';
 import { RoleInfo } from './types';
 
 @Injectable()
-export class RoleService extends DataBaseService<RoleEntity> {
+export class RoleService extends DataBasicService<RoleEntity> {
   constructor(
     @InjectEntityManager()
     private entityManager: EntityManager,

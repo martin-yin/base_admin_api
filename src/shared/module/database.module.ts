@@ -6,7 +6,7 @@ import {
 } from '@/app/admin/system/management/entity/management.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MacroCategoryEntity } from '@/app/admin/macro/category/entity';
+import { TagEntity } from '@/app/admin/articles/entity/tag.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -22,7 +22,7 @@ import { MacroCategoryEntity } from '@/app/admin/macro/category/entity';
         ManagementEntity,
         ManagementRoleEntity,
         MenuEntity,
-        MacroCategoryEntity,
+        TagEntity,
       ],
       synchronize: true,
     }),

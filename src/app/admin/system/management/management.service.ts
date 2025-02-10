@@ -2,7 +2,7 @@ import { success } from '@/helper/handle';
 import { generateSalt, hashPassword, verifyPassword } from '@/helper/password';
 import { Result } from '@/interfaces';
 import { ApiException } from '@/shared/exceptions';
-import { DataBaseService } from '@/shared/service/base.service';
+import { DataBasicService } from '@/shared/service/basic.service';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
@@ -17,7 +17,7 @@ import {
 } from './entity/management.entity';
 
 @Injectable()
-export class ManagementService extends DataBaseService<ManagementEntity> {
+export class ManagementService extends DataBasicService<ManagementEntity> {
   constructor(
     @InjectEntityManager()
     private entityManager: EntityManager,
@@ -193,7 +193,7 @@ export class ManagementService extends DataBaseService<ManagementEntity> {
   }
 
   async deleteManagement(id: number): Promise<Result> {
-    await this.baseDelete(id);
-    return success('删除用户成功');
+    const result = await this.basicDelete(id);
+    return success('删除用户成功', result);
   }
 }

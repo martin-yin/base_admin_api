@@ -1,8 +1,8 @@
-import { BaseEntity } from '@/shared/entity';
+import { BaseRichEntity } from '@/shared/entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('managements')
-export class ManagementEntity extends BaseEntity {
+export class ManagementEntity extends BaseRichEntity {
   @Column({
     length: 16,
     type: 'varchar',

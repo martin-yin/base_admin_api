@@ -1,14 +1,14 @@
-import { BaseEntity } from '@/shared/entity';
+import { BaseRichEntity } from '@/shared/entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity({
-  name: 'macro_category',
+  name: 'tag',
 })
-export class MacroCategoryEntity extends BaseEntity {
+export class TagEntity extends BaseRichEntity {
   @Column({
     type: 'varchar',
     length: 50,
-    comment: '分类名称',
+    comment: '标签名称',
   })
   name: string;
 

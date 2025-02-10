@@ -4,23 +4,11 @@ import { AdminJwtModule } from '@/shared/module/admin.jwt.module';
 import { AdminJwtStrategy } from '@/shared/service/admin.jwt.strategy';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthModule } from './system/auth/auth.module';
-import { MenuModule } from './system/menu/menu.module';
-import { RoleModule } from './system/role/role.module';
-import { ManagementModule } from './system/management/management.module';
+import { SystemModule } from './system/system.module';
 import { UploadModule } from './upload/upload.module';
-import { MacroModule } from './macro/macro.moduel';
 
 @Module({
-  imports: [
-    AdminJwtModule,
-    AuthModule,
-    ManagementModule,
-    MenuModule,
-    RoleModule,
-    UploadModule,
-    MacroModule,
-  ],
+  imports: [AdminJwtModule, SystemModule, UploadModule],
   controllers: [],
   providers: [
     AdminJwtStrategy,

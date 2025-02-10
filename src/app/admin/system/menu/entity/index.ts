@@ -1,8 +1,8 @@
-import { BaseEntity } from '@/shared/entity';
+import { BaseRichEntity } from '@/shared/entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity('menus')
-export class MenuEntity extends BaseEntity {
+export class MenuEntity extends BaseRichEntity {
   @Column({
     type: 'int',
     comment: '菜单类型 0: 目录 1: 菜单 2: 按钮',

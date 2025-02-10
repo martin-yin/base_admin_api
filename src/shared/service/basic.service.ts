@@ -15,7 +15,7 @@ export interface FindWhere {
   readonly [key: string]: string | number | boolean;
 }
 
-export abstract class DataBaseService<T> {
+export abstract class DataBasicService<T> {
   constructor(protected repository: Repository<T>) {}
 
   async findOne(id: string | number | FindOneOptions<T>): Promise<T> {
@@ -26,7 +26,7 @@ export abstract class DataBaseService<T> {
     return record;
   }
 
-  async baseCreate(entity: DeepPartial<T>): Promise<Result> {
+  async basicCreate(entity: DeepPartial<T>): Promise<Result> {
     let ojb: T;
     try {
       ojb = await this.repository.save<T>(this.repository.create(entity));
@@ -40,7 +40,7 @@ export abstract class DataBaseService<T> {
     return success('新增成功', ojb);
   }
 
-  async baseEdit(id: number, entity: DeepPartial<T>) {
+  async basicEdit(id: number, entity: DeepPartial<T>) {
     let obj: T;
 
     const existing = await this.findOne(id as any);
@@ -67,7 +67,7 @@ export abstract class DataBaseService<T> {
    * @param softDelete
    * @returns
    */
-  async baseDelete(
+  async basicDelete(
     criteria: string | number,
     softDelete = true,
   ): Promise<DeleteResult | UpdateResult | T> {
@@ -81,7 +81,7 @@ export abstract class DataBaseService<T> {
     try {
       if (softDelete) {
         entity.isDelete = 1;
-        return await this.baseUpdate(criteria, entity);
+        return await this.basicUpdate(criteria, entity);
       } else {
         return await this.repository.delete(criteria);
       }
@@ -91,7 +91,7 @@ export abstract class DataBaseService<T> {
     }
   }
 
-  async baseUpdate(
+  async basicUpdate(
     id: string | number,
     partialEntity: QueryDeepPartialEntity<T>,
   ): Promise<UpdateResult | T> {
