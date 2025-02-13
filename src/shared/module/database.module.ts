@@ -14,6 +14,7 @@ import {
   ArticleVersionEntity,
   MacroCodeEntity,
 } from '@/app/admin/article/entity/article.entity';
+import { UserEntity } from '@/app/admin/user/entity/index.entity';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import {
         ArticleEntity,
         ArticleTagEntity,
         MacroCodeEntity,
+        UserEntity,
       ],
       synchronize: true,
     }),

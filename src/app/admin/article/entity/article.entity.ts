@@ -112,7 +112,6 @@ export class ArticleEntity extends BaseRichEntity {
     type: 'text',
     comment: '文章来源',
     name: 'source',
-    default: '',
   })
   source: string;
 

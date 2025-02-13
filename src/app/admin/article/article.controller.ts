@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { UpdateArticleDto } from './dto/index.dto';
 
@@ -14,5 +14,10 @@ export class ArticleController {
   @Post()
   async create(@Body() body: UpdateArticleDto) {
     return await this.articleService.createArticle(body);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+    return await this.articleService.deleteArticle(id);
   }
 }
