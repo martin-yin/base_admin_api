@@ -33,9 +33,6 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
    */
   async getCategoryList() {
     const category = await this.categoryRepository.find({
-      where: {
-        isDelete: 0,
-      },
       order: { sort: 'ASC' },
     });
     return category;
@@ -47,7 +44,6 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
       throw new BadRequestException('分类不存在');
     }
 
-    console.log(category, 'category.tagIds');
     const tagIds = category.tagIds.split(',').map(Number);
     const tagList = await this.tagRepository.find({
       where: {
@@ -69,19 +65,24 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     if (!categoryEntity) {
       throw new BadRequestException('分类不存在');
     }
-    await this.categoryRepository.update(id, {
+    await this.categoryRepository.save({
       ...categoryEntity,
       ...category,
+      isDelete: 0,
     });
-    return success('编辑成功', category);
+    return success('编辑成功');
   }
 
   async deleteCategory(id: number) {
-    const oldCategory = await this.findOne(id);
-    if (!oldCategory) {
+    const categoryEntity = await this.findOne(id);
+    if (!categoryEntity) {
       throw new BadRequestException('分类不存在');
     }
-    await this.categoryRepository.delete(id);
-    return success('删除成功', oldCategory);
+
+    await this.categoryRepository.save({
+      ...categoryEntity,
+      isDelete: 1,
+    });
+    return success('删除成功');
   }
 }
