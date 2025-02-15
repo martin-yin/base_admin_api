@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
     MulterModule.registerAsync({
       useFactory: async () => ({
         limits: {
-          fileSize: 1024 * 1024 * 1,
+          fileSize: 1024 * 1024 * 5,
         },
         storage: diskStorage({
           destination: (req, file, cb) => {

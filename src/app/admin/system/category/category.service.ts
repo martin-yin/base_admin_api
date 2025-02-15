@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { FindOneOptions, In, Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { CategoryEntity } from './entity';
 import { success } from '@/helper/handle';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -43,15 +43,7 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     if (!category) {
       throw new BadRequestException('分类不存在');
     }
-
-    const tagIds = category.tagIds.split(',').map(Number);
-    const tagList = await this.tagRepository.find({
-      where: {
-        id: In(tagIds),
-        isDelete: 0,
-      },
-    });
-    return tagList;
+    return null;
   }
 
   async createCategory(category: Partial<CategoryEntity>) {
@@ -82,6 +74,7 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     await this.categoryRepository.save({
       ...categoryEntity,
       isDelete: 1,
+      status: 0,
     });
     return success('删除成功');
   }

@@ -13,11 +13,6 @@ export class CreateCategoryDto {
   })
   icon: string;
 
-  @IsString({
-    message: '标签不能为空',
-  })
-  tagIds: string;
-
   sort?: number;
 }
 

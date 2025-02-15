@@ -19,10 +19,9 @@ export class CategoryEntity extends BaseRichEntity {
   icon: string;
 
   @Column({
-    type: 'varchar',
-    name: 'tag_ids',
-    default: '',
-    comment: '当前分类关联的tag',
+    type: 'int',
+    comment: '分类类型 0: 插件 1: 游戏版本',
+    default: 0,
   })
-  tagIds: string;
+  type: number;
 }
