@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto/index.dto';
 import { CategoryService } from './category.service';
+import { CategoryTagEntity } from './entity';
 
 @Controller('category')
 export class CategoryController {
@@ -22,11 +23,6 @@ export class CategoryController {
   @Get(':id')
   async getCategoryById(@Param('id') id: number) {
     return await this.categoryService.findOne(id);
-  }
-
-  @Get('tag/:id')
-  async getCategoryByTagId(@Param('id') id: number) {
-    return await this.categoryService.getCategoryTagList(id);
   }
 
   @Post()
@@ -45,5 +41,31 @@ export class CategoryController {
   @Delete(':id')
   async deleteCategory(@Param('id') id: number) {
     return await this.categoryService.deleteCategory(id);
+  }
+
+  @Get(':id/tag')
+  async getCategoryByTagId(@Param('id') id: number) {
+    return await this.categoryService.getCategoryTagList(id);
+  }
+
+  @Post(':id/tag')
+  async createCategoryTag(
+    @Param('id') id: number,
+    @Body() categoryTag: Partial<CategoryTagEntity>,
+  ) {
+    return await this.categoryService.createCategoryTag(categoryTag);
+  }
+
+  @Put(':id/tag')
+  async editCategoryTag(
+    @Param('id') id: number,
+    @Body() categoryTag: Partial<CategoryTagEntity>,
+  ) {
+    return await this.categoryService.editCategoryTag(id, categoryTag);
+  }
+
+  @Delete(':id/tag')
+  async deleteCategoryTag(@Param('id') id: number) {
+    return await this.categoryService.deleteCategoryTag(id);
   }
 }

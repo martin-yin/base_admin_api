@@ -7,7 +7,10 @@ import {
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TagEntity } from '@/app/admin/system/tag/entity/index.entity';
-import { CategoryEntity } from '@/app/admin/system/category/entity';
+import {
+  CategoryEntity,
+  CategoryTagEntity,
+} from '@/app/admin/system/category/entity';
 import {
   ArticleEntity,
   ArticleTagEntity,
@@ -33,6 +36,7 @@ import { UserEntity } from '@/app/admin/user/entity/index.entity';
         MenuEntity,
         TagEntity,
         CategoryEntity,
+        CategoryTagEntity,
         ArticleVersionEntity,
         ArticleEntity,
         ArticleTagEntity,

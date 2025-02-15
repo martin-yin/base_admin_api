@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
-import { CategoryEntity } from './entity';
+import { CategoryEntity, CategoryTagEntity } from './entity';
 import { success } from '@/helper/handle';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataBasicService } from '@/shared/service/basic.service';
@@ -11,6 +11,9 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
   constructor(
     @InjectRepository(CategoryEntity)
     private readonly categoryRepository: Repository<CategoryEntity>,
+
+    @InjectRepository(CategoryTagEntity)
+    private readonly categoryTagRepository: Repository<CategoryTagEntity>,
 
     @InjectRepository(TagEntity)
     private readonly tagRepository: Repository<TagEntity>,
@@ -38,12 +41,42 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     return category;
   }
 
-  async getCategoryTagList(id: number) {
+  async getCategoryTagList(id: number): Promise<CategoryTagEntity[]> {
     const category = await this.findOne(id);
     if (!category) {
       throw new BadRequestException('分类不存在');
     }
-    return null;
+    const categoryTagEntityList = await this.categoryTagRepository.find({
+      where: { categoryId: id },
+    });
+    return categoryTagEntityList;
+  }
+
+  async createCategoryTag(categoryTag: Partial<CategoryTagEntity>) {
+    const newCategoryTag = this.categoryTagRepository.create(categoryTag);
+    await this.categoryTagRepository.save(newCategoryTag);
+    return success('创建成功', newCategoryTag);
+  }
+
+  async editCategoryTag(id: number, categoryTag: Partial<CategoryTagEntity>) {
+    const categoryTagEntity = await this.findOne(id);
+    if (!categoryTagEntity) {
+      throw new BadRequestException('分类标签不存在');
+    }
+    await this.categoryTagRepository.save({
+      ...categoryTagEntity,
+      ...categoryTag,
+    });
+    return success('编辑成功');
+  }
+
+  async deleteCategoryTag(id: number) {
+    const categoryTagEntity = await this.findOne(id);
+    if (!categoryTagEntity) {
+      throw new BadRequestException('分类标签不存在');
+    }
+    await this.categoryTagRepository.delete(id);
+    return success('删除成功');
   }
 
   async createCategory(category: Partial<CategoryEntity>) {
