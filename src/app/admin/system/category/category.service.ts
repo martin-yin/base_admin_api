@@ -4,7 +4,6 @@ import { CategoryEntity, CategoryTagEntity } from './entity';
 import { success } from '@/helper/handle';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataBasicService } from '@/shared/service/basic.service';
-import { TagEntity } from '../tag/entity/index.entity';
 
 @Injectable()
 export class CategoryService extends DataBasicService<CategoryEntity> {
@@ -14,9 +13,6 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
 
     @InjectRepository(CategoryTagEntity)
     private readonly categoryTagRepository: Repository<CategoryTagEntity>,
-
-    @InjectRepository(TagEntity)
-    private readonly tagRepository: Repository<TagEntity>,
   ) {
     super(categoryRepository);
   }

@@ -6,7 +6,6 @@ import {
 } from '@/app/admin/system/management/entity/management.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TagEntity } from '@/app/admin/system/tag/entity/index.entity';
 import {
   CategoryEntity,
   CategoryTagEntity,
@@ -34,7 +33,6 @@ import { UserEntity } from '@/app/admin/user/entity/index.entity';
         ManagementEntity,
         ManagementRoleEntity,
         MenuEntity,
-        TagEntity,
         CategoryEntity,
         CategoryTagEntity,
         ArticleVersionEntity,
