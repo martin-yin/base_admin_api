@@ -24,7 +24,7 @@ export class BasicEntity {
 }
 
 @Entity()
-export class BaseRichEntity extends BasicEntity {
+export class BasicRichEntity extends BasicEntity {
   @Column({
     type: 'int',
     comment: '状态 1: 启用 0: 停用',

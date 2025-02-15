@@ -1,4 +1,4 @@
-import { BaseRichEntity, BasicEntity } from '@/shared/entity';
+import { BasicRichEntity, BasicEntity } from '@/shared/entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
@@ -44,7 +44,7 @@ export class ArticleVersionEntity extends BasicEntity {
 @Entity({
   name: 'articles',
 })
-export class ArticleEntity extends BaseRichEntity {
+export class ArticleEntity extends BasicRichEntity {
   @Column({
     type: 'text',
     comment: '文章标题',

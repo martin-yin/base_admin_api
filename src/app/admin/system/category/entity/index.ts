@@ -1,10 +1,10 @@
-import { BaseRichEntity } from '@/shared/entity';
+import { BasicRichEntity, BasicEntity } from '@/shared/entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity({
   name: 'categorys',
 })
-export class CategoryEntity extends BaseRichEntity {
+export class CategoryEntity extends BasicRichEntity {
   @Column({
     type: 'varchar',
     length: 20,
@@ -25,3 +25,8 @@ export class CategoryEntity extends BaseRichEntity {
   })
   type: number;
 }
+
+@Entity({
+  name: 'category_tags',
+})
+export class CategoryTagEntity extends BasicEntity {}
