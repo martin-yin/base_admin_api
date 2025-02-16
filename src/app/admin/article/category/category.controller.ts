@@ -15,11 +15,20 @@ import { TagEntity } from '../entity/category.entity';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  /**
+   * @description 获取分类列表
+   * @returns
+   */
   @Get()
   async getCategoryList() {
     return await this.categoryService.getCategoryList();
   }
 
+  /**
+   * @description 获取分类详情
+   * @param id
+   * @returns
+   */
   @Get(':id')
   async getCategoryById(@Param('id') id: number) {
     return await this.categoryService.findOne(id);

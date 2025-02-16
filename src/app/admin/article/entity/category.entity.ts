@@ -54,10 +54,10 @@ export class TagEntity extends BasicRichEntity {
   })
   type: string; // 使用枚举提高可读性
 
-  @ManyToOne(() => CategoryEntity) // 建立外键关系
+  @ManyToOne(() => CategoryEntity)
   @JoinColumn({ name: 'category_id' })
   category: CategoryEntity;
 
   @Column({ name: 'category_id' })
-  categoryId: number; // 外键字段
+  categoryId: number;
 }

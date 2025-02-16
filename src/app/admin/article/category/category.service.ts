@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { FindOneOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { success } from '@/helper/handle';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataBasicService } from '@/shared/service/basic.service';
@@ -17,14 +17,6 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     super(categoryRepository);
   }
 
-  async find(id: string | number | FindOneOptions<CategoryEntity>) {
-    const category = await this.findOne(id);
-    if (!category) {
-      throw new BadRequestException('分类不存在');
-    }
-    return category;
-  }
-
   /**
    * @description 获取分类列表
    * @param parent_id
@@ -35,6 +27,39 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
       order: { sort: 'ASC' },
     });
     return category;
+  }
+
+  async createCategory(category: Partial<CategoryEntity>) {
+    const categoryEntity = this.categoryRepository.create(category);
+    await this.categoryRepository.save(categoryEntity);
+    return success('创建成功');
+  }
+
+  async editCategory(id: number, category: Partial<CategoryEntity>) {
+    const categoryEntity = await this.findOne(id);
+    if (!categoryEntity) {
+      throw new BadRequestException('分类不存在');
+    }
+    await this.categoryRepository.save({
+      ...categoryEntity,
+      ...category,
+      isDelete: 0,
+    });
+    return success('编辑成功');
+  }
+
+  async deleteCategory(id: number) {
+    const categoryEntity = await this.findOne(id);
+    if (!categoryEntity) {
+      throw new BadRequestException('分类不存在');
+    }
+
+    await this.categoryRepository.save({
+      ...categoryEntity,
+      isDelete: 1,
+      status: 0,
+    });
+    return success('删除成功');
   }
 
   async getCategoryTagList(id: number): Promise<TagEntity[]> {
@@ -67,44 +92,13 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
   }
 
   async deleteCategoryTag(id: number) {
-    const categoryTagEntity = await this.findOne(id);
+    const categoryTagEntity = await this.tagRepository.findOne({
+      where: { id: id },
+    });
     if (!categoryTagEntity) {
       throw new BadRequestException('分类标签不存在');
     }
     await this.tagRepository.delete(id);
-    return success('删除成功');
-  }
-
-  async createCategory(category: Partial<CategoryEntity>) {
-    const newCategory = this.categoryRepository.create(category);
-    await this.categoryRepository.save(newCategory);
-    return success('创建成功', newCategory);
-  }
-
-  async editCategory(id: number, category: Partial<CategoryEntity>) {
-    const categoryEntity = await this.findOne(id);
-    if (!categoryEntity) {
-      throw new BadRequestException('分类不存在');
-    }
-    await this.categoryRepository.save({
-      ...categoryEntity,
-      ...category,
-      isDelete: 0,
-    });
-    return success('编辑成功');
-  }
-
-  async deleteCategory(id: number) {
-    const categoryEntity = await this.findOne(id);
-    if (!categoryEntity) {
-      throw new BadRequestException('分类不存在');
-    }
-
-    await this.categoryRepository.save({
-      ...categoryEntity,
-      isDelete: 1,
-      status: 0,
-    });
     return success('删除成功');
   }
 }

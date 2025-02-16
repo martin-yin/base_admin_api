@@ -93,7 +93,7 @@ export class ArticleHistoryEntity extends BasicRichEntity {
   @Column({ type: 'text' })
   cover: string;
 
-  @Column({ type: 'json' })
+  @Column({ type: 'json', name: 'carousel_images' })
   carouselImages: string[];
 
   @Column({ name: 'plugin_category_id' })
