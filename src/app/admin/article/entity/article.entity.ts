@@ -1,63 +1,26 @@
-import { BasicRichEntity, BasicEntity } from '@/shared/entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-@Entity({
-  name: 'article_versions',
-  comment: '文章版本表',
-})
-export class ArticleVersionEntity extends BasicEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({
-    type: 'int',
-    comment: '关联文章ID',
-    name: 'article_id',
-  })
-  articleId: number;
-
-  @Column({
-    type: 'varchar',
-    comment: '版本号（语义化版本，如 v1.0.0）',
-    name: 'version',
-    length: 20,
-  })
-  version: string;
-
-  @Column({
-    type: 'boolean',
-    comment: '是否为当前生效版本',
-    name: 'is_current',
-    default: false,
-  })
-  isCurrent: boolean;
-
-  @Column({
-    type: 'text',
-    comment: '版本备注',
-    name: 'remark',
-    nullable: true,
-  })
-  remark: string | null;
-}
+import { BasicRichEntity } from '@/shared/entity';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { TagEntity } from './category.entity';
 
 @Entity({
   name: 'articles',
 })
 export class ArticleEntity extends BasicRichEntity {
   @Column({
-    type: 'text',
+    type: 'varchar',
     comment: '文章标题',
     name: 'title',
+    length: 255,
   })
   title: string;
 
   @Column({
-    type: 'text',
+    type: 'varchar',
     comment: '文章简介',
-    name: 'desc',
+    name: 'summary',
+    length: 255,
   })
-  desc: string;
+  summary: string;
 
   @Column({
     type: 'text',
@@ -66,19 +29,15 @@ export class ArticleEntity extends BasicRichEntity {
   })
   cover: string;
 
-  @Column({
-    type: 'text',
-    comment: '文章类型 0: macro 宏文章 1: 普通文章 2: 其他',
-    name: 'type',
-  })
-  type: string;
+  @Column({ type: 'json', nullable: true })
+  carouselImages: string[];
 
   @Column({
-    type: 'text',
-    comment: '文章状态 0: 草稿 1: 发布 2: 待审核 3: 已下架',
-    name: 'status',
+    type: 'int',
+    comment: '插件分类id',
+    name: 'plugin_category_id',
   })
-  status: number;
+  pluginCategoryId: number;
 
   @Column({
     type: 'int',
@@ -87,12 +46,16 @@ export class ArticleEntity extends BasicRichEntity {
   })
   categoryId: number;
 
+  @ManyToMany(() => TagEntity)
+  @JoinTable({ name: 'article_tags' })
+  tags: TagEntity[];
+
   @Column({
-    type: 'text',
-    comment: '文章轮播图',
-    name: 'carousel_images',
+    type: 'int',
+    comment: '作者id',
+    name: 'user_id',
   })
-  carouselImages: string;
+  userId: number;
 
   @Column({
     type: 'text',
@@ -102,18 +65,11 @@ export class ArticleEntity extends BasicRichEntity {
   content: string;
 
   @Column({
-    type: 'int',
-    comment: '作者id',
-    name: 'auther_id',
-  })
-  autherId: number;
-
-  @Column({
     type: 'text',
-    comment: '文章来源',
-    name: 'source',
+    comment: '代码',
+    name: 'code',
   })
-  source: string;
+  code: string;
 
   @Column({
     type: 'int',
@@ -122,69 +78,60 @@ export class ArticleEntity extends BasicRichEntity {
     default: 0,
   })
   viewCount: number;
-
-  @Column({
-    type: 'int',
-    comment: '收藏数',
-    name: 'collect_count',
-    default: 0,
-  })
-  collectCount: number;
 }
 
-@Entity({
-  name: 'article_tags',
-  comment: '文章标签',
-})
-export class ArticleTagEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+// 历史版本表（全量字段）
+@Entity('article_histories')
+export class ArticleHistoryEntity extends BasicRichEntity {
+  // 完全复制文章表所有字段
+  @Column({ type: 'varchar', length: 255 })
+  title: string;
 
-  @Column({
-    type: 'int',
-    comment: '标签名称',
-    name: 'tag_id',
-  })
-  tagId: number;
+  @Column({ type: 'varchar', length: 255 })
+  summary: string;
 
-  @Column({
-    type: 'int',
-    comment: '文章id',
-    name: 'article_id',
-  })
-  articleId: number;
-}
+  @Column({ type: 'text' })
+  cover: string;
 
-@Entity({
-  name: 'macro_codes',
-})
-export class MacroCodeEntity extends BasicEntity {
-  @Column({
-    type: 'int',
-    comment: '关联文章ID',
-    name: 'article_id',
-  })
-  articleId: number;
+  @Column({ type: 'json' })
+  carouselImages: string[];
 
-  @Column({
-    type: 'int',
-    comment: '关联版本ID',
-    name: 'version_id',
-  })
-  versionId: number;
+  @Column({ name: 'plugin_category_id' })
+  pluginCategoryId: number;
 
-  @Column({
-    type: 'text',
-    comment: '代码内容',
-    name: 'code_content',
-  })
-  codeContent: string;
+  @Column({ name: 'category_id' })
+  categoryId: number;
 
+  @Column({ type: 'int' })
+  userId: number;
+
+  @Column({ type: 'text' })
+  content: string;
+
+  @Column({ type: 'text' })
+  code: string;
+
+  @Column({ default: 0 })
+  viewCount: number;
+
+  // 新增版本控制字段
   @Column({
     type: 'varchar',
-    comment: '代码语言',
-    name: 'code_language',
-    length: 50,
+    length: 20,
+    comment: '语义化版本号 (e.g. 2.1.3)',
   })
-  codeLanguage: string;
+  version: string;
+
+  @Column({
+    name: 'article_id',
+    comment: '关联的主文章ID',
+  })
+  articleId: number;
+
+  @Column({
+    type: 'enum',
+    enum: ['AUTO_SAVE', 'MANUAL_SAVE'],
+    default: 'MANUAL_SAVE',
+  })
+  saveType: string; // 版本保存类型
 }

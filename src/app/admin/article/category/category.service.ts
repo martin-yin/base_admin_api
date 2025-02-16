@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
-import { CategoryEntity, CategoryTagEntity } from './entity';
 import { success } from '@/helper/handle';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataBasicService } from '@/shared/service/basic.service';
+import { CategoryEntity, TagEntity } from '../entity/category.entity';
 
 @Injectable()
 export class CategoryService extends DataBasicService<CategoryEntity> {
@@ -11,8 +11,8 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     @InjectRepository(CategoryEntity)
     private readonly categoryRepository: Repository<CategoryEntity>,
 
-    @InjectRepository(CategoryTagEntity)
-    private readonly categoryTagRepository: Repository<CategoryTagEntity>,
+    @InjectRepository(TagEntity)
+    private readonly tagRepository: Repository<TagEntity>,
   ) {
     super(categoryRepository);
   }
@@ -37,29 +37,29 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     return category;
   }
 
-  async getCategoryTagList(id: number): Promise<CategoryTagEntity[]> {
+  async getCategoryTagList(id: number): Promise<TagEntity[]> {
     const category = await this.findOne(id);
     if (!category) {
       throw new BadRequestException('分类不存在');
     }
-    const categoryTagEntityList = await this.categoryTagRepository.find({
+    const categoryTagEntityList = await this.tagRepository.find({
       where: { categoryId: id },
     });
     return categoryTagEntityList;
   }
 
-  async createCategoryTag(categoryTag: Partial<CategoryTagEntity>) {
-    const newCategoryTag = this.categoryTagRepository.create(categoryTag);
-    await this.categoryTagRepository.save(newCategoryTag);
+  async createCategoryTag(categoryTag: Partial<TagEntity>) {
+    const newCategoryTag = this.tagRepository.create(categoryTag);
+    await this.tagRepository.save(newCategoryTag);
     return success('创建成功', newCategoryTag);
   }
 
-  async editCategoryTag(id: number, categoryTag: Partial<CategoryTagEntity>) {
+  async editCategoryTag(id: number, categoryTag: Partial<TagEntity>) {
     const categoryTagEntity = await this.findOne(id);
     if (!categoryTagEntity) {
       throw new BadRequestException('分类标签不存在');
     }
-    await this.categoryTagRepository.save({
+    await this.tagRepository.save({
       ...categoryTagEntity,
       ...categoryTag,
     });
@@ -71,7 +71,7 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     if (!categoryTagEntity) {
       throw new BadRequestException('分类标签不存在');
     }
-    await this.categoryTagRepository.delete(id);
+    await this.tagRepository.delete(id);
     return success('删除成功');
   }
 

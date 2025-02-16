@@ -7,9 +7,9 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto/index.dto';
 import { CategoryService } from './category.service';
-import { CategoryTagEntity } from './entity';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dto/index.dto';
+import { TagEntity } from '../entity/category.entity';
 
 @Controller('category')
 export class CategoryController {
@@ -51,7 +51,7 @@ export class CategoryController {
   @Post(':id/tag')
   async createCategoryTag(
     @Param('id') id: number,
-    @Body() categoryTag: Partial<CategoryTagEntity>,
+    @Body() categoryTag: Partial<TagEntity>,
   ) {
     return await this.categoryService.createCategoryTag(categoryTag);
   }
@@ -59,7 +59,7 @@ export class CategoryController {
   @Put(':id/tag')
   async editCategoryTag(
     @Param('id') id: number,
-    @Body() categoryTag: Partial<CategoryTagEntity>,
+    @Body() categoryTag: Partial<TagEntity>,
   ) {
     return await this.categoryService.editCategoryTag(id, categoryTag);
   }

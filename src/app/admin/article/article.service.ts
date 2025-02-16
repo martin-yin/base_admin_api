@@ -1,10 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  ArticleEntity,
-  ArticleTagEntity,
-  ArticleVersionEntity,
-  MacroCodeEntity,
-} from './entity/article.entity';
+import { ArticleEntity } from './entity/article.entity';
 import { DataBasicService } from '@/shared/service/basic.service';
 import { EntityManager, Repository } from 'typeorm';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';

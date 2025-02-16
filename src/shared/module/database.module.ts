@@ -9,7 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   CategoryEntity,
   CategoryTagEntity,
-} from '@/app/admin/system/category/entity';
+} from '@/app/admin/article/category/entity';
 import {
   ArticleEntity,
   ArticleTagEntity,
