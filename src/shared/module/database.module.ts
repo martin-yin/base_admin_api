@@ -6,17 +6,15 @@ import {
 } from '@/app/admin/system/management/entity/management.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from '@/app/admin/user/entity/index.entity';
 import {
   CategoryEntity,
-  CategoryTagEntity,
-} from '@/app/admin/article/category/entity';
+  TagEntity,
+} from '@/app/admin/article/entity/category.entity';
 import {
   ArticleEntity,
-  ArticleTagEntity,
-  ArticleVersionEntity,
-  MacroCodeEntity,
+  ArticleHistoryEntity,
 } from '@/app/admin/article/entity/article.entity';
-import { UserEntity } from '@/app/admin/user/entity/index.entity';
 
 @Module({
   imports: [
@@ -33,13 +31,11 @@ import { UserEntity } from '@/app/admin/user/entity/index.entity';
         ManagementEntity,
         ManagementRoleEntity,
         MenuEntity,
-        CategoryEntity,
-        CategoryTagEntity,
-        ArticleVersionEntity,
-        ArticleEntity,
-        ArticleTagEntity,
-        MacroCodeEntity,
         UserEntity,
+        CategoryEntity,
+        TagEntity,
+        ArticleEntity,
+        ArticleHistoryEntity,
       ],
       synchronize: true,
     }),

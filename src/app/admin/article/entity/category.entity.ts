@@ -46,13 +46,13 @@ export class TagEntity extends BasicRichEntity {
   })
   icon: string;
 
-  @Column({
-    type: 'enum',
-    enum: ['SYSTEM', 'CUSTOM'],
-    default: 'SYSTEM',
-    comment: '标签类型',
-  })
-  type: string; // 使用枚举提高可读性
+  // @Column({
+  //   type: 'enum',
+  //   enum: ['SYSTEM', 'CUSTOM'],
+  //   default: 'SYSTEM',
+  //   comment: '标签类型',
+  // })
+  // type: string; // 使用枚举提高可读性
 
   @ManyToOne(() => CategoryEntity)
   @JoinColumn({ name: 'category_id' })
