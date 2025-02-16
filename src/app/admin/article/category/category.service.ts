@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { success } from '@/helper/handle';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataBasicService } from '@/shared/service/basic.service';
@@ -100,5 +100,15 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     }
     await this.tagRepository.delete(id);
     return success('删除成功');
+  }
+
+  async findTagByIds(ids: number[]): Promise<TagEntity[]> {
+    const tagList = await this.tagRepository.find({
+      where: { id: In(ids) },
+    });
+    if (tagList.length !== ids.length || tagList.length === 0) {
+      throw new BadRequestException('分类标签不存在');
+    }
+    return tagList;
   }
 }

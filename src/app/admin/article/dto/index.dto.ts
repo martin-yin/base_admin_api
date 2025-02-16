@@ -1,38 +1,45 @@
-import { IsString } from 'class-validator';
-
-export class UpdateArticleDto {
-  id: number;
-  title: string;
-  desc: string;
-  cover: string;
-  type: string;
-  status: number;
-  categoryId: number;
-  carouselImages: string;
-  content: string;
-  autherId: number;
-  source: string;
-  tagIds: string;
-  viewCount: number;
-  collectCount: number;
-  marcoCode: string;
-}
+import { Type } from 'class-transformer';
+import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
+import { TagEntity } from '../entity/category.entity';
 
 export class CreateArticleDto {
+  @IsString()
   title: string;
-  desc: string;
+
+  @IsString()
+  summary: string;
+
+  @IsString()
   cover: string;
-  type: string;
-  status: number;
+
+  @IsArray()
+  @IsOptional()
+  carouselImages: string[];
+
+  @IsNumber()
+  pluginCategoryId: number;
+
+  @IsNumber()
   categoryId: number;
-  carouselImages: string;
+
+  @IsNumber()
+  userId: number;
+
+  @IsString()
   content: string;
-  autherId: number;
-  source: string;
-  tagIds: string;
+
+  @IsString()
+  code: string;
+
+  @IsNumber()
   viewCount: number;
-  collectCount: number;
-  marcoCode: string;
+
+  @IsArray()
+  tags: number[];
+}
+
+export class UpdateArticleDto extends CreateArticleDto {
+  id: number;
 }
 
 export class CreateCategoryDto {

@@ -1,5 +1,6 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ArticleService } from './article.service';
+import { CreateArticleDto } from './dto/index.dto';
 
 @Controller('article')
 export class ArticleController {
@@ -9,10 +10,10 @@ export class ArticleController {
   //   return await this.articleService.findAll();
   // }
 
-  // @Post()
-  // async create(@Body() body: UpdateArticleDto) {
-  //   return await this.articleService.createArticle(body);
-  // }
+  @Post()
+  async create(@Body() body: CreateArticleDto) {
+    return await this.articleService.createArticle(body);
+  }
 
   // @Delete(':id')
   // async delete(@Param('id') id: number) {

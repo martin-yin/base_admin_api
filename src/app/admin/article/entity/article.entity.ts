@@ -46,10 +46,6 @@ export class ArticleEntity extends BasicRichEntity {
   })
   categoryId: number;
 
-  @ManyToMany(() => TagEntity)
-  @JoinTable({ name: 'article_tags' })
-  tags: TagEntity[];
-
   @Column({
     type: 'int',
     comment: '作者id',
@@ -78,43 +74,34 @@ export class ArticleEntity extends BasicRichEntity {
     default: 0,
   })
   viewCount: number;
+
+  @ManyToMany(() => TagEntity)
+  @JoinTable({ name: 'article_tags' })
+  tags: TagEntity[];
 }
 
-// 历史版本表（全量字段）
 @Entity('article_histories')
 export class ArticleHistoryEntity extends BasicRichEntity {
-  // 完全复制文章表所有字段
-  @Column({ type: 'varchar', length: 255 })
-  title: string;
+  @Column({
+    type: 'json',
+    comment: '文章快照，包含所有文章相关数据的JSON对象',
+  })
+  snapshot: any;
 
-  @Column({ type: 'varchar', length: 255 })
-  summary: string;
+  @Column({
+    type: 'int',
+    comment: '文章id',
+    name: 'article_id',
+  })
+  articleId: number;
 
-  @Column({ type: 'text' })
-  cover: string;
+  @Column({
+    type: 'text',
+    comment: '更新日志',
+    name: 'changelog',
+  })
+  changelog: string;
 
-  @Column({ type: 'json', name: 'carousel_images' })
-  carouselImages: string[];
-
-  @Column({ name: 'plugin_category_id' })
-  pluginCategoryId: number;
-
-  @Column({ name: 'category_id' })
-  categoryId: number;
-
-  @Column({ type: 'int' })
-  userId: number;
-
-  @Column({ type: 'text' })
-  content: string;
-
-  @Column({ type: 'text' })
-  code: string;
-
-  @Column({ default: 0 })
-  viewCount: number;
-
-  // 新增版本控制字段
   @Column({
     type: 'varchar',
     length: 20,
@@ -123,15 +110,10 @@ export class ArticleHistoryEntity extends BasicRichEntity {
   version: string;
 
   @Column({
-    name: 'article_id',
-    comment: '关联的主文章ID',
-  })
-  articleId: number;
-
-  @Column({
     type: 'enum',
     enum: ['AUTO_SAVE', 'MANUAL_SAVE'],
     default: 'MANUAL_SAVE',
+    comment: '版本保存类型',
   })
-  saveType: string; // 版本保存类型
+  saveType: string;
 }
