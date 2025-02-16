@@ -1,13 +1,13 @@
 import { BasicRichEntity } from '@/shared/entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-@Entity('categories') // 修正表名拼写错误
+@Entity('categories')
 export class CategoryEntity extends BasicRichEntity {
   @Column({
     type: 'varchar',
     length: 20,
     comment: '分类名称',
-    unique: true, // 名称唯一
+    unique: true,
   })
   name: string;
 
@@ -15,7 +15,7 @@ export class CategoryEntity extends BasicRichEntity {
     type: 'varchar',
     length: 255,
     comment: '分类图标（存储图标URL）',
-    nullable: true, // 允许为空
+    nullable: true,
   })
   icon: string;
 

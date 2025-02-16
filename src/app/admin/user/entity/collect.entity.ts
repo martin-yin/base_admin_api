@@ -23,20 +23,3 @@ export class CollectEntity extends BasicRichEntity {
   })
   isPublic: number;
 }
-
-@Entity({
-  name: 'collection_articles',
-})
-export class CollectionArticleEntity extends BasicRichEntity {
-  @Column({
-    type: 'int',
-    comment: '收藏夹ID',
-  })
-  collectionId: number;
-
-  @Column({
-    type: 'int',
-    comment: '文章ID',
-  })
-  articleId: number;
-}

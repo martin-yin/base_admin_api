@@ -1,6 +1,4 @@
-import { Type } from 'class-transformer';
 import { IsArray, IsNumber, IsOptional, IsString } from 'class-validator';
-import { TagEntity } from '../entity/category.entity';
 
 export class CreateArticleDto {
   @IsString()

@@ -80,4 +80,35 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
     });
     await manager.save(ArticleHistoryEntity, historyEntry);
   }
+
+  async getArticleList() {
+    const queryBuilder = this.articleRepository
+      .createQueryBuilder('articles')
+      .select([
+        'articles.id as id',
+        'articles.title as title',
+        'articles.summary as summary',
+        'articles.cover as  cover',
+        'articles.viewCount as viewCount',
+        'articles.updatedAt as updatedAt',
+        'users.nick_name as nickName',
+        'JSON_ARRAYAGG(JSON_OBJECT("name", tags.name, "icon", tags.icon)) as tags', // 聚合 tags 的 name 和 icon
+      ])
+      .leftJoin('users', 'users', 'articles.user_id = users.id')
+      .leftJoin(
+        'categories',
+        'categories',
+        'articles.category_id = categories.id',
+      )
+      .leftJoin('articles.tags', 'tags')
+      .where('users.nick_name IS NOT NULL')
+      .groupBy('articles.id');
+
+    const result = await queryBuilder.getRawMany();
+
+    // 将 tags 字段从字符串解析为 JSON 对象
+    return result.map((item) => ({
+      ...item,
+    }));
+  }
 }
