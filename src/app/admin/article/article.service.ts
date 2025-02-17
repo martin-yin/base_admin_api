@@ -29,11 +29,11 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
    */
   async createArticle(articleData: CreateArticleDto): Promise<ArticleEntity> {
     return await this.entityManager.transaction(async (manager) => {
-      const article = this.articleRepository.create({
+      const entity = this.articleRepository.create({
         ...articleData,
         tags: await this.categoryService.findTagByIds(articleData.tags),
       });
-      const result = await manager.save(ArticleEntity, article);
+      const result = await manager.save(ArticleEntity, entity);
       await this.saveArticleSnapshot(manager, result, '', '1.0.0');
       return result;
     });
@@ -82,12 +82,12 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
   }
 
   async deleteArticle(id: number) {
-    const articleEntity = await this.findOne(id);
-    if (!articleEntity) {
+    const entity = await this.findOne(id);
+    if (!entity) {
       throw new BadRequestException('文章不存在');
     }
     return await this.articleRepository.save({
-      ...articleEntity,
+      ...entity,
       isDelete: 1,
       status: 0,
     });
