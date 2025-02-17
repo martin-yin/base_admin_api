@@ -8,7 +8,6 @@ export class ArticleController {
 
   @Get()
   async getArticleList(@Query() params: GetArticleDto) {
-    console.log('params', params);
     return await this.articleService.getArticleList(params);
   }
 }

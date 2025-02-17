@@ -136,6 +136,7 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
 
       // 动态添加查询条件
       if (keyword) {
+        console.log('keyword', keyword)
         queryBuilder.andWhere('articles.title LIKE :keyword', {
           keyword: `%${keyword}%`,
         });
