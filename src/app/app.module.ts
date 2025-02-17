@@ -7,6 +7,7 @@ import { AdminModule } from './admin/admin.module';
 import { DatabaseModule } from '@/shared/module/database.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ClientModule } from './client/client.module';
 
 console.log(join(__dirname, '..', '..', 'upload'));
 @Module({
@@ -20,6 +21,7 @@ console.log(join(__dirname, '..', '..', 'upload'));
       },
     ]),
     AdminModule,
+    ClientModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'upload'),
       serveRoot: '/upload',
