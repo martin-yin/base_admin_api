@@ -3,7 +3,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { ArticleEntity, ArticleHistoryEntity } from './entity/article.entity';
-import { CreateArticleDto, UpdateArticleDto } from './dto/index.dto';
+import {
+  CreateArticleDto,
+  GetArticleDto,
+  UpdateArticleDto,
+} from './dto/index.dto';
 import { CategoryService } from './category/category.service';
 
 @Injectable()
@@ -93,30 +97,78 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
     });
   }
 
-  async getArticleList() {
-    const queryBuilder = this.articleRepository
-      .createQueryBuilder('articles')
-      .select([
-        'articles.id as id',
-        'articles.title as title',
-        'articles.summary as summary',
-        'articles.cover as  cover',
-        'articles.viewCount as viewCount',
-        'articles.updatedAt as updatedAt',
-        'users.nick_name as nickName',
-        'JSON_ARRAYAGG(JSON_OBJECT("name", tags.name, "icon", tags.icon)) as tags', // 聚合 tags 的 name 和 icon
-      ])
-      .leftJoin('users', 'users', 'articles.user_id = users.id')
-      .leftJoin(
-        'categories',
-        'categories',
-        'articles.category_id = categories.id',
-      )
-      .leftJoin('articles.tags', 'tags')
-      .where('users.nick_name IS NOT NULL')
-      .groupBy('articles.id');
+  async getArticleList(params?: GetArticleDto) {
+    const {
+      keyword,
+      pluginTypeId,
+      categoryId,
+      pageNum = 1,
+      pageSize = 10,
+    } = params;
 
-    return await queryBuilder.getRawMany();
+    try {
+      const queryBuilder = this.articleRepository
+        .createQueryBuilder('articles')
+        .select([
+          'articles.id as id',
+          'articles.title as title',
+          'articles.summary as summary',
+          'articles.cover as cover',
+          'articles.viewCount as viewCount',
+          'articles.updatedAt as updatedAt',
+          'users.nick_name as nickName',
+          'JSON_ARRAYAGG(JSON_OBJECT("name", tags.name, "icon", tags.icon)) as tags',
+        ])
+        .leftJoin('users', 'users', 'articles.user_id = users.id')
+        .leftJoin(
+          'categories',
+          'plugin_categories',
+          'articles.plugin_category_id = plugin_categories.id',
+        )
+        .leftJoin(
+          'categories',
+          'categories',
+          'articles.category_id = categories.id',
+        )
+        .leftJoin('articles.tags', 'tags')
+        .where('users.nick_name IS NOT NULL')
+        .groupBy('articles.id');
+
+      // 动态添加查询条件
+      if (keyword) {
+        queryBuilder.andWhere('articles.title LIKE :keyword', {
+          keyword: `%${keyword}%`,
+        });
+      }
+
+      if (pluginTypeId) {
+        queryBuilder.andWhere('articles.plugin_category_id = :pluginTypeId', {
+          pluginTypeId,
+        });
+      }
+
+      if (categoryId) {
+        queryBuilder.andWhere('articles.category_id = :categoryId', {
+          categoryId,
+        });
+      }
+
+      // 分页处理
+      const total = await queryBuilder.getCount();
+      const articles = await queryBuilder
+        .offset((pageNum - 1) * pageSize)
+        .limit(pageSize)
+        .getRawMany();
+
+      return {
+        total,
+        list: articles,
+      };
+    } catch (error) {
+      // 错误处理
+      console.error('Error fetching article list:', error);
+      throw new Error('Failed to fetch article list');
+    }
   }
 
   async updateArticle(id: number, articleData: UpdateArticleDto) {

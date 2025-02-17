@@ -41,6 +41,14 @@ export class UpdateArticleDto extends CreateArticleDto {
   version: string;
 }
 
+export class GetArticleDto {
+  keyword: string;
+  pluginTypeId: number;
+  categoryId: number;
+  pageNum: number;
+  pageSize: number;
+}
+
 export class CreateCategoryDto {
   @IsString({
     message: '标签名称不能为空',
