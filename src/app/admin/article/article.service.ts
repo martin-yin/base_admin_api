@@ -1,9 +1,9 @@
 import { DataBasicService } from '@/shared/service/basic.service';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { ArticleEntity, ArticleHistoryEntity } from './entity/article.entity';
-import { CreateArticleDto } from './dto/index.dto';
+import { CreateArticleDto, UpdateArticleDto } from './dto/index.dto';
 import { CategoryService } from './category/category.service';
 
 @Injectable()
@@ -81,6 +81,18 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
     await manager.save(ArticleHistoryEntity, historyEntry);
   }
 
+  async deleteArticle(id: number) {
+    const articleEntity = await this.findOne(id);
+    if (!articleEntity) {
+      throw new BadRequestException('文章不存在');
+    }
+    return await this.articleRepository.save({
+      ...articleEntity,
+      isDelete: 1,
+      status: 0,
+    });
+  }
+
   async getArticleList() {
     const queryBuilder = this.articleRepository
       .createQueryBuilder('articles')
@@ -104,11 +116,25 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       .where('users.nick_name IS NOT NULL')
       .groupBy('articles.id');
 
-    const result = await queryBuilder.getRawMany();
+    return await queryBuilder.getRawMany();
+  }
 
-    // 将 tags 字段从字符串解析为 JSON 对象
-    return result.map((item) => ({
-      ...item,
-    }));
+  async updateArticle(id: number, articleData: UpdateArticleDto) {
+    const entity = await this.findOne(id);
+    if (!entity) {
+      throw new BadRequestException('文章不存在');
+    }
+    const newEntity = await this.articleRepository.save({
+      ...entity,
+      ...articleData,
+      tags: await this.categoryService.findTagByIds(articleData.tags),
+    });
+    await this.saveArticleSnapshot(
+      this.entityManager,
+      newEntity,
+      articleData.changeLog,
+      articleData.version,
+    );
+    return newEntity;
   }
 }

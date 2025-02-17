@@ -37,7 +37,8 @@ export class CreateArticleDto {
 }
 
 export class UpdateArticleDto extends CreateArticleDto {
-  id: number;
+  changeLog: string;
+  version: string;
 }
 
 export class CreateCategoryDto {

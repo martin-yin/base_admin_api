@@ -15,6 +15,7 @@ import {
   ArticleEntity,
   ArticleHistoryEntity,
 } from '@/app/admin/article/entity/article.entity';
+import { CollectionEntity } from '@/app/admin/user/entity/collection.entity';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import {
         TagEntity,
         ArticleEntity,
         ArticleHistoryEntity,
+        CollectionEntity,
       ],
       synchronize: true,
     }),
