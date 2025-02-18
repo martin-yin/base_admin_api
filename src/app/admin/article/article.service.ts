@@ -116,6 +116,7 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
           'articles.cover as cover',
           'articles.viewCount as viewCount',
           'articles.updatedAt as updatedAt',
+          'users.avatar as avatar',
           'users.nick_name as nickName',
           'JSON_ARRAYAGG(JSON_OBJECT("name", tags.name, "icon", tags.icon)) as tags',
         ])
@@ -136,7 +137,7 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
 
       // 动态添加查询条件
       if (keyword) {
-        console.log('keyword', keyword)
+        console.log('keyword', keyword);
         queryBuilder.andWhere('articles.title LIKE :keyword', {
           keyword: `%${keyword}%`,
         });
@@ -189,5 +190,50 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       articleData.version,
     );
     return newEntity;
+  }
+
+  async getArticleById(id: number) {
+    const queryBuilder = this.articleRepository
+      .createQueryBuilder('articles')
+      .select([
+        'articles.id as id',
+        'articles.title as title',
+        'articles.summary as summary',
+        'articles.cover as cover',
+        'articles.carouselImages as carouselImages',
+        'articles.content as content',
+        'articles.code as code',
+        'articles.viewCount as viewCount',
+        'articles.updatedAt as updatedAt',
+        'users.nick_name as nickName',
+        'users.avatar as avatar',
+        'JSON_ARRAYAGG(JSON_OBJECT("name", tags.name, "icon", tags.icon)) as tags',
+      ])
+      .leftJoin('users', 'users', 'articles.user_id = users.id')
+      .leftJoin(
+        'categories',
+        'plugin_categories',
+        'articles.plugin_category_id = plugin_categories.id',
+      )
+      .leftJoin(
+        'categories',
+        'categories',
+        'articles.category_id = categories.id',
+      )
+      .leftJoin('articles.tags', 'tags')
+      .where('articles.id = :id', { id });
+
+    // 收藏数量
+    // 评论数量
+    // 历史版本数量 and current version
+
+    const article = await queryBuilder.getRawOne();
+    if (!article) {
+      throw new BadRequestException('文章不存在');
+    }
+
+    return {
+      article: article,
+    };
   }
 }
