@@ -7,9 +7,16 @@ import { APP_GUARD } from '@nestjs/core';
 import { SystemModule } from './system/system.module';
 import { UploadModule } from './upload/upload.module';
 import { ArticleModule } from './article/article.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [AdminJwtModule, SystemModule, UploadModule, ArticleModule],
+  imports: [
+    AdminJwtModule,
+    SystemModule,
+    UploadModule,
+    ArticleModule,
+    UserModule,
+  ],
   controllers: [],
   providers: [
     AdminJwtStrategy,

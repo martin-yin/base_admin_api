@@ -14,11 +14,28 @@ import {
   GetArticleDto,
   UpdateArticleDto,
 } from '../admin/article/dto/index.dto';
+import { ConfigService } from '@nestjs/config';
+import { ArticleEntity } from '../admin/article/entity/article.entity';
 
 @Controller('client/article')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    private configService: ConfigService,
+  ) {}
 
+  addArticleImagePrefix(article: ArticleEntity) {
+    const prefix = this.configService.get('DOMAIN');
+    article.cover = prefix + article.cover;
+    article.carouselImages = article.carouselImages?.map(
+      (item) => prefix + item,
+    );
+    article.tags = article.tags?.map((item) => {
+      item.icon = prefix + item.icon;
+      return item;
+    });
+    return article;
+  }
   @Get()
   async getArticleList(@Request() req: any, @Query() params: GetArticleDto) {
     return await this.articleService.getArticleList(params);
@@ -26,7 +43,9 @@ export class ArticleController {
 
   @Get(':id')
   async getArticleById(@Param('id') id: number) {
-    return await this.articleService.getArticleDetail(id);
+    const data = await this.articleService.getArticleDetail(id);
+    data.article = this.addArticleImagePrefix(data.article);
+    return data;
   }
 
   @Get(':id/history/:versionId')
@@ -34,7 +53,12 @@ export class ArticleController {
     @Param('id') id: number,
     @Param('versionId') versionId: number,
   ) {
-    return await this.articleService.getArticleDetailByVersion(versionId, id);
+    const data = await this.articleService.getArticleDetailByVersion(
+      versionId,
+      id,
+    );
+    data.article = this.addArticleImagePrefix(data.article);
+    return data;
   }
 
   @Put(':id')

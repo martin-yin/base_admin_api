@@ -10,6 +10,7 @@ import {
 } from './dto/index.dto';
 import { CategoryService } from './category/category.service';
 import { ConfigService } from '@nestjs/config';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ArticleService extends DataBasicService<ArticleEntity> {
@@ -24,6 +25,7 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
 
     private readonly categoryService: CategoryService,
     private configService: ConfigService,
+    private userService: UserService,
   ) {
     super(articleRepository);
   }
@@ -233,20 +235,17 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       order: { updatedAt: 'DESC' },
     });
     const article = history.snapshot;
+    const user = await this.userService.findOne(article.userId);
+
     return {
-      article,
+      article: {
+        ...article,
+        nickName: user.nickName,
+        avatar: user.avatar,
+      },
       currentVersion: history.version,
       versionList,
     };
-  }
-
-  async getArticleHistory(id: number) {
-    const versionList = await this.articleHistoryRepository.find({
-      where: { articleId: id },
-      select: ['id', 'version', 'changelog', 'updatedAt'],
-      order: { version: 'DESC' },
-    });
-    return versionList;
   }
 
   private async getArticleById(id: number) {
@@ -286,17 +285,6 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
     if (!article) {
       throw new BadRequestException('文章不存在');
     }
-    const domin = this.configService.get('DOMAIN');
-
-    article.cover = domin + article.cover;
-    article.carouselImages = article.carouselImages?.map(
-      (item) => domin + item,
-    );
-
-    article.tags = article.tags?.map((item) => {
-      item.icon = domin + item.icon;
-      return item;
-    });
     return article;
   }
 }
