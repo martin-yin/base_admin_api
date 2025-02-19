@@ -70,6 +70,7 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       content: article.content,
       code: article.code,
       viewCount: article.viewCount,
+      updatedAt: article.updatedAt,
       tags: article.tags
         ? article.tags.map((tag) => ({
             id: tag.id,
@@ -196,7 +197,7 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
         ...articleData,
         tags: await this.categoryService.findTagByIds(articleData.tags),
       });
-      const { article } = await this.getArticleById(id);
+      const article = await this.getArticleById(id);
       await this.saveArticleSnapshot(
         manager,
         article,
@@ -207,7 +208,48 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
     });
   }
 
-  async getArticleById(id: number) {
+  async getArticleDetail(id: number) {
+    const article = await this.getArticleById(id);
+    const versionList = await this.articleHistoryRepository.find({
+      where: { articleId: id },
+      select: ['id', 'version', 'changelog', 'updatedAt'],
+      order: { updatedAt: 'DESC' },
+    });
+
+    return {
+      article,
+      currentVersion: versionList[0].version,
+      versionList,
+    };
+  }
+
+  async getArticleDetailByVersion(id: number, articleId: number) {
+    const history = await this.articleHistoryRepository.findOne({
+      where: { id },
+    });
+    const versionList = await this.articleHistoryRepository.find({
+      where: { articleId },
+      select: ['id', 'version', 'changelog', 'updatedAt'],
+      order: { updatedAt: 'DESC' },
+    });
+    const article = history.snapshot;
+    return {
+      article,
+      currentVersion: history.version,
+      versionList,
+    };
+  }
+
+  async getArticleHistory(id: number) {
+    const versionList = await this.articleHistoryRepository.find({
+      where: { articleId: id },
+      select: ['id', 'version', 'changelog', 'updatedAt'],
+      order: { version: 'DESC' },
+    });
+    return versionList;
+  }
+
+  private async getArticleById(id: number) {
     const queryBuilder = this.articleRepository
       .createQueryBuilder('articles')
       .select([
@@ -240,11 +282,6 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       .leftJoin('articles.tags', 'tags')
       .where('articles.id = :id', { id });
 
-    const versionList = await this.articleHistoryRepository.find({
-      where: { articleId: id },
-      select: ['id', 'version', 'changelog', 'updatedAt'],
-      order: { version: 'DESC' },
-    });
     const article = await queryBuilder.getRawOne();
     if (!article) {
       throw new BadRequestException('文章不存在');
@@ -260,11 +297,6 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       item.icon = domin + item.icon;
       return item;
     });
-
-    return {
-      article,
-      versionList,
-      version: versionList[0].version,
-    };
+    return article;
   }
 }

@@ -26,7 +26,15 @@ export class ArticleController {
 
   @Get(':id')
   async getArticleById(@Param('id') id: number) {
-    return await this.articleService.getArticleById(id);
+    return await this.articleService.getArticleDetail(id);
+  }
+
+  @Get(':id/history/:versionId')
+  async getArticleHistory(
+    @Param('id') id: number,
+    @Param('versionId') versionId: number,
+  ) {
+    return await this.articleService.getArticleDetailByVersion(versionId, id);
   }
 
   @Put(':id')
