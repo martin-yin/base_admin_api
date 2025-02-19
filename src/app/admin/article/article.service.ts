@@ -214,12 +214,14 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
         'articles.cover as cover',
         'articles.carouselImages as carouselImages',
         'articles.content as content',
+        'articles.categoryId as categoryId',
+        'articles.pluginCategoryId as pluginCategoryId',
         'articles.code as code',
         'articles.viewCount as viewCount',
         'articles.updatedAt as updatedAt',
         'users.nick_name as nickName',
         'users.avatar as avatar',
-        'JSON_ARRAYAGG(JSON_OBJECT("name", tags.name, "icon", tags.icon)) as tags',
+        'JSON_ARRAYAGG(JSON_OBJECT("id", tags.id, "name", tags.name, "icon", tags.icon)) as tags',
       ])
       .leftJoin('users', 'users', 'articles.user_id = users.id')
       .leftJoin(
@@ -235,16 +237,13 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       .leftJoin('articles.tags', 'tags')
       .where('articles.id = :id', { id });
 
-    // 收藏数量
-    // 评论数量
-    // 历史版本数量 and current version
-
     const article = await queryBuilder.getRawOne();
     if (!article) {
       throw new BadRequestException('文章不存在');
     }
     const domin = this.configService.get('DOMAIN');
 
+    article.cover = domin + article.cover;
     article.carouselImages = article.carouselImages?.map(
       (item) => domin + item,
     );
