@@ -9,6 +9,7 @@ import {
   UpdateArticleDto,
 } from './dto/index.dto';
 import { CategoryService } from './category/category.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ArticleService extends DataBasicService<ArticleEntity> {
@@ -22,6 +23,7 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
     private entityManager: EntityManager,
 
     private readonly categoryService: CategoryService,
+    private configService: ConfigService,
   ) {
     super(articleRepository);
   }
@@ -36,6 +38,8 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       const entity = this.articleRepository.create({
         ...articleData,
         tags: await this.categoryService.findTagByIds(articleData.tags),
+        viewCount: 0,
+        userId: 1,
       });
       const result = await manager.save(ArticleEntity, entity);
       await this.saveArticleSnapshot(manager, result, '', '1.0.0');
@@ -162,9 +166,17 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
         .limit(pageSize)
         .getRawMany();
 
+      const domin = this.configService.get('DOMAIN');
       return {
         total,
-        list: articles,
+        list: articles.map((article) => {
+          article.cover = domin + article.cover;
+          article.tags = article.tags?.map((item) => {
+            item.icon = domin + item.icon;
+            return item;
+          });
+          return article;
+        }),
       };
     } catch (error) {
       // 错误处理
@@ -231,6 +243,16 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
     if (!article) {
       throw new BadRequestException('文章不存在');
     }
+    const domin = this.configService.get('DOMAIN');
+
+    article.carouselImages = article.carouselImages?.map(
+      (item) => domin + item,
+    );
+
+    article.tags = article.tags?.map((item) => {
+      item.icon = domin + item.icon;
+      return item;
+    });
 
     return {
       article: article,

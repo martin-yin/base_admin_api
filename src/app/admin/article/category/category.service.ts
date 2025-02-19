@@ -4,6 +4,7 @@ import { success } from '@/helper/handle';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataBasicService } from '@/shared/service/basic.service';
 import { CategoryEntity, TagEntity } from '../entity/category.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CategoryService extends DataBasicService<CategoryEntity> {
@@ -13,6 +14,8 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
 
     @InjectRepository(TagEntity)
     private readonly tagRepository: Repository<TagEntity>,
+
+    private configService: ConfigService,
   ) {
     super(categoryRepository);
   }
@@ -25,6 +28,10 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
   async getCategoryList() {
     const category = await this.categoryRepository.find({
       order: { sort: 'ASC' },
+    });
+    const domain = this.configService.get('DOMAIN');
+    category.map((item) => {
+      item.icon = `${domain}${item.icon}`;
     });
     return category;
   }
@@ -67,10 +74,14 @@ export class CategoryService extends DataBasicService<CategoryEntity> {
     if (!category) {
       throw new BadRequestException('分类不存在');
     }
-    const categoryTagEntityList = await this.tagRepository.find({
+    const tagLit = await this.tagRepository.find({
       where: { categoryId: id },
     });
-    return categoryTagEntityList;
+    const domain = this.configService.get('DOMAIN');
+    tagLit.map((item) => {
+      item.icon = `${domain}${item.icon}`;
+    });
+    return tagLit;
   }
 
   async createCategoryTag(categoryTag: Partial<TagEntity>) {

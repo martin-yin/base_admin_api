@@ -20,8 +20,8 @@ export class CreateArticleDto {
   @IsNumber()
   categoryId: number;
 
-  @IsNumber()
-  userId: number;
+  // @IsNumber()
+  // userId: number;
 
   @IsString()
   content: string;
@@ -29,8 +29,8 @@ export class CreateArticleDto {
   @IsString()
   code: string;
 
-  @IsNumber()
-  viewCount: number;
+  // @IsNumber()
+  // viewCount: number;
 
   @IsArray()
   tags: number[];
