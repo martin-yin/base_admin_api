@@ -186,22 +186,25 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
   }
 
   async updateArticle(id: number, articleData: UpdateArticleDto) {
-    const entity = await this.findOne(id);
-    if (!entity) {
-      throw new BadRequestException('文章不存在');
-    }
-    const newEntity = await this.articleRepository.save({
-      ...entity,
-      ...articleData,
-      tags: await this.categoryService.findTagByIds(articleData.tags),
+    return await this.entityManager.transaction(async (manager) => {
+      const entity = await this.findOne(id);
+      if (!entity) {
+        throw new BadRequestException('文章不存在');
+      }
+      const newEntity = await manager.save(ArticleEntity, {
+        ...entity,
+        ...articleData,
+        tags: await this.categoryService.findTagByIds(articleData.tags),
+      });
+      const { article } = await this.getArticleById(id);
+      await this.saveArticleSnapshot(
+        manager,
+        article,
+        articleData.changeLog,
+        articleData.version,
+      );
+      return newEntity;
     });
-    await this.saveArticleSnapshot(
-      this.entityManager,
-      newEntity,
-      articleData.changeLog,
-      articleData.version,
-    );
-    return newEntity;
   }
 
   async getArticleById(id: number) {
@@ -237,6 +240,11 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
       .leftJoin('articles.tags', 'tags')
       .where('articles.id = :id', { id });
 
+    const versionList = await this.articleHistoryRepository.find({
+      where: { articleId: id },
+      select: ['id', 'version', 'changelog', 'updatedAt'],
+      order: { version: 'DESC' },
+    });
     const article = await queryBuilder.getRawOne();
     if (!article) {
       throw new BadRequestException('文章不存在');
@@ -254,7 +262,9 @@ export class ArticleService extends DataBasicService<ArticleEntity> {
     });
 
     return {
-      article: article,
+      article,
+      versionList,
+      version: versionList[0].version,
     };
   }
 }

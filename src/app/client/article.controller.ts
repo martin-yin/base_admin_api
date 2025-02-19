@@ -6,11 +6,13 @@ import {
   Param,
   Post,
   Query,
+  Put,
   Request,
 } from '@nestjs/common';
 import {
   CreateArticleDto,
   GetArticleDto,
+  UpdateArticleDto,
 } from '../admin/article/dto/index.dto';
 
 @Controller('client/article')
@@ -25,6 +27,14 @@ export class ArticleController {
   @Get(':id')
   async getArticleById(@Param('id') id: number) {
     return await this.articleService.getArticleById(id);
+  }
+
+  @Put(':id')
+  async updateArticle(
+    @Param('id') id: number,
+    @Body() articleData: UpdateArticleDto,
+  ) {
+    return await this.articleService.updateArticle(id, articleData);
   }
 
   @Post()
