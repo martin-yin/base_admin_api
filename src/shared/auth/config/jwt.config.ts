@@ -15,8 +15,8 @@ export class JwtConfigService implements JwtOptionsFactory {
 
     const expirationKey =
       this.type === 'admin'
-        ? 'JWT_ADMIN_EXPIRATION_TIME'
-        : 'JWT_USER_EXPIRATION_TIME';
+        ? 'JWT_ACCESS_TOKEN_EXPIRATION_TIME'
+        : 'JWT_ACCESS_TOKEN_EXPIRATION_TIME';
 
     return {
       secret: this.configService.get(secretKey),

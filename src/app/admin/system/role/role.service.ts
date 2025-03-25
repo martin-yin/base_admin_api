@@ -5,7 +5,7 @@ import { RoleEntity, RoleMenuEntity } from './entity';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { DataBasicService } from '@/core/database/services/basic.service';
 import { RoleInfo } from './types';
-import { ApiException } from '@/common/core/exceptions';
+import { ApiException } from '@/core/exceptions';
 
 @Injectable()
 export class RoleService extends DataBasicService<RoleEntity> {

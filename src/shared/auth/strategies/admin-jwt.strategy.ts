@@ -10,7 +10,7 @@ export interface AdminJwtPayload {
 @Injectable()
 export class AdminJwtStrategy extends BaseJwtStrategy {
   constructor(protected readonly configService: ConfigService) {
-    super(configService, 'JWT_ADMIN_SECRET');
+    super(configService, 'JWT_ACCESS_TOKEN_SECRET');
   }
 
   async validate(payload: AdminJwtPayload) {

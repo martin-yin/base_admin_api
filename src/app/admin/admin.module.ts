@@ -4,11 +4,11 @@ import { SystemModule } from './system/system.module';
 import { UploadModule } from './upload/upload.module';
 import { ArticleModule } from './article/article.module';
 import { UserModule } from './user/user.module';
-import { AdminJwtModule } from '@/shared/auth/admin.jwt.module';
+import { AdminAuthModule } from '@/shared/auth/admin-auth.module';
 
 @Module({
   imports: [
-    AdminJwtModule,
+    AdminAuthModule,
     SystemModule,
     UploadModule,
     ArticleModule,

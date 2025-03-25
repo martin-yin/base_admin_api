@@ -10,7 +10,7 @@ export interface UserJwtPayload {
 @Injectable()
 export class UserJwtStrategy extends BaseJwtStrategy {
   constructor(protected readonly configService: ConfigService) {
-    super(configService, 'JWT_USER_SECRET');
+    super(configService, 'JWT_ACCESS_TOKEN_SECRET');
   }
 
   async validate(payload: UserJwtPayload) {
