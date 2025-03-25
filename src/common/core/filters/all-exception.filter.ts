@@ -5,9 +5,8 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { LoggerService } from '../logger/logger.service';
-import { get_current_time } from '../utils';
-
+import { LoggerService } from '@/common/core/logger/logger.service';
+import { get_current_time } from '@/common/utils';
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   constructor(private loggerService: LoggerService) {}

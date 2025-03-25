@@ -1,3 +1,4 @@
+import { get_current_time } from '@/common/utils';
 import {
   ArgumentsHost,
   Catch,
@@ -5,9 +6,8 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { LoggerService } from '../logger/logger.service';
-import { get_current_time } from '../utils';
 import { QueryFailedError } from 'typeorm';
+import { LoggerService } from '../logger/logger.service';
 
 @Catch(QueryFailedError)
 export class QueryFailedExceptionFilter implements ExceptionFilter {

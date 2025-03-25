@@ -1,6 +1,6 @@
 import { success } from '@/helper/handle';
 import { generateSalt, hashPassword, verifyPassword } from '@/helper/password';
-import { Result } from '@/interfaces';
+import { Result } from '@/common/types';
 import { ApiException } from '@/shared/exceptions';
 import { DataBasicService } from '@/shared/service/basic.service';
 import { HttpStatus, Injectable } from '@nestjs/common';

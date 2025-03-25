@@ -1,3 +1,4 @@
+import { get_current_time } from '@/common/utils';
 import {
   ArgumentsHost,
   Catch,
@@ -5,9 +6,8 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { ThrottlerException } from '@nestjs/throttler';
-import { ApiException } from '../exceptions/api.exception';
+import { ApiException } from '../exceptions';
 import { LoggerService } from '../logger/logger.service';
-import { get_current_time } from '../utils';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { join as path_join } from 'node:path';
 import { format, transports } from 'winston';
 import 'winston-daily-rotate-file';
-import { dateFormat } from '../utils';
+import { dateFormat } from '../../utils';
 
 @Injectable()
 export class WinstonConfigService implements WinstonModuleOptionsFactory {

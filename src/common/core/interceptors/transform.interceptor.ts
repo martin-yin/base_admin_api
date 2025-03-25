@@ -1,3 +1,5 @@
+import { Result } from '@/common/types/result.interface';
+import { get_current_time } from '@/common/utils';
 import {
   Injectable,
   NestInterceptor,
@@ -7,8 +9,6 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Result } from '../interfaces/result.interface';
-import { get_current_time } from '../utils';
 
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<T, Result> {

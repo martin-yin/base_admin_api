@@ -9,7 +9,7 @@ import {
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { ApiException } from '../exceptions';
 import { success } from '@/helper/handle';
-import { Result } from '@/interfaces';
+import { Result } from '@/common/types';
 
 export interface FindWhere {
   readonly [key: string]: string | number | boolean;
