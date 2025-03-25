@@ -1,13 +1,12 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpStatus,
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AUTHORIZE_METADATA } from '../constants/api-authorize';
-import { ApiException } from '../exceptions';
 import { AuthService } from '@/app/admin/system/auth/auth.service';
+import { ApiException } from '@/common/core/exceptions/api.exception';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {

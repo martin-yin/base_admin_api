@@ -9,7 +9,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import * as _ from 'lodash';
 import { AUTHORIZE_METADATA } from '../constants/api-authorize';
-import { ApiException } from '../exceptions';
+import { ApiException } from '@/common/core/exceptions';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(

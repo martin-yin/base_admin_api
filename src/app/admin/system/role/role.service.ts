@@ -4,8 +4,8 @@ import { EntityManager, Repository } from 'typeorm';
 import { RoleEntity, RoleMenuEntity } from './entity';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { DataBasicService } from '@/shared/service/basic.service';
-import { ApiException } from '@/shared/exceptions';
 import { RoleInfo } from './types';
+import { ApiException } from '@/common/core/exceptions';
 
 @Injectable()
 export class RoleService extends DataBasicService<RoleEntity> {

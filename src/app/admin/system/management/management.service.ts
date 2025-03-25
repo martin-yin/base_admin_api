@@ -1,7 +1,7 @@
 import { success } from '@/helper/handle';
 import { generateSalt, hashPassword, verifyPassword } from '@/helper/password';
 import { Result } from '@/common/types';
-import { ApiException } from '@/shared/exceptions';
+
 import { DataBasicService } from '@/shared/service/basic.service';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +15,7 @@ import {
   ManagementEntity,
   ManagementRoleEntity,
 } from './entity/management.entity';
+import { ApiException } from '@/common/core/exceptions';
 
 @Injectable()
 export class ManagementService extends DataBasicService<ManagementEntity> {
