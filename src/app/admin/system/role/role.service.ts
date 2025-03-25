@@ -3,7 +3,7 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { RoleEntity, RoleMenuEntity } from './entity';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
-import { DataBasicService } from '@/shared/services/basic.service';
+import { DataBasicService } from '@/core/database/services/basic.service';
 import { RoleInfo } from './types';
 import { ApiException } from '@/common/core/exceptions';
 

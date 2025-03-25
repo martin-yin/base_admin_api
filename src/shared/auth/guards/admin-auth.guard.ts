@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 import { ApiException } from '@/core/exceptions/api.exception';
 import { AUTHORIZE_METADATA } from '@/shared/constants/api-authorize';
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class JwtAuthGuard extends AuthGuard('admin-jwt') {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,

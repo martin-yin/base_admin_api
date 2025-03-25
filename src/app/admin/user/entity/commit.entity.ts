@@ -1,4 +1,4 @@
-import { BasicRichEntity } from '@/shared/database/entities';
+import { BasicRichEntity } from '@/core/database/entitys';
 import { Column, Entity, Index } from 'typeorm';
 
 @Entity({ name: 'article_comments' })

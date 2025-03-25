@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
 import { success } from '@/core/utils/handle';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataBasicService } from '@/shared/services/basic.service';
+import { DataBasicService } from '@/core/database/services/basic.service';
 import { CategoryEntity, TagEntity } from '../entity/category.entity';
 import { ConfigService } from '@nestjs/config';
 

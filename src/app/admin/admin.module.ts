@@ -1,10 +1,10 @@
-import { AdminJwtModule } from '@/shared/module/admin.jwt.module';
-import { AdminJwtStrategy } from '@/shared/services/admin.jwt.strategy';
+import { AdminJwtStrategy } from '@/shared/auth/strategies/admin-jwt.strategy';
 import { Module } from '@nestjs/common';
 import { SystemModule } from './system/system.module';
 import { UploadModule } from './upload/upload.module';
 import { ArticleModule } from './article/article.module';
 import { UserModule } from './user/user.module';
+import { AdminJwtModule } from '@/shared/auth/admin.jwt.module';
 
 @Module({
   imports: [

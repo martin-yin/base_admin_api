@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AdminModule } from './admin/admin.module';
-import { DatabaseModule } from '@/shared/module/database.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ValidationProvider } from '@/core/validation';
 import { CoreModule } from '@/core';
+import { DatabaseModule } from '@/core/database/database.module';
 // import { ClientModule } from './client/client.module';
 
 @Module({
