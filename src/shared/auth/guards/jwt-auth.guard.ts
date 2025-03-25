@@ -8,8 +8,8 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import * as _ from 'lodash';
-import { AUTHORIZE_METADATA } from '../constants/api-authorize';
-import { ApiException } from '@/common/core/exceptions';
+import { ApiException } from '@/core/exceptions/api.exception';
+import { AUTHORIZE_METADATA } from '@/shared/constants/api-authorize';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(

@@ -1,13 +1,13 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { LoggerModule } from './core/logger/logger.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Global()
 @Module({})
-export class CommonModule {
+export class CoreModule {
   static forRoot() {
     return {
-      module: CommonModule,
+      module: CoreModule,
       imports: [
         LoggerModule,
         ConfigModule.forRoot({

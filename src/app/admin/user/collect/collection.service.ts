@@ -3,7 +3,7 @@ import { CollectionEntity } from '../entity/collection.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCollectionDto } from '../dto/collection.dto';
-import { DataBasicService } from '@/shared/service/basic.service';
+import { DataBasicService } from '@/shared/services/basic.service';
 import { ArticleService } from '../../article/article.service';
 
 @Injectable()

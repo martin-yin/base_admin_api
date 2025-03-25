@@ -1,4 +1,4 @@
-import { BasicRichEntity } from '@/shared/entity';
+import { BasicRichEntity } from '@/shared/database/entities';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { TagEntity } from './category.entity';
 

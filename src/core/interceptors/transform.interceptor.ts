@@ -1,5 +1,5 @@
-import { Result } from '@/common/types/result.interface';
-import { get_current_time } from '@/common/utils';
+import { Result } from '@/core/types/result.interface';
+import { get_current_time } from '@/core/utils';
 import {
   Injectable,
   NestInterceptor,

@@ -5,12 +5,9 @@ import {
   AllExceptionsFilter,
   HttpExceptionFilter,
   QueryFailedExceptionFilter,
-} from './common/core/filters';
-import { LoggerService } from './common/core/logger/logger.service';
-import {
-  LoggingInterceptor,
-  TransformInterceptor,
-} from './common/core/interceptors';
+} from './core/filters';
+import { TransformInterceptor, LoggingInterceptor } from './core/interceptors';
+import { LoggerService } from './core/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

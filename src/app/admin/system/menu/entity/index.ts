@@ -1,4 +1,4 @@
-import { BasicRichEntity } from '@/shared/entity';
+import { BasicRichEntity } from '@/shared/database/entities';
 import { Column, Entity } from 'typeorm';
 
 @Entity('menus')

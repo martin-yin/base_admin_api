@@ -7,7 +7,7 @@ import {
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { APP_PIPE } from '@nestjs/core';
 import { ApiException } from '../exceptions/api.exception';
-import { ApiCode } from '../../enums/api-code.enum';
+import { ApiCode } from '../enums/api-code.enum';
 
 export const ValidationProvider = {
   provide: APP_PIPE,

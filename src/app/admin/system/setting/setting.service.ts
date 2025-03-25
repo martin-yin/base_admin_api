@@ -1,4 +1,4 @@
-import { DataBasicService } from '@/shared/service/basic.service';
+import { DataBasicService } from '@/shared/services/basic.service';
 import { Injectable } from '@nestjs/common';
 
 // @Injectable()

@@ -7,9 +7,9 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { success } from '@/helper/handle';
-import { Result } from '@/common/types';
-import { ApiException } from '@/common/core/exceptions';
+import { success } from '@/core/utils/handle';
+import { Result } from '@/core/types';
+import { ApiException } from '@/core/exceptions';
 
 export interface FindWhere {
   readonly [key: string]: string | number | boolean;

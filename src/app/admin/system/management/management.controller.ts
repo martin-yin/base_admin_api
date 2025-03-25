@@ -8,7 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiAuthorize } from '@/shared/decorators';
+import { ApiAuthorize } from '@/shared/auth/decorators';
 import {
   AUTHORIZE_USER_CREATE,
   AUTHORIZE_USER_DELETE,

@@ -1,4 +1,4 @@
-import { get_current_time } from '@/common/utils';
+import { get_current_time } from '@/core/utils';
 import {
   ArgumentsHost,
   Catch,
