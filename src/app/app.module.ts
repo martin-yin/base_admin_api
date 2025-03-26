@@ -6,13 +6,11 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ValidationProvider } from '@/core/validation';
 import { CoreModule } from '@/core';
-import { DatabaseModule } from '@/core/database/database.module';
 // import { ClientModule } from './client/client.module';
 
 @Module({
   imports: [
     CoreModule.forRoot(),
-    DatabaseModule,
     ThrottlerModule.forRoot([
       {
         ttl: 6000,

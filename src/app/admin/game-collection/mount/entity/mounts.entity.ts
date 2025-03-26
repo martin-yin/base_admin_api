@@ -1,6 +1,8 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-Entity('mounts');
+@Entity({
+  name: 'mounts',
+})
 export class MountEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -8,7 +10,6 @@ export class MountEntity {
   @Index()
   @Column({
     type: 'int',
-    length: 100,
     name: 'mount_id',
     comment: '坐骑id',
   })
@@ -16,7 +17,7 @@ export class MountEntity {
 
   @Index()
   @Column({
-    type: 'string',
+    type: 'varchar',
     comment: '坐骑名称',
   })
   name: string;
@@ -38,7 +39,6 @@ export class MountEntity {
 
   @Column({
     type: 'varchar',
-    length: 20,
     comment: '版本',
   })
   version: string;
@@ -61,6 +61,7 @@ export class MountEntity {
     length: 100,
     name: 'post_uid',
     comment: '帖子UID',
+    default: '',
   })
   postUid: number;
 
@@ -69,6 +70,7 @@ export class MountEntity {
     length: 255,
     name: 'post_link',
     comment: '帖子链接',
+    default: '',
   })
   postLink: string;
 }

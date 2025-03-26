@@ -58,6 +58,9 @@ export class UploadController {
       const worksheet = workbook.Sheets[firstSheetName];
       const excelJsonData = XLSX.utils.sheet_to_json(worksheet);
       console.log(excelJsonData);
+      if (type === 'mount') {
+        return this.uploadService.createMounts(excelJsonData);
+      }
     } catch (error) {
       throw new ApiException(
         `Excel解析失败: ${error.message}`,

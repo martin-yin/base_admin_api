@@ -5,7 +5,21 @@ import { MountService } from '../game-collection/mount/mount.service';
 export class UploadService {
   constructor(private readonly mountService: MountService) {}
 
-  async createMountData(mounts: any[]) {
-    console.log(mounts);
+  async createMounts(mounts: any[]) {
+    const data = mounts.map((item) => {
+      return {
+        mountId: item['id'],
+        name: item['中文名称'],
+        category: item['类别'],
+        iconUrl: item['图标地址'],
+        description: item.description,
+        version: item['版本'],
+        camp: item['阵营'],
+        source: item['来源'],
+        postUid: item['帖子UID'] || '',
+        postLink: item['帖子链接'] || '',
+      };
+    });
+    return this.mountService.createMountsData(data as any);
   }
 }
