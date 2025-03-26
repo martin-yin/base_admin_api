@@ -3,9 +3,11 @@ import { SystemModule } from './system/system.module';
 import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from '@/shared/auth/guards/admin-auth.guard';
-import { PermissionGuard } from '@/shared/auth/guards/permission.guard';
+
+// import { PermissionGuard } from '@/shared/auth/guards/permission.guard';
 import { AdminAuthModule } from '@/shared/auth/admin-auth.module';
+import { AdminJwtAuthGuard } from '@/shared/auth/guards/admin-auth.guard';
+import { PermissionGuard } from '@/shared/auth/guards/permission.guard';
 
 @Module({
   imports: [AdminAuthModule, SystemModule, UploadModule, UserModule],
@@ -13,7 +15,7 @@ import { AdminAuthModule } from '@/shared/auth/admin-auth.module';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: AdminJwtAuthGuard,
     },
     {
       provide: APP_GUARD,

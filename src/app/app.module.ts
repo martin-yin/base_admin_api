@@ -20,7 +20,6 @@ import { DatabaseModule } from '@/core/database/database.module';
       },
     ]),
     AdminModule,
-    // ClientModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'upload'),
       serveRoot: '/upload',

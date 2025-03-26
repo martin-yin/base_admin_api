@@ -7,7 +7,9 @@ import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'admin-jwt' }),
+    PassportModule.register({
+      defaultStrategy: 'admin-jwt',
+    }),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => {
         const jwtConfig = new JwtConfigService(configService, 'admin');

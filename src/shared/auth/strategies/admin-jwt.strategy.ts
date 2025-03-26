@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BaseJwtStrategy } from './jwt.strategy';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PassportStrategy } from '@nestjs/passport';
 
 export interface AdminJwtPayload {
   sub: number;
@@ -8,9 +9,13 @@ export interface AdminJwtPayload {
 }
 
 @Injectable()
-export class AdminJwtStrategy extends BaseJwtStrategy {
+export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
   constructor(protected readonly configService: ConfigService) {
-    super(configService, 'JWT_ACCESS_TOKEN_SECRET');
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: configService.get('JWT_ACCESS_TOKEN_SECRET'),
+    });
   }
 
   async validate(payload: AdminJwtPayload) {

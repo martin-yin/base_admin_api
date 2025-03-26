@@ -11,7 +11,9 @@ export class JwtConfigService implements JwtOptionsFactory {
 
   createJwtOptions(): JwtModuleOptions {
     const secretKey =
-      this.type === 'admin' ? 'JWT_ADMIN_SECRET' : 'JWT_USER_SECRET';
+      this.type === 'admin'
+        ? 'JWT_ACCESS_TOKEN_SECRET'
+        : 'JWT_ACCESS_TOKEN_SECRET';
 
     const expirationKey =
       this.type === 'admin'
