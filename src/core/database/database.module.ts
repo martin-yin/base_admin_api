@@ -6,16 +6,7 @@ import {
 } from '@/app/admin/system/management/entity/management.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UserEntity } from '@/app/admin/user/entity/index.entity';
-import {
-  CategoryEntity,
-  TagEntity,
-} from '@/app/admin/article/entity/category.entity';
-import {
-  ArticleEntity,
-  ArticleHistoryEntity,
-} from '@/app/admin/article/entity/article.entity';
-import { CollectionEntity } from '@/app/admin/user/entity/collection.entity';
+import { UserEntity } from '@/app/admin/user/entitys/index.entity';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
@@ -38,11 +29,6 @@ import { ConfigService } from '@nestjs/config';
           ManagementRoleEntity,
           MenuEntity,
           UserEntity,
-          CategoryEntity,
-          TagEntity,
-          ArticleEntity,
-          ArticleHistoryEntity,
-          CollectionEntity,
         ],
         synchronize: true,
       }),
