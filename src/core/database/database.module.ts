@@ -8,6 +8,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UserEntity } from '@/app/admin/user/entitys/index.entity';
 import { ConfigService } from '@nestjs/config';
+import { WoWHeadMountEntity } from '@/app/admin/game-collection/mount/entity/wowhead-mounts.entity';
+import { MountEntity } from '@/app/admin/game-collection/mount/entity/mounts.entity';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { ConfigService } from '@nestjs/config';
           ManagementRoleEntity,
           MenuEntity,
           UserEntity,
+          MountEntity,
+          WoWHeadMountEntity,
         ],
         synchronize: true,
       }),
