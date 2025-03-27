@@ -1,32 +1,26 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-Entity('wowhead_mounts');
-export class WoWHeadMountEntity {
+@Entity({
+  name: 'pets',
+})
+export class PetEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Index()
   @Column({
     type: 'int',
-    length: 100,
-    name: 'mount_id',
-    comment: '坐骑id',
+    name: 'pet_id',
+    comment: '宠物id',
   })
-  mountId: number;
+  petId: number;
 
   @Index()
   @Column({
-    type: 'string',
-    comment: '坐骑名称',
+    type: 'varchar',
+    comment: '宠物名称',
   })
   name: string;
-
-  @Column({
-    type: 'varchar',
-    length: 50,
-    comment: '类别',
-  })
-  category: string;
 
   @Column({
     type: 'varchar',
@@ -38,7 +32,6 @@ export class WoWHeadMountEntity {
 
   @Column({
     type: 'varchar',
-    length: 20,
     comment: '版本',
   })
   version: string;
@@ -57,16 +50,11 @@ export class WoWHeadMountEntity {
   source: string;
 
   @Column({
-    type: 'text',
-    comment: '详细描述',
-  })
-  description: string;
-
-  @Column({
     type: 'varchar',
     length: 100,
     name: 'post_uid',
     comment: '帖子UID',
+    default: '',
   })
   postUid: number;
 
@@ -75,6 +63,7 @@ export class WoWHeadMountEntity {
     length: 255,
     name: 'post_link',
     comment: '帖子链接',
+    default: '',
   })
   postLink: string;
 }

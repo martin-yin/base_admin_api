@@ -2,56 +2,55 @@ import { DataBasicService } from '@/core/database/services/basic.service';
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
-import { MountEntity } from './entity/mounts.entity';
+import { PetEntity } from './entity/pet.entity';
 import { success } from '@/core/utils/handle';
 import { ApiException } from '@/core/exceptions/api.exception';
 import { HttpStatus } from '@nestjs/common';
 
 @Injectable()
-export class MountService extends DataBasicService<MountEntity> {
+export class PetService extends DataBasicService<PetEntity> {
   constructor(
     @InjectEntityManager()
     private entityManager: EntityManager,
-    @InjectRepository(MountEntity)
-    private mountRepository: Repository<MountEntity>,
+    @InjectRepository(PetEntity)
+    private PetRepository: Repository<PetEntity>,
   ) {
-    super(mountRepository);
+    super(PetRepository);
   }
 
   async findAll() {
-    return await this.mountRepository.find();
+    return await this.PetRepository.find();
   }
 
   /**
    * @description 创建或更新坐骑数据
-   * @param mounts
+   * @param Pets
    * @returns
    */
-  async createMountsData(mounts: MountEntity[]) {
+  async createPetsData(Pets: PetEntity[]) {
     try {
       return await this.entityManager.transaction(
         async (transactionManager) => {
-          for (const mount of mounts) {
-            const existingMount = await transactionManager.findOne(
-              MountEntity,
-              { where: { mountId: mount.mountId } },
-            );
+          for (const Pet of Pets) {
+            const existingPet = await transactionManager.findOne(PetEntity, {
+              where: { petId: Pet.petId },
+            });
 
-            if (existingMount) {
+            if (existingPet) {
               await transactionManager.update(
-                MountEntity,
-                { mountId: mount.mountId },
-                mount,
+                PetEntity,
+                { petId: Pet.petId },
+                Pet,
               );
             } else {
-              const newMount = new MountEntity();
-              Object.assign(newMount, mount);
-              await transactionManager.save(MountEntity, newMount);
+              const newPet = new PetEntity();
+              Object.assign(newPet, Pet);
+              await transactionManager.save(PetEntity, newPet);
             }
           }
 
           return success('处理成功', {
-            total: mounts.length,
+            total: Pets.length,
           });
         },
       );

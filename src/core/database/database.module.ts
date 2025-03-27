@@ -9,6 +9,8 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { UserEntity } from '@/app/admin/user/entitys/index.entity';
 import { ConfigService } from '@nestjs/config';
 import { MountEntity } from '@/app/admin/game-collection/mount/entity/mounts.entity';
+import { ToyEntity } from '@/app/admin/game-collection/toy/entity/toy.entity';
+import { PetEntity } from '@/app/admin/game-collection/pet/entity/pet.entity';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { MountEntity } from '@/app/admin/game-collection/mount/entity/mounts.ent
           MenuEntity,
           UserEntity,
           MountEntity,
+          ToyEntity,
+          PetEntity,
         ],
         synchronize: true,
       }),
