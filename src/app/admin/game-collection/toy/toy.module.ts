@@ -7,6 +7,6 @@ import { ToyService } from './toy.service';
   imports: [TypeOrmModule.forFeature([ToyEntity])],
   controllers: [],
   providers: [ToyService],
-  exports: [],
+  exports: [ToyService],
 })
 export class ToyModule {}

@@ -7,6 +7,6 @@ import { PetService } from './pet.service';
   imports: [TypeOrmModule.forFeature([PetEntity])],
   controllers: [],
   providers: [PetService],
-  exports: [],
+  exports: [PetService],
 })
 export class PetModule {}
