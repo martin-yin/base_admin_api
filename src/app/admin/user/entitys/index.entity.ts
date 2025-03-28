@@ -1,9 +1,10 @@
+import { BasicEntity } from '@/core/database/entitys';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
   name: 'users',
 })
-export class UserEntity {
+export class UserEntity extends BasicEntity {
   @PrimaryGeneratedColumn({
     type: 'bigint',
   })
@@ -67,4 +68,27 @@ export class UserEntity {
     name: 'nickname_last_updated_time',
   })
   nicknameLastUpdatedTime: Date;
+}
+
+@Entity('user_favorites')
+export class UserFavoriteEntity extends BasicEntity {
+  @Column({
+    type: 'bigint',
+    name: 'user_id',
+  })
+  userId: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'type',
+    comment: '收藏数据的类型',
+  })
+  type: string;
+
+  @Column({
+    type: 'bigint',
+    name: 'target_id',
+    comment: '目标的id',
+  })
+  targetId: number;
 }

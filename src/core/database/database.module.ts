@@ -6,7 +6,10 @@ import {
 } from '@/app/admin/system/management/entity/management.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UserEntity } from '@/app/admin/user/entitys/index.entity';
+import {
+  UserEntity,
+  UserFavoriteEntity,
+} from '@/app/admin/user/entitys/index.entity';
 import { ConfigService } from '@nestjs/config';
 import { MountEntity } from '@/app/admin/game-collection/mount/entity/mounts.entity';
 import { ToyEntity } from '@/app/admin/game-collection/toy/entity/toy.entity';
@@ -31,10 +34,11 @@ import { PetEntity } from '@/app/admin/game-collection/pet/entity/pet.entity';
           ManagementEntity,
           ManagementRoleEntity,
           MenuEntity,
-          UserEntity,
           MountEntity,
           ToyEntity,
           PetEntity,
+          UserEntity,
+          UserFavoriteEntity,
         ],
         synchronize: true,
       }),

@@ -48,7 +48,7 @@ export class UploadService {
     const data = toys.map((item) => {
       return {
         toyId: item['id'],
-        name: item['中文名称'],
+        name: item['中文名'],
         iconUrl: item['图标地址'],
         version: item['版本'],
         faction: item['阵营'],

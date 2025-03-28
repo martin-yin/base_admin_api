@@ -61,6 +61,14 @@ export class UploadController {
       if (type === 'mount') {
         return this.uploadService.createMounts(excelJsonData);
       }
+
+      if (type === 'pet') {
+        return this.uploadService.createPets(excelJsonData);
+      }
+
+      if (type === 'toy') {
+        return this.uploadService.createToys(excelJsonData);
+      }
     } catch (error) {
       throw new ApiException(
         `Excel解析失败: ${error.message}`,
