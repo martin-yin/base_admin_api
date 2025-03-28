@@ -2,7 +2,7 @@ import { BasicEntity } from '@/core/database/entitys';
 import { Column, Entity } from 'typeorm';
 
 @Entity({
-  name: 'achievement',
+  name: 'achievements',
 })
 export class AchievementEntity extends BasicEntity {
   @Column({ comment: '中文名称' })
@@ -32,8 +32,8 @@ export class AchievementEntity extends BasicEntity {
   @Column({ type: 'text', comment: '达成条件说明' })
   unlockCondition: string;
 
-  @Column({ type: 'json', comment: '奖励内容' })
-  rewards: object;
+  @Column({ type: 'text', comment: '奖励内容' })
+  rewards: string;
 
   @Column({ comment: '成就点数' })
   points: number;
@@ -47,8 +47,8 @@ export class AchievementEntity extends BasicEntity {
   @Column({ comment: '关联版本号' })
   version: string;
 
-  @Column({ type: 'json', comment: '物品详细数据' })
-  itemDetails: object;
+  @Column({ type: 'text', comment: '物品详细数据' })
+  itemDetails: string;
 
   @Column({ name: 'post_uid', comment: '关联帖子UID' })
   postUid: string;
