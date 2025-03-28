@@ -6,7 +6,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ValidationProvider } from '@/core/validation';
 import { CoreModule } from '@/core';
-// import { ClientModule } from './client/client.module';
 
 @Module({
   imports: [

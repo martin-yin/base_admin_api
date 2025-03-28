@@ -69,6 +69,9 @@ export class UploadController {
       if (type === 'toy') {
         return this.uploadService.createToys(excelJsonData);
       }
+      if (type === 'achievement') {
+        return this.uploadService.createAchievements(excelJsonData);
+      }
     } catch (error) {
       throw new ApiException(
         `Excel解析失败: ${error.message}`,
