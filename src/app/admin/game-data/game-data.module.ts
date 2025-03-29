@@ -17,7 +17,7 @@ import { GameDataController } from './game-data.controller';
     ]),
   ],
   controllers: [GameDataController],
-  providers: [],
+  providers: [GameDataService],
   exports: [GameDataService],
 })
 export class GameDataModule {}
