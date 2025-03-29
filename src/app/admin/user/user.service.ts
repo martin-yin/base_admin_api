@@ -1,6 +1,6 @@
 import { DataBasicService } from '@/core/database/services/basic.service';
 import { Injectable } from '@nestjs/common';
-import { UserEntity, UserFavoriteEntity } from './entitys/index.entity';
+import { UserEntity, UserFavoriteEntity } from './entitys/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 

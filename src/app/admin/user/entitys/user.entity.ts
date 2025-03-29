@@ -69,6 +69,29 @@ export class UserEntity extends BasicEntity {
   })
   nicknameLastUpdatedTime: Date;
 }
+@Entity({
+  name: 'user_collections',
+  comment: '用户已经完成的收藏',
+})
+export class UserCollection extends BasicEntity {
+  @Column({
+    type: 'bigint',
+    name: 'user_id',
+  })
+  userId: number;
+
+  @Column({
+    type: 'bigint',
+    name: 'target_id',
+  })
+  targetId: number;
+
+  @Column({
+    type: 'varchar',
+    name: 'type',
+  })
+  type: string;
+}
 
 @Entity('user_favorites')
 export class UserFavoriteEntity extends BasicEntity {

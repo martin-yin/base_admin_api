@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { GameDataModule } from './game-data/game-data.module';
 
 @Module({
-  imports: [],
+  imports: [GameDataModule],
   controllers: [],
   providers: [],
 })
