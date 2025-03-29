@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { MountService } from '../game-collection/mount/mount.service';
-import { PetService } from '../game-collection/pet/pet.service';
-import { ToyService } from '../game-collection/toy/toy.service';
-import { AchievementService } from '../achievement/achievement.service';
+import { MountService } from '../game-data/mount/mount.service';
+import { PetService } from '../game-data/pet/pet.service';
+import { ToyService } from '../game-data/toy/toy.service';
+import { AchievementService } from '../game-data/achievement/achievement.service';
 
 @Injectable()
 export class UploadService {

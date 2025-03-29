@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { MountService } from './mount.service';
 
-@Controller('mount')
+@Controller('game-data/mount')
 export class MountController {
   constructor(private mountService: MountService) {}
 

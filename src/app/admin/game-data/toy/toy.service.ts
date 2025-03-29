@@ -2,7 +2,7 @@ import { DataBasicService } from '@/core/database/services/basic.service';
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
-import { ToyEntity } from './entity/toy.entity';
+import { ToyEntity } from '../achievement/entity/toy.entity';
 import { success } from '@/core/utils/handle';
 import { ApiException } from '@/core/exceptions/api.exception';
 import { HttpStatus } from '@nestjs/common';

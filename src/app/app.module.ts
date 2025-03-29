@@ -6,6 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ValidationProvider } from '@/core/validation';
 import { CoreModule } from '@/core';
+import { FrontendModule } from './frontend/frontend.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CoreModule } from '@/core';
       },
     ]),
     AdminModule,
+    FrontendModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'upload'),
       serveRoot: '/upload',

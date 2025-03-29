@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AchievementService } from './achievement.service';
 
-@Controller('achievement')
+@Controller('game-data/achievement')
 export class AchievementController {
   constructor(private achievementService: AchievementService) {}
 

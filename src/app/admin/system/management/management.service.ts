@@ -92,7 +92,6 @@ export class ManagementService extends DataBasicService<ManagementEntity> {
       )
       .leftJoin('roles', 'roles', 'management_roles.role_id = roles.id')
       .where('managements.is_delete = :isDelete', { isDelete: 0 })
-      .where('managements.is_delete = :isDelete', { isDelete: 0 })
       .andWhere('managements.status = :status', { status: 1 })
       .andWhere('roles.status = :status', { status: 1 })
       .andWhere('roles.is_delete = :isDelete', { isDelete: 0 })
