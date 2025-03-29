@@ -1,17 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { MountService } from '../game-data/mount/mount.service';
-import { PetService } from '../game-data/pet/pet.service';
-import { ToyService } from '../game-data/toy/toy.service';
-import { AchievementService } from '../game-data/achievement/achievement.service';
+import { GameDataService } from '../game-data/game-data.service';
 
 @Injectable()
 export class UploadService {
-  constructor(
-    private readonly mountService: MountService,
-    private readonly petService: PetService,
-    private readonly toyService: ToyService,
-    private readonly achievementService: AchievementService,
-  ) {}
+  constructor(private readonly gameDataService: GameDataService) {}
 
   async createMounts(mounts: any[]) {
     const data = mounts.map((item) => {
@@ -27,7 +19,7 @@ export class UploadService {
         postLink: item['帖子链接'] || '',
       };
     });
-    return this.mountService.createMountsData(data as any);
+    return this.gameDataService.createMounts(data as any);
   }
 
   async createPets(pets: any[]) {
@@ -43,7 +35,7 @@ export class UploadService {
         postLink: item['帖子链接'] || '',
       };
     });
-    return this.petService.createPetsData(data as any);
+    return this.gameDataService.createPets(data as any);
   }
 
   async createToys(toys: any[]) {
@@ -58,7 +50,7 @@ export class UploadService {
         postUid: item['帖子UID'] || '',
       };
     });
-    return this.toyService.createToysData(data as any);
+    return this.gameDataService.createToys(data as any);
   }
 
   async createAchievements(achievements: any[]) {
@@ -82,6 +74,6 @@ export class UploadService {
       };
     });
 
-    return this.achievementService.createAchievementData(data as any);
+    return this.gameDataService.createAchievements(data as any);
   }
 }

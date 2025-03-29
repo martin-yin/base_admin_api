@@ -1,13 +1,23 @@
 import { Module } from '@nestjs/common';
-import { MountModule } from './mount/mount.module';
-import { PetModule } from './pet/pet.module';
-import { ToyModule } from './toy/toy.module';
-import { AchievementModule } from './achievement/achievement.module';
+import { GameDataService } from './game-data.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ToyEntity } from './entity/toy.entity';
+import { PetEntity } from './entity/pet.entity';
+import { MountEntity } from './entity/mounts.entity';
+import { AchievementEntity } from './entity/achievement.entity';
+import { GameDataController } from './game-data.controller';
 
 @Module({
-  imports: [MountModule, PetModule, ToyModule, AchievementModule],
-  controllers: [],
+  imports: [
+    TypeOrmModule.forFeature([
+      ToyEntity,
+      PetEntity,
+      MountEntity,
+      AchievementEntity,
+    ]),
+  ],
+  controllers: [GameDataController],
   providers: [],
-  exports: [MountModule, PetModule, ToyModule, AchievementModule],
+  exports: [GameDataService],
 })
 export class GameDataModule {}

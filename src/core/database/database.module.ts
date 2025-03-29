@@ -14,7 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { MountEntity } from '@/app/admin/game-data/mount/entity/mounts.entity';
 import { ToyEntity } from '@/app/admin/game-data/entity/toy.entity';
 import { PetEntity } from '@/app/admin/game-data/pet/entity/pet.entity';
-import { AchievementEntity } from '@/app/admin/game-data/achievement/entity/index.entity';
+import { AchievementEntity } from '@/app/admin/game-data/achievement/entity/achievement.entity';
 
 @Module({
   imports: [
