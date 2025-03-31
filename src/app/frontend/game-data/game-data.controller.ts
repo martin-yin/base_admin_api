@@ -6,14 +6,14 @@ export class GameDataController {
   constructor(private readonly gameDataService: GameDataService) {}
 
   @Get('collection')
-  async getCollectionList() {
-    return await this.gameDataService.getCollectionProcess(1);
+  async getCollectionList(@Query('type') type = 'pet') {
+    return await this.gameDataService.getCollectionProcess(type);
   }
+
   @Get('pet')
   async getPetList(
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
-    @Query('user_id') user_id?: number,
   ) {
     return await this.gameDataService.getPetList(page, limit, 1);
   }
@@ -34,5 +34,15 @@ export class GameDataController {
     @Query('user_id') user_id?: number,
   ) {
     return await this.gameDataService.getMountList(page, limit, user_id);
+  }
+
+  @Get('info')
+  async getGameDataInfo(@Query('type') type: string) {
+    return await this.gameDataService.getGameDataInfo(type);
+  }
+
+  @Get('collection/process')
+  async getCollectionProcess(@Query('type') type: string) {
+    return await this.gameDataService.getCollectionProcess(type, 1);
   }
 }

@@ -1,12 +1,10 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { BasicEntity } from '@/core/database/entitys';
+import { Column, Entity, Index } from 'typeorm';
 
 @Entity({
   name: 'mounts',
 })
-export class MountEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class MountEntity extends BasicEntity {
   @Index()
   @Column({
     type: 'int',

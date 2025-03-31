@@ -125,88 +125,113 @@ export class GameDataService {
       };
     }
 
-    return this.petRepository.find({
+    const list = await this.petRepository.find({
       skip: (page - 1) * limit,
       take: limit,
     });
+
+    const total = await this.petRepository.count();
+
+    return {
+      list,
+      total,
+      page,
+      limit,
+    };
   }
 
   async getToyList(page: number = 1, limit: number = 10, user_id?: number) {
-    const queryBuilder = this.toyRepository
-      .createQueryBuilder('toys')
-      .select([
-        'toys.id as id',
-        'toys.name as name',
-        'toys.icon_url as icon_url',
-        'toys.version as version',
-        'toys.faction as faction',
-        'toys.post_uid as post_uid',
-        'toys.post_link as post_link',
-        'CASE WHEN user_collections.id IS NOT NULL THEN true ELSE false END as is_collected',
-        'CASE WHEN user_favorites.id IS NOT NULL THEN true ELSE false END as is_favorited',
-      ])
-      .leftJoin(
-        'user_collections',
-        'user_collections',
-        'user_collections.target_id = toys.id AND user_collections.user_id = :userId AND user_collections.type = :type',
-        { userId: user_id, type: 'toy' },
-      )
-      .leftJoin(
-        'user_favorites',
-        'user_favorites',
-        'user_favorites.target_id = toys.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
-        { userId: user_id, type: 'toy' },
-      );
+    const lastUpdated = await this.toyRepository.find({
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
 
     if (user_id) {
+      const queryBuilder = this.toyRepository
+        .createQueryBuilder('toys')
+        .select([
+          'toys.id as id',
+          'toys.name as name',
+          'toys.icon_url as icon_url',
+          'toys.version as version',
+          'toys.faction as faction',
+          'toys.post_uid as post_uid',
+          'toys.post_link as post_link',
+          'CASE WHEN user_collections.id IS NOT NULL THEN true ELSE false END as is_collected',
+          'CASE WHEN user_favorites.id IS NOT NULL THEN true ELSE false END as is_favorited',
+        ])
+        .leftJoin(
+          'user_collections',
+          'user_collections',
+          'user_collections.target_id = toys.id AND user_collections.user_id = :userId AND user_collections.type = :type',
+          { userId: user_id, type: 'toy' },
+        )
+        .leftJoin(
+          'user_favorites',
+          'user_favorites',
+          'user_favorites.target_id = toys.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
+          { userId: user_id, type: 'toy' },
+        );
+
       const data = await queryBuilder
         .offset((page - 1) * limit)
         .limit(limit)
         .getRawMany();
-      const total = await queryBuilder.getCount(); // 获取总记录数
+      const total = await queryBuilder.getCount();
 
       return {
         list: data,
+        lastUpdated,
         page,
         total,
         limit,
       };
     }
 
-    return this.toyRepository.find({
+    const list = await this.toyRepository.find({
       skip: (page - 1) * limit,
       take: limit,
     });
+
+    const total = await this.toyRepository.count();
+
+    return {
+      list,
+      total,
+      lastUpdated,
+      page,
+      limit,
+    };
   }
 
   async getMountList(page: number = 1, limit: number = 10, user_id?: number) {
-    const queryBuilder = this.mountRepository
-      .createQueryBuilder('mounts')
-      .select([
-        'mounts.id as id',
-        'mounts.name as name',
-        'mounts.icon_url as icon_url',
-        'mounts.version as version',
-        'mounts.faction as faction',
-        'mounts.post_uid as post_uid',
-        'mounts.post_link as post_link',
-        'CASE WHEN user_collections.id IS NOT NULL THEN true ELSE false END as is_collected',
-        'CASE WHEN user_favorites.id IS NOT NULL THEN true ELSE false END as is_favorited',
-      ])
-      .leftJoin(
-        'user_collections',
-        'user_collections',
-        'user_collections.target_id = mounts.id AND user_collections.user_id = :userId AND user_collections.type = :type',
-        { userId: user_id, type: 'mount' },
-      )
-      .leftJoin(
-        'user_favorites',
-        'user_favorites',
-        'user_favorites.target_id = mounts.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
-        { userId: user_id, type: 'mount' },
-      );
-
     if (user_id) {
+      const queryBuilder = this.mountRepository
+        .createQueryBuilder('mounts')
+        .select([
+          'mounts.id as id',
+          'mounts.name as name',
+          'mounts.icon_url as icon_url',
+          'mounts.version as version',
+          'mounts.faction as faction',
+          'mounts.post_uid as post_uid',
+          'mounts.post_link as post_link',
+          'CASE WHEN user_collections.id IS NOT NULL THEN true ELSE false END as is_collected',
+          'CASE WHEN user_favorites.id IS NOT NULL THEN true ELSE false END as is_favorited',
+        ])
+        .leftJoin(
+          'user_collections',
+          'user_collections',
+          'user_collections.target_id = mounts.id AND user_collections.user_id = :userId AND user_collections.type = :type',
+          { userId: user_id, type: 'mount' },
+        )
+        .leftJoin(
+          'user_favorites',
+          'user_favorites',
+          'user_favorites.target_id = mounts.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
+          { userId: user_id, type: 'mount' },
+        );
       const data = await queryBuilder
         .offset((page - 1) * limit)
         .limit(limit)
@@ -222,18 +247,63 @@ export class GameDataService {
       };
     }
 
-    return this.mountRepository.find({
+    const list = await this.mountRepository.find({
       skip: (page - 1) * limit,
       take: limit,
     });
+
+    const total = await this.mountRepository.count();
+
+    return {
+      list,
+      total,
+      page,
+      limit,
+    };
   }
+
+  async getGameDataInfo(type: string = 'pet') {
+    // 根据类型获取对应数据的最后更新时间和总数
+    let repository: Repository<any>;
+    switch (type) {
+      case 'pet':
+        repository = this.petRepository;
+        break;
+      case 'toy':
+        repository = this.toyRepository;
+        break;
+      case 'mount':
+        repository = this.mountRepository;
+        break;
+      case 'achievement':
+        repository = this.achievementRepository;
+        break;
+      default:
+        throw new ApiException('不支持的类型', HttpStatus.BAD_REQUEST);
+    }
+
+    const total = await repository.count();
+    const lastUpdated = await repository.find({
+      order: {
+        updatedAt: 'DESC',
+      },
+      take: 1,
+    });
+
+    return {
+      type,
+      total,
+      lastUpdated: lastUpdated[0]?.updatedAt || '',
+    };
+  }
+
   /**
    * @description 收藏进度
    * @param userId
    * @param type
    */
-  async getCollectionProcess(userId: number, type: string = 'pet') {
-    // 根据类型选择对应的repository
+  async getCollectionProcess(type: string, userId?: number) {
+    // 如果没有id 则收藏进度全部为 0
     let repository: Repository<any>;
     switch (type) {
       case 'pet':
@@ -249,7 +319,37 @@ export class GameDataService {
         throw new ApiException('不支持的类型', HttpStatus.BAD_REQUEST);
     }
 
-    // 获取总数量统计
+    // 获取版本列表和每个版本的总数
+    const versionStats = await repository
+      .createQueryBuilder('item')
+      .select(['item.version as version', 'COUNT(item.id) as total_count'])
+      .groupBy('item.version')
+      .orderBy('item.version', 'ASC')
+      .getRawMany();
+
+    // 获取总数
+    const totalCount = await repository.count();
+
+    // 如果没有用户ID，返回所有进度为0的数据
+    if (!userId) {
+      return {
+        total: {
+          collected: 0,
+          uncollected: totalCount,
+          total: totalCount,
+          progress: 0,
+        },
+        versionCollectiond: versionStats.map((stat) => ({
+          version: stat.version,
+          collected: 0,
+          uncollected: Number(stat.total_count),
+          total: Number(stat.total_count),
+          progress: 0,
+        })),
+      };
+    }
+
+    // 有用户ID的情况，获取收藏统计
     const totalStats = await repository
       .createQueryBuilder('item')
       .select([
@@ -264,8 +364,8 @@ export class GameDataService {
       )
       .getRawOne();
 
-    // 按版本分组统计
-    const versionStats = await repository
+    // 按版本分组统计收藏情况
+    const versionCollectionStats = await repository
       .createQueryBuilder('item')
       .select([
         'item.version as version',
@@ -290,23 +390,23 @@ export class GameDataService {
         total: Number(totalStats.total_count),
         progress:
           totalStats.total_count > 0
-            ? Math.round(
+            ? Number(
                 (Number(totalStats.collected_count) /
                   Number(totalStats.total_count)) *
                   100,
-              )
+              ).toFixed(0)
             : 0,
       },
-      versionCollectiond: versionStats.map((stat) => ({
+      versionCollectiond: versionCollectionStats.map((stat) => ({
         version: stat.version,
         collected: Number(stat.collected_count),
         uncollected: Number(stat.total_count) - Number(stat.collected_count),
         total: Number(stat.total_count),
         progress:
           stat.total_count > 0
-            ? Math.round(
+            ? Number(
                 (Number(stat.collected_count) / Number(stat.total_count)) * 100,
-              )
+              ).toFixed(0)
             : 0,
       })),
     };

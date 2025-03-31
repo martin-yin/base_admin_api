@@ -1,12 +1,10 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { BasicEntity } from '@/core/database/entitys';
+import { Column, Entity, Index } from 'typeorm';
 
 @Entity({
   name: 'pets',
 })
-export class PetEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class PetEntity extends BasicEntity {
   @Index()
   @Column({
     type: 'int',
