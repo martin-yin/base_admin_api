@@ -1,11 +1,11 @@
 // upload.module.ts
 import { Module } from '@nestjs/common';
-import { GameDataModule } from '../game-data/game-data.module';
+import { CollectGalleryModule } from '../collect-gallery/collect-gallery.module';
 import { UploadController } from './upload.controller';
 import { UploadService } from './upload.service';
 
 @Module({
-  imports: [GameDataModule],
+  imports: [CollectGalleryModule],
   controllers: [UploadController],
   providers: [UploadService],
 })

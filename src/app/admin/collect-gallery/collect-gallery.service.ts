@@ -10,7 +10,7 @@ import { MountEntity } from './entity/mounts.entity';
 import { PetEntity } from './entity/pet.entity';
 
 @Injectable()
-export class GameDataService {
+export class CollectGalleryService {
   constructor(
     @InjectRepository(ToyEntity)
     private toyRepository: Repository<ToyEntity>,
@@ -25,7 +25,7 @@ export class GameDataService {
   ) {}
 
   // 统一处理所有游戏数据的创建/更新
-  async createOrUpdateGameData<T extends { id: number }>(
+  async createOrUpdateCollectGallery<T extends { id: number }>(
     entityClass: new () => T,
     items: T[],
     idField: string,
@@ -64,23 +64,41 @@ export class GameDataService {
 
   // 特定类型数据的处理方法
   async createToys(toys: ToyEntity[]) {
-    return this.createOrUpdateGameData(ToyEntity, toys, 'toyId');
+    return this.createOrUpdateCollectGallery(ToyEntity, toys, 'toyId');
   }
 
   async createPets(pets: PetEntity[]) {
-    return this.createOrUpdateGameData(PetEntity, pets, 'petId');
+    return this.createOrUpdateCollectGallery(PetEntity, pets, 'petId');
   }
 
   async createMounts(mounts: MountEntity[]) {
-    return this.createOrUpdateGameData(MountEntity, mounts, 'mountId');
+    return this.createOrUpdateCollectGallery(MountEntity, mounts, 'mountId');
   }
 
   async createAchievements(achievements: AchievementEntity[]) {
-    return this.createOrUpdateGameData(
+    return this.createOrUpdateCollectGallery(
       AchievementEntity,
       achievements,
       'achievementId',
     );
+  }
+
+  async getCollectGallery(
+    type: string,
+    page: number = 1,
+    limit: number = 10,
+    user_id?: number,
+  ) {
+    switch (type) {
+      case 'toy':
+        return await this.getToyList(page, limit, user_id);
+      case 'pet':
+        return await this.getPetList(page, limit, user_id);
+      case 'mount':
+        return await this.getMountList(page, limit, user_id);
+      default:
+        throw new ApiException('不支持的类型', HttpStatus.BAD_REQUEST);
+    }
   }
 
   async getPetList(page: number = 1, limit: number = 10, user_id?: number) {
@@ -262,7 +280,7 @@ export class GameDataService {
     };
   }
 
-  async getGameDataInfo(type: string = 'pet') {
+  async getCollectGalleryInfo(type: string = 'pet') {
     // 根据类型获取对应数据的最后更新时间和总数
     let repository: Repository<any>;
     switch (type) {
@@ -417,7 +435,7 @@ export class GameDataService {
   }
 
   // 添加批量查询方法
-  // async findAllGameData() {
+  // async findAllCollectGallery() {
   //   const [toys, pets, mounts, achievements] = await Promise.all([
   //     this.toyRepository.find(),
   //     this.petRepository.find(),

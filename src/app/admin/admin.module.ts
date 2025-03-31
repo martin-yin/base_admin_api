@@ -6,7 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AdminAuthModule } from '@/shared/auth/admin-auth.module';
 import { AdminJwtAuthGuard } from '@/shared/auth/guards/admin-auth.guard';
 import { PermissionGuard } from '@/shared/auth/guards/permission.guard';
-import { GameDataModule } from './game-data/game-data.module';
+import { CollectGalleryModule } from './collect-gallery/collect-gallery.module';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { GameDataModule } from './game-data/game-data.module';
     SystemModule,
     UploadModule,
     UserModule,
-    GameDataModule,
+    CollectGalleryModule,
   ],
   controllers: [],
   providers: [

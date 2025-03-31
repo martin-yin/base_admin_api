@@ -12,10 +12,10 @@ import {
   UserFavoriteEntity,
 } from '@/app/admin/user/entitys/user.entity';
 import { ConfigService } from '@nestjs/config';
-import { AchievementEntity } from '@/app/admin/game-data/entity/achievement.entity';
-import { MountEntity } from '@/app/admin/game-data/entity/mounts.entity';
-import { PetEntity } from '@/app/admin/game-data/entity/pet.entity';
-import { ToyEntity } from '@/app/admin/game-data/entity/toy.entity';
+import { AchievementEntity } from '@/app/admin/collect-gallery/entity/achievement.entity';
+import { MountEntity } from '@/app/admin/collect-gallery/entity/mounts.entity';
+import { PetEntity } from '@/app/admin/collect-gallery/entity/pet.entity';
+import { ToyEntity } from '@/app/admin/collect-gallery/entity/toy.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({

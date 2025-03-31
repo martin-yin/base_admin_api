@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { GameDataService } from '../game-data/game-data.service';
+import { CollectGalleryService } from '../collect-gallery/collect-gallery.service';
 
 @Injectable()
 export class UploadService {
-  constructor(private readonly gameDataService: GameDataService) {}
+  constructor(private readonly collectGalleryService: CollectGalleryService) {}
 
   async createMounts(mounts: any[]) {
     const data = mounts.map((item) => {
@@ -19,7 +19,7 @@ export class UploadService {
         postLink: item['帖子链接'] || '',
       };
     });
-    return this.gameDataService.createMounts(data as any);
+    return this.collectGalleryService.createMounts(data as any);
   }
 
   async createPets(pets: any[]) {
@@ -35,7 +35,7 @@ export class UploadService {
         postLink: item['帖子链接'] || '',
       };
     });
-    return this.gameDataService.createPets(data as any);
+    return this.collectGalleryService.createPets(data as any);
   }
 
   async createToys(toys: any[]) {
@@ -50,7 +50,7 @@ export class UploadService {
         postUid: item['帖子UID'] || '',
       };
     });
-    return this.gameDataService.createToys(data as any);
+    return this.collectGalleryService.createToys(data as any);
   }
 
   async createAchievements(achievements: any[]) {
@@ -74,6 +74,6 @@ export class UploadService {
       };
     });
 
-    return this.gameDataService.createAchievements(data as any);
+    return this.collectGalleryService.createAchievements(data as any);
   }
 }

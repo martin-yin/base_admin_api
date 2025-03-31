@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { GameDataService } from './game-data.service';
+import { CollectGalleryService } from './collect-gallery.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ToyEntity } from './entity/toy.entity';
 import { PetEntity } from './entity/pet.entity';
 import { MountEntity } from './entity/mounts.entity';
 import { AchievementEntity } from './entity/achievement.entity';
-import { GameDataController } from './game-data.controller';
+import { CollectGalleryController } from './collect-gallery.controller';
 
 @Module({
   imports: [
@@ -16,8 +16,8 @@ import { GameDataController } from './game-data.controller';
       AchievementEntity,
     ]),
   ],
-  controllers: [GameDataController],
-  providers: [GameDataService],
-  exports: [GameDataService],
+  controllers: [CollectGalleryController],
+  providers: [CollectGalleryService],
+  exports: [CollectGalleryService],
 })
-export class GameDataModule {}
+export class CollectGalleryModule {}
