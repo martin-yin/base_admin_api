@@ -280,7 +280,7 @@ export class CollectGalleryService {
     };
   }
 
-  async getCollectGalleryInfo(type: string = 'pet') {
+  async getCollectGalleryInfo(type: string) {
     // 根据类型获取对应数据的最后更新时间和总数
     let repository: Repository<any>;
     switch (type) {
