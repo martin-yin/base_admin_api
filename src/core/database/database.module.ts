@@ -28,7 +28,7 @@ import { ToyEntity } from '@/app/admin/collect-gallery/entity/toy.entity';
         port: configService.get('DATABASE_PORT'),
         username: configService.get('DATABASE_USER'),
         password: configService.get('DATABASE_PWD'),
-        database: 'base_admin',
+        database: configService.get('DATABASE_DB') as any,
         entities: [
           RoleEntity,
           RoleMenuEntity,
