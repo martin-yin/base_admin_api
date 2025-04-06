@@ -52,8 +52,8 @@ export class WowheadMount {
   @Column({ type: 'text', nullable: true })
   trivia: string;
 
-  @Column({ name: 'update_time', type: 'timestamp', nullable: true })
-  updateTime: Date;
+  @Column({ name: 'update_time', type: 'text', nullable: true })
+  updateTime: string;
 
   @Column({ type: 'text', nullable: true })
   tooltip: string;

@@ -17,6 +17,9 @@ import { MountEntity } from '@/app/admin/collect-gallery/entity/mounts.entity';
 import { PetEntity } from '@/app/admin/collect-gallery/entity/pet.entity';
 import { ToyEntity } from '@/app/admin/collect-gallery/entity/toy.entity';
 import { WowheadMount } from './entitys/wowhead.mount.entity';
+import { WowheadAchievement } from './entitys/wowhead.achievement.entity';
+import { WowheadPet } from './entitys/wowhead.pet.entity';
+import { WowheadToy } from './entitys/wowhead.toy.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -44,6 +47,9 @@ import { WowheadMount } from './entitys/wowhead.mount.entity';
           ToyEntity,
           PetEntity,
           WowheadMount,
+          WowheadAchievement,
+          WowheadPet,
+          WowheadToy,
         ],
         synchronize: true,
       }),

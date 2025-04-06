@@ -1,9 +1,9 @@
 import { Entity, PrimaryColumn, Column } from 'typeorm';
 
 @Entity({
-  name: 'wowhead_achievements',
+  name: 'wowhead_pets',
 })
-export class WowheadAchievement {
+export class WowheadPet {
   @PrimaryColumn()
   id: number;
 
@@ -34,23 +34,23 @@ export class WowheadAchievement {
   @Column({ name: 'icon_local', nullable: true })
   iconLocal: string;
 
-  @Column({ type: 'text', nullable: true })
-  description: string;
-
-  @Column({ type: 'text', nullable: true })
-  dacheng: string;
-
-  @Column({ type: 'text', nullable: true })
-  reward: string;
+  @Column({ nullable: true })
+  level: number;
 
   @Column({ nullable: true })
-  points: number;
+  life: number;
 
-  @Column({ name: 'isshared', nullable: true })
-  isShared: boolean;
+  @Column({ name: 'attack_power', nullable: true })
+  attackPower: number;
 
   @Column({ nullable: true })
-  camp: string;
+  speed: number;
+
+  @Column({ nullable: true })
+  variety: string;
+
+  @Column({ name: 'battle_pet', nullable: true })
+  battlePet: boolean;
 
   @Column({ nullable: true })
   version: string;
@@ -58,8 +58,17 @@ export class WowheadAchievement {
   @Column({ name: 'increase_name', nullable: true })
   increaseName: string;
 
+  @Column({ nullable: true })
+  source: string;
+
+  @Column({ name: '_type', nullable: true })
+  _type: string;
+
   @Column({ name: 'item_url', nullable: true })
   itemUrl: string;
+
+  @Column({ type: 'text', nullable: true })
+  description: string;
 
   @Column({ type: 'text', nullable: true })
   trivia: string;
@@ -75,4 +84,7 @@ export class WowheadAchievement {
 
   @Column({ name: 'screenshot_local', nullable: true })
   screenshotLocal: string;
+
+  @Column({ name: 'extra_content', type: 'text', nullable: true })
+  extraContent: string;
 }
