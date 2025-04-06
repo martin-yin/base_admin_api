@@ -2,7 +2,7 @@ import { BasicEntity } from '@/core/database/entitys';
 import { Column, Entity, Index } from 'typeorm';
 
 @Entity({
-  name: 'pets',
+  name: 'data_site_pets',
 })
 export class PetEntity extends BasicEntity {
   @Index()

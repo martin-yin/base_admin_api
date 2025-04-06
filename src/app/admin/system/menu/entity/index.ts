@@ -1,7 +1,7 @@
 import { BasicRichEntity } from '@/core/database/entitys';
 import { Column, Entity } from 'typeorm';
 
-@Entity('menus')
+@Entity('data_site_menus')
 export class MenuEntity extends BasicRichEntity {
   @Column({
     type: 'int',

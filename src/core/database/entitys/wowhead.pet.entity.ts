@@ -2,6 +2,7 @@ import { Entity, PrimaryColumn, Column } from 'typeorm';
 
 @Entity({
   name: 'wowhead_pets',
+  comment: 'wowhead宠物',
 })
 export class WowheadPet {
   @PrimaryColumn()

@@ -2,7 +2,7 @@ import { BasicEntity } from '@/core/database/entitys';
 import { Column, Entity, Index } from 'typeorm';
 
 @Entity({
-  name: 'mounts',
+  name: 'data_site_mounts',
 })
 export class MountEntity extends BasicEntity {
   @Index()

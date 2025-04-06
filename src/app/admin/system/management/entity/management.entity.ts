@@ -1,7 +1,7 @@
 import { BasicRichEntity } from '@/core/database/entitys';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('managements')
+@Entity('data_site_managements')
 export class ManagementEntity extends BasicRichEntity {
   @Column({
     length: 16,
@@ -30,7 +30,7 @@ export class ManagementEntity extends BasicRichEntity {
   hashSlat: string;
 }
 
-@Entity('management_roles')
+@Entity('data_site_management_roles')
 export class ManagementRoleEntity {
   @PrimaryGeneratedColumn()
   id: number;

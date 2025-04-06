@@ -2,7 +2,7 @@ import { BasicEntity } from '@/core/database/entitys';
 import { Column, Entity } from 'typeorm';
 
 @Entity({
-  name: 'achievements',
+  name: 'data_site_achievements',
 })
 export class AchievementEntity extends BasicEntity {
   @Column({ comment: '中文名称' })

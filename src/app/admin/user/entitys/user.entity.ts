@@ -2,7 +2,7 @@ import { BasicEntity } from '@/core/database/entitys';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
-  name: 'users',
+  name: 'data_site_users',
 })
 export class UserEntity extends BasicEntity {
   @PrimaryGeneratedColumn({
@@ -70,7 +70,7 @@ export class UserEntity extends BasicEntity {
   nicknameLastUpdatedTime: Date;
 }
 @Entity({
-  name: 'user_collections',
+  name: 'data_site_user_collections',
   comment: '用户已经完成的收藏',
 })
 export class UserCollection extends BasicEntity {
@@ -93,7 +93,7 @@ export class UserCollection extends BasicEntity {
   type: string;
 }
 
-@Entity('user_favorites')
+@Entity('data_site_user_favorites')
 export class UserFavoriteEntity extends BasicEntity {
   @Column({
     type: 'bigint',

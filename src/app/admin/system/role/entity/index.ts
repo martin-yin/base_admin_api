@@ -1,7 +1,7 @@
 import { BasicRichEntity } from '@/core/database/entitys';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('roles')
+@Entity('data_site_roles')
 export class RoleEntity extends BasicRichEntity {
   @Column({
     length: 16,
@@ -11,7 +11,7 @@ export class RoleEntity extends BasicRichEntity {
   name: string;
 }
 
-@Entity('role_menus')
+@Entity('data_site_role_menus')
 export class RoleMenuEntity {
   @PrimaryGeneratedColumn()
   id: number;
