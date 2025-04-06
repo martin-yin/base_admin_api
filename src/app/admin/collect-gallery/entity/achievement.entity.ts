@@ -5,9 +5,6 @@ import { Column, Entity } from 'typeorm';
   name: 'data_site_achievements',
 })
 export class AchievementEntity extends BasicEntity {
-  @Column({ comment: '中文名称' })
-  name: string;
-
   @Column({
     comment: '成就id',
     name: 'achievement_id',
@@ -23,32 +20,53 @@ export class AchievementEntity extends BasicEntity {
   })
   categoryId: number;
 
-  @Column({ type: 'varchar', length: 500, comment: '图标地址' })
-  iconUrl: string;
+  @Column({
+    type: 'varchar',
+    comment: '版本',
+  })
+  version: string;
 
-  @Column({ type: 'text', comment: '成就详情描述' })
-  detail: string;
+  @Column({
+    type: 'text',
+    name: 'icon',
+    comment: '图标地址',
+    nullable: true,
+  })
+  icon: string;
 
-  @Column({ type: 'text', comment: '达成条件说明' })
-  unlockCondition: string;
-
-  @Column({ type: 'text', comment: '奖励内容' })
-  rewards: string;
+  @Column({ comment: '名称' })
+  name: string;
 
   @Column({ comment: '成就点数' })
   points: number;
 
+  @Column({
+    type: 'text',
+    name: 'screenshot',
+    comment: '图标地址',
+    nullable: true,
+  })
+  screenshot: string;
+
+  @Column({ type: 'text', comment: '成就详情描述' })
+  description: string;
+
+  @Column({
+    type: 'varchar',
+    default: '无',
+    comment: '阵营',
+    name: 'camp',
+  })
+  camp: string;
+
   @Column({ default: false, comment: '是否账号共享' })
-  isAccountShared: boolean;
+  isshared: boolean;
 
-  @Column({ type: 'enum', enum: ['联盟', '部落', '双方'], comment: '阵营限制' })
-  faction: string;
+  @Column({ type: 'text', comment: '达成条件说明' })
+  dacheng: string;
 
-  @Column({ comment: '关联版本号' })
-  version: string;
-
-  @Column({ type: 'text', comment: '物品详细数据' })
-  itemDetails: string;
+  @Column({ type: 'text', comment: '奖励' })
+  reward: string;
 
   @Column({ name: 'post_uid', comment: '关联帖子UID' })
   postUid: string;

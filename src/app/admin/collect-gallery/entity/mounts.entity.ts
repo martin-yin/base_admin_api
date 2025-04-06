@@ -28,6 +28,12 @@ export class MountEntity extends BasicEntity {
   category: string;
 
   @Column({
+    type: 'varchar',
+    comment: '版本',
+  })
+  version: string;
+
+  @Column({
     type: 'text',
     name: 'icon',
     comment: '图标地址',
@@ -45,23 +51,11 @@ export class MountEntity extends BasicEntity {
 
   @Column({
     type: 'varchar',
-    comment: '版本',
-  })
-  reagents_version: string;
-
-  @Column({
-    type: 'varchar',
     default: '无',
     comment: '阵营',
-    name: 'reagents_camp',
+    name: 'camp',
   })
-  reagentsCamp: string;
-
-  // @Column({
-  //   type: 'text',
-  //   comment: '来源描述',
-  // })
-  // source: string;
+  camp: string;
 
   @Column({
     type: 'varchar',

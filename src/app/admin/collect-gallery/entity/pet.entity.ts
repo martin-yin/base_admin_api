@@ -44,17 +44,11 @@ export class PetEntity extends BasicEntity {
 
   @Column({
     type: 'varchar',
-    comment: '版本',
-  })
-  reagents_version: string;
-
-  @Column({
-    type: 'varchar',
     default: '无',
     comment: '阵营',
-    name: 'reagents_camp',
+    name: 'camp',
   })
-  reagentsCamp: string;
+  camp: string;
 
   @Column({
     type: 'varchar',

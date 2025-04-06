@@ -22,30 +22,33 @@ export class ToyEntity extends BasicEntity {
 
   @Column({
     type: 'varchar',
-    length: 255,
-    name: 'icon_url',
-    comment: '图标地址',
-  })
-  iconUrl: string;
-
-  @Column({
-    type: 'varchar',
     comment: '版本',
   })
   version: string;
 
   @Column({
-    type: 'varchar',
-    default: '无',
-    comment: '阵营',
+    type: 'text',
+    name: 'icon',
+    comment: '图标地址',
+    nullable: true,
   })
-  faction: string;
+  icon: string;
 
   @Column({
     type: 'text',
-    comment: '来源描述',
+    name: 'screenshot',
+    comment: '图标地址',
+    nullable: true,
   })
-  source: string;
+  screenshot: string;
+
+  @Column({
+    type: 'varchar',
+    default: '无',
+    comment: '阵营',
+    name: 'camp',
+  })
+  camp: string;
 
   @Column({
     type: 'varchar',
