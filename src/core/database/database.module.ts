@@ -18,7 +18,7 @@ import { PetEntity } from '@/app/admin/collect-gallery/entity/pet.entity';
 import { ToyEntity } from '@/app/admin/collect-gallery/entity/toy.entity';
 import { WowheadMount } from './entitys/wowhead.mount.entity';
 import { WowheadAchievement } from './entitys/wowhead.achievement.entity';
-import { WowheadPet } from './entitys/wowhead.pet.entity';
+import { WowheadBattlePet } from './entitys/wowhead.battle.pet.entity';
 import { WowheadToy } from './entitys/wowhead.toy.entity';
 @Module({
   imports: [
@@ -48,7 +48,7 @@ import { WowheadToy } from './entitys/wowhead.toy.entity';
           PetEntity,
           WowheadMount,
           WowheadAchievement,
-          WowheadPet,
+          WowheadBattlePet,
           WowheadToy,
         ],
         synchronize: true,

@@ -23,36 +23,45 @@ export class MountEntity extends BasicEntity {
   @Column({
     type: 'varchar',
     length: 50,
-    comment: '类别',
+    comment: '类别 飞行坐骑 陆地坐骑 水下坐骑',
   })
   category: string;
 
   @Column({
-    type: 'varchar',
-    length: 255,
-    name: 'icon_url',
+    type: 'text',
+    name: 'icon',
     comment: '图标地址',
+    nullable: true,
   })
-  iconUrl: string;
+  icon: string;
+
+  @Column({
+    type: 'text',
+    name: 'screenshot',
+    comment: '图标地址',
+    nullable: true,
+  })
+  screenshot: string;
 
   @Column({
     type: 'varchar',
     comment: '版本',
   })
-  version: string;
+  reagents_version: string;
 
   @Column({
     type: 'varchar',
     default: '无',
     comment: '阵营',
+    name: 'reagents_camp',
   })
-  faction: string;
+  reagentsCamp: string;
 
-  @Column({
-    type: 'text',
-    comment: '来源描述',
-  })
-  source: string;
+  // @Column({
+  //   type: 'text',
+  //   comment: '来源描述',
+  // })
+  // source: string;
 
   @Column({
     type: 'varchar',
