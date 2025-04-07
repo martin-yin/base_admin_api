@@ -10,7 +10,7 @@ export class CollectGalleryController {
     return await this.collectGalleryService.getCollectionProcess(type);
   }
 
-  @Get('')
+  @Get()
   async getPetList(
     @Query('type') type: string,
     @Query('page') page: number = 1,

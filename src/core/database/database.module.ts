@@ -21,6 +21,7 @@ import { WowheadAchievement } from './entitys/wowhead.achievement.entity';
 import { WowheadBattlePet } from './entitys/wowhead.battle.pet.entity';
 import { WowheadToy } from './entitys/wowhead.toy.entity';
 import { WowVersion } from '@/app/admin/wow-version/entity/index.entity';
+import { WordpressUserEntity } from './entitys/wordpress.user.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -54,6 +55,22 @@ import { WowVersion } from '@/app/admin/wow-version/entity/index.entity';
           WowVersion,
         ],
         synchronize: true,
+      }),
+    }),
+    TypeOrmModule.forRootAsync({
+      name: 'wordpress_db',
+      inject: [ConfigService],
+      useFactory: async (
+        configService: ConfigService,
+      ): Promise<TypeOrmModuleOptions> => ({
+        type: configService.get('DATABASE_TYPE') as any,
+        host: configService.get('DATABASE_HOST'),
+        port: configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PWD'),
+        database: 'wordpresstest_db',
+        entities: [WordpressUserEntity],
+        synchronize: false,
       }),
     }),
   ],
