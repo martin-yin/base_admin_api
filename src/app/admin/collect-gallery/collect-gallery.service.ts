@@ -27,43 +27,6 @@ export class CollectGalleryService {
     private wowVersionService: WowVersionService,
   ) {}
 
-  // async createOrUpdateCollectGallery<T extends { id: number }>(
-  //   entityClass: new () => T,
-  //   items: T[],
-  //   idField: string,
-  // ) {
-  //   try {
-  //     return await this.entityManager.transaction(
-  //       async (transactionManager) => {
-  //         for (const item of items) {
-  //           const existingItem = await transactionManager.findOne(entityClass, {
-  //             where: { [idField]: item[idField] } as any,
-  //           });
-
-  //           if (existingItem) {
-  //             await transactionManager.update(
-  //               entityClass,
-  //               { [idField]: item[idField] },
-  //               item as any,
-  //             );
-  //           } else {
-  //             const newItem = new entityClass();
-  //             Object.assign(newItem, item);
-  //             await transactionManager.save(entityClass, newItem);
-  //           }
-  //         }
-  //         return success('处理成功');
-  //       },
-  //     );
-  //   } catch (error) {
-  //     console.error(`处理${entityClass.name}数据错误:`, error);
-  //     throw new ApiException(
-  //       `处理${entityClass.name}数据失败: ${error.message}`,
-  //       HttpStatus.INTERNAL_SERVER_ERROR,
-  //     );
-  //   }
-  // }
-
   async getCollectGallery(
     type: string,
     page: number = 1,
@@ -94,7 +57,7 @@ export class CollectGalleryService {
           'battle-pets.id as id',
           'battle-pets.name as name',
           'battle-pets.icon_url as icon_url',
-          'battle-pets.version as version',
+          'wow_versions.version as version',
           'battle-pets.faction as faction',
           'battle-pets.post_uid as post_uid',
           'battle-pets.post_link as post_link',
@@ -112,7 +75,13 @@ export class CollectGalleryService {
           'user_favorites',
           'user_favorites.target_id = battle-pets.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
           { userId: user_id, type: 'pet' },
+        )
+        .leftJoin(
+          'data_site_wow_versions',
+          'wow_versions',
+          'wow_versions.id = battle-pets.versionId',
         );
+
       const data = await queryBuilder
         .offset((page - 1) * limit)
         .limit(limit)
@@ -144,37 +113,35 @@ export class CollectGalleryService {
   }
 
   async getToyList(page: number = 1, limit: number = 10, user_id?: number) {
-    const lastUpdated = await this.toyRepository.find({
-      order: {
-        updatedAt: 'DESC',
-      },
-    });
-
     if (user_id) {
       const queryBuilder = this.toyRepository
         .createQueryBuilder('toys')
         .select([
           'toys.id as id',
           'toys.name as name',
-          'toys.icon_url as icon_url',
-          'toys.version as version',
-          'toys.faction as faction',
+          'toys.icon as icon',
+          'toys.screenshot as screenshot',
           'toys.post_uid as post_uid',
           'toys.post_link as post_link',
           'CASE WHEN user_collections.id IS NOT NULL THEN true ELSE false END as is_collected',
           'CASE WHEN user_favorites.id IS NOT NULL THEN true ELSE false END as is_favorited',
         ])
         .leftJoin(
-          'user_collections',
+          'data_site_user_collections',
           'user_collections',
           'user_collections.target_id = toys.id AND user_collections.user_id = :userId AND user_collections.type = :type',
           { userId: user_id, type: 'toy' },
         )
         .leftJoin(
-          'user_favorites',
+          'data_site_user_favorites',
           'user_favorites',
           'user_favorites.target_id = toys.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
           { userId: user_id, type: 'toy' },
+        )
+        .leftJoin(
+          'data_site_wow_versions',
+          'wow_versions',
+          'wow_versions.id = toys.versionId',
         );
 
       const data = await queryBuilder
@@ -185,24 +152,39 @@ export class CollectGalleryService {
 
       return {
         list: data,
-        lastUpdated,
         page,
         total,
         limit,
       };
     }
 
-    const list = await this.toyRepository.find({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+    // 没有用户的情况
+    const queryBuilder = this.toyRepository
+      .createQueryBuilder('toys')
+      .select([
+        'toys.id as id',
+        'toys.name as name',
+        'toys.icon as icon',
+        'toys.screenshot as screenshot',
+        'toys.post_uid as post_uid',
+        'toys.post_link as post_link',
+      ])
+      .leftJoin(
+        'data_site_wow_versions',
+        'wow_versions',
+        'wow_versions.id = toys.versionId',
+      );
 
-    const total = await this.toyRepository.count();
+    const list = await queryBuilder
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .getRawMany();
+
+    const total = await queryBuilder.getCount();
 
     return {
       list,
       total,
-      lastUpdated,
       page,
       limit,
     };
@@ -216,7 +198,7 @@ export class CollectGalleryService {
           'mounts.id as id',
           'mounts.name as name',
           'mounts.icon_url as icon_url',
-          'mounts.version as version',
+          'wow_versions.version as version',
           'mounts.faction as faction',
           'mounts.post_uid as post_uid',
           'mounts.post_link as post_link',
@@ -234,13 +216,19 @@ export class CollectGalleryService {
           'user_favorites',
           'user_favorites.target_id = mounts.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
           { userId: user_id, type: 'mount' },
+        )
+        .leftJoin(
+          'data_site_wow_versions',
+          'wow_versions',
+          'wow_versions.id = mounts.versionId',
         );
+
       const data = await queryBuilder
         .offset((page - 1) * limit)
         .limit(limit)
         .getRawMany();
 
-      const total = await queryBuilder.getCount(); // 获取总记录数
+      const total = await queryBuilder.getCount();
 
       return {
         list: data,
@@ -423,142 +411,102 @@ export class CollectGalleryService {
     return await this.entityManager.transaction(async (transactionManager) => {
       const versionMap = await this.wowVersionService.getVersionMap();
 
-      if (type === 'toy') {
-        const toys = await transactionManager.query(`
-          SELECT * FROM wowhead_toys WHERE exist is NULL
-        `);
+      const syncConfig = {
+        toy: {
+          table: 'wowhead_toys',
+          entity: ToyEntity,
+          idField: 'toyId',
+          versionField: 'version',
+          fieldMappings: {
+            name: 'name',
+            icon: 'icon_local',
+            screenshot: 'screenshot_local',
+            camp: 'camp',
+            postUid: 'postUid',
+            postLink: 'postLink',
+          },
+        },
+        'battle-pet': {
+          table: 'wowhead_battle_pets',
+          entity: BattlePetEntity,
+          idField: 'battlePetId',
+          versionField: 'version',
+          fieldMappings: {
+            name: 'name',
+            icon: 'icon_local',
+            screenshot: 'screenshot_local',
+            camp: 'camp',
+            postUid: 'postUid',
+            postLink: 'postLink',
+          },
+        },
+        mount: {
+          table: 'wowhead_mounts',
+          entity: MountEntity,
+          idField: 'mountId',
+          versionField: 'reagents_version',
+          fieldMappings: {
+            name: 'name',
+            type: 'nav3', // 字段映射
+            icon: 'icon_local',
+            screenshot: 'screenshot_local',
+            camp: 'reagents_camp', // 字段映射
+            postUid: 'postUid',
+            postLink: 'postLink',
+          },
+          condition: "TRIM(reagents_version) <> ''",
+        },
+      };
 
-        for (const toy of toys) {
-          const existingToy = await transactionManager.findOne(ToyEntity, {
-            where: { toyId: toy.id },
-          });
-          const toyVersion = versionMap.get(toy.version.split('.')[0]);
-          if (existingToy) {
-            await transactionManager.update(
-              ToyEntity,
-              { toyId: toy.id },
-              {
-                name: toy.name,
-                icon: toy.icon_local,
-                screenshot: toy.screenshot_local,
-                camp: toy.camp,
-                postUid: toy.postUid,
-                postLink: toy.postLink,
-                versionId: toyVersion,
-              },
-            );
-          } else {
-            const newToy = new ToyEntity();
-            Object.assign(newToy, {
-              toyId: toy.id,
-              name: toy.name,
-              icon: toy.icon_local,
-              screenshot: toy.screenshot_local,
-              camp: toy.camp,
-              postUid: toy.postUid,
-              postLink: toy.postLink,
-              versionId: toyVersion,
-            });
-            await transactionManager.save(ToyEntity, newToy);
-          }
-        }
-        return success('玩具数据同步成功');
+      const config = syncConfig[type];
+      if (!config) {
+        throw new ApiException('不支持的类型', HttpStatus.BAD_REQUEST);
       }
 
-      if (type === 'battle-pet') {
-        const battlePets = await transactionManager.query(`
-          SELECT * FROM wowhead_battle_pets WHERE exist is NULL
-        `);
+      // 构建查询语句
+      let query = `SELECT * FROM ${config.table} WHERE exist is NULL`;
+      if (config.condition) {
+        query += ` AND ${config.condition}`;
+      }
 
-        for (const battlePet of battlePets) {
-          const existingBattlePet = await transactionManager.findOne(
-            BattlePetEntity,
-            {
-              where: { battlePetId: battlePet.id },
+      // 查询数据
+      const items = await transactionManager.query(query);
+
+      // 同步数据
+      for (const item of items) {
+        const version = versionMap.get(item[config.versionField].split('.')[0]);
+
+        // 构建数据对象，处理字段映射
+        const data = {
+          [config.idField]: item.id,
+          versionId: version,
+          ...Object.entries(config.fieldMappings).reduce(
+            (acc, [targetField, sourceField]) => {
+              acc[targetField] = item[sourceField as any];
+              return acc;
             },
+            {},
+          ),
+        };
+
+        const existingItem = await transactionManager.findOne(config.entity, {
+          where: { [config.idField]: item.id },
+        });
+
+        if (existingItem) {
+          await transactionManager.update(
+            config.entity,
+            { [config.idField]: item.id },
+            data,
           );
-          const battlePetVersion = versionMap.get(
-            battlePet.version.split('.')[0],
-          );
-          if (existingBattlePet) {
-            await transactionManager.update(
-              BattlePetEntity,
-              { battlePetId: battlePet.id },
-              {
-                name: battlePet.name,
-                battlePetId: battlePet.id,
-                icon: battlePet.icon_local,
-                screenshot: battlePet.screenshot_local,
-                camp: battlePet.camp,
-                postUid: battlePet.postUid,
-                postLink: battlePet.postLink,
-                versionId: battlePetVersion,
-              },
-            );
-          } else {
-            const newBattlePet = new BattlePetEntity();
-            Object.assign(newBattlePet, {
-              name: battlePet.name,
-              battlePetId: battlePet.id,
-              icon: battlePet.icon_local,
-              screenshot: battlePet.screenshot_local,
-              camp: battlePet.camp,
-              postUid: battlePet.postUid,
-              postLink: battlePet.postLink,
-              versionId: battlePetVersion,
-            });
-            await transactionManager.save(BattlePetEntity, newBattlePet);
-          }
+        } else {
+          const newItem = new config.entity();
+          Object.assign(newItem, data);
+          await transactionManager.save(config.entity, newItem);
         }
-        return success('数据同步成功');
       }
 
-      if (type === 'mount') {
-        const mounts = await transactionManager.query(`
-          SELECT * FROM wowhead_mounts WHERE exist IS NULL AND TRIM(reagents_version) <> ''
-        `);
-
-        for (const mount of mounts) {
-          const existingMount = await transactionManager.findOne(MountEntity, {
-            where: { mountId: mount.id },
-          });
-          const mountVersion = versionMap.get(
-            mount.reagents_version.split('.')[0],
-          );
-          if (existingMount) {
-            await transactionManager.update(
-              MountEntity,
-              { mountId: mount.id },
-              {
-                name: mount.name,
-                mountId: mount.id,
-                type: mount.nav3,
-                icon: mount.icon_local,
-                screenshot: mount.screenshot_local,
-                camp: mount.reagents_camp,
-                postUid: mount.postUid,
-                postLink: mount.postLink,
-                versionId: mountVersion,
-              },
-            );
-          } else {
-            const newMount = new MountEntity();
-            Object.assign(newMount, {
-              name: mount.name,
-              mountId: mount.id,
-              type: mount.nav3,
-              icon: mount.icon_local,
-              screenshot: mount.screenshot_local,
-              camp: mount.reagents_camp,
-              postUid: mount.postUid,
-              postLink: mount.postLink,
-              versionId: mountVersion,
-            });
-            await transactionManager.save(MountEntity, newMount);
-          }
-        }
-        return success('数据同步成功');
-      }
+      return success(`数据同步成功`);
     });
   }
 }

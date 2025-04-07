@@ -20,6 +20,7 @@ export class CollectGalleryController {
       type,
       page,
       limit,
+      1,
     );
   }
 
