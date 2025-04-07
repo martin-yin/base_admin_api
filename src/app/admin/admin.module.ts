@@ -7,6 +7,7 @@ import { AdminAuthModule } from '@/shared/auth/admin-auth.module';
 import { AdminJwtAuthGuard } from '@/shared/auth/guards/admin-auth.guard';
 import { PermissionGuard } from '@/shared/auth/guards/permission.guard';
 import { CollectGalleryModule } from './collect-gallery/collect-gallery.module';
+import { WowVersion } from './game-version/entity/index.entity';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CollectGalleryModule } from './collect-gallery/collect-gallery.module';
     UploadModule,
     UserModule,
     CollectGalleryModule,
+    WowVersion,
   ],
   controllers: [],
   providers: [

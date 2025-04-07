@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { CollectGalleryService } from './collect-gallery.service';
 
 @Controller('admin/collect-gallery')
@@ -23,5 +23,10 @@ export class CollectGalleryController {
   @Get('achievement')
   async getAchievementList() {
     return await this.collectGalleryService.getAchievementList();
+  }
+
+  @Get('sysnc-data')
+  async syncData(@Query() type: string) {
+    return await this.collectGalleryService.sysncData(type);
   }
 }

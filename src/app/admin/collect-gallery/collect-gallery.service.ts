@@ -434,6 +434,50 @@ export class CollectGalleryService {
     return await this.achievementRepository.find();
   }
 
+  async sysncData(type: string) {
+    return await this.entityManager.transaction(async (transactionManager) => {
+      if (type === 'toy') {
+        const toys = await transactionManager.query(`
+          SELECT * FROM wowhead_toys WHERE exist != 0
+        `);
+
+        // 将数据同步到 toy 表
+        for (const toy of toys) {
+          const existingToy = await transactionManager.findOne(ToyEntity, {
+            where: { toyId: toy.id },
+          });
+
+          if (existingToy) {
+            await transactionManager.update(
+              ToyEntity,
+              { toyId: toy.id },
+              {
+                name: toy.name,
+                icon: toy.icon,
+                screenshot: toy.screenshot,
+                camp: toy.camp,
+                postUid: toy.postUid,
+                postLink: toy.postLink,
+              },
+            );
+          } else {
+            const newToy = new ToyEntity();
+            Object.assign(newToy, {
+              toyId: toy.id,
+              icon: toy.icon,
+              screenshot: toy.screenshot,
+              camp: toy.camp,
+              postUid: toy.postUid,
+              postLink: toy.postLink,
+            });
+            await transactionManager.save(ToyEntity, newToy);
+          }
+        }
+        return success('玩具数据同步成功');
+      }
+    });
+  }
+
   // 添加批量查询方法
   // async findAllCollectGallery() {
   //   const [toys, pets, mounts, achievements] = await Promise.all([

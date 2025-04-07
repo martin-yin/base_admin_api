@@ -20,6 +20,7 @@ import { WowheadMount } from './entitys/wowhead.mount.entity';
 import { WowheadAchievement } from './entitys/wowhead.achievement.entity';
 import { WowheadBattlePet } from './entitys/wowhead.battle.pet.entity';
 import { WowheadToy } from './entitys/wowhead.toy.entity';
+import { WowVersion } from '@/app/admin/game-version/entity/index.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -50,6 +51,7 @@ import { WowheadToy } from './entitys/wowhead.toy.entity';
           WowheadAchievement,
           WowheadBattlePet,
           WowheadToy,
+          WowVersion,
         ],
         synchronize: true,
       }),
