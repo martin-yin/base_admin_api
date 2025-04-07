@@ -1,11 +1,19 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
-import { GameVersionService } from './game-version.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
+import { WowVersionService } from './wow-version.service';
 import { CreateVersionDto, UpdateVersionDto } from './dto/version.dto';
 import { WowVersion } from './entity/index.entity';
 
-@Controller('game-versions')
-export class GameVersionController {
-  constructor(private readonly versionService: GameVersionService) {}
+@Controller('wow-versions')
+export class WowVersionController {
+  constructor(private readonly versionService: WowVersionService) {}
 
   @Post()
   create(@Body() createVersionDto: CreateVersionDto): Promise<WowVersion> {

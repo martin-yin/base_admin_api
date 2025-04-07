@@ -58,20 +58,20 @@ export class UploadController {
       const worksheet = workbook.Sheets[firstSheetName];
       const excelJsonData = XLSX.utils.sheet_to_json(worksheet);
       console.log(excelJsonData);
-      if (type === 'mount') {
-        return this.uploadService.createMounts(excelJsonData);
-      }
+      // if (type === 'mount') {
+      //   return this.uploadService.createMounts(excelJsonData);
+      // }
 
-      if (type === 'pet') {
-        return this.uploadService.createPets(excelJsonData);
-      }
+      // if (type === 'pet') {
+      //   return this.uploadService.createPets(excelJsonData);
+      // }
 
-      if (type === 'toy') {
-        return this.uploadService.createToys(excelJsonData);
-      }
-      if (type === 'achievement') {
-        return this.uploadService.createAchievements(excelJsonData);
-      }
+      // if (type === 'toy') {
+      //   return this.uploadService.createToys(excelJsonData);
+      // }
+      // if (type === 'achievement') {
+      //   return this.uploadService.createAchievements(excelJsonData);
+      // }
     } catch (error) {
       throw new ApiException(
         `Excel解析失败: ${error.message}`,

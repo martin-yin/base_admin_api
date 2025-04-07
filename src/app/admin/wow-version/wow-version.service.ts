@@ -7,7 +7,7 @@ import { ApiException } from '@/core/exceptions/api.exception';
 import { HttpStatus } from '@nestjs/common';
 
 @Injectable()
-export class GameVersionService {
+export class WowVersionService {
   constructor(
     @InjectRepository(WowVersion)
     private versionRepository: Repository<WowVersion>,
@@ -42,5 +42,15 @@ export class GameVersionService {
   async remove(id: number): Promise<void> {
     const version = await this.findOne(id);
     await this.versionRepository.remove(version);
+  }
+
+  async getVersionMap(): Promise<Map<string, number>> {
+    const versions = await this.findAll();
+    const versionMap = new Map<string, number>();
+    versions.forEach((version) => {
+      const versionNumber = version.versionNumber.split('.')[0];
+      versionMap.set(versionNumber, version.id);
+    });
+    return versionMap;
   }
 }

@@ -7,81 +7,62 @@ import { HttpStatus } from '@nestjs/common';
 import { ToyEntity } from './entity/toy.entity';
 import { AchievementEntity } from './entity/achievement.entity';
 import { MountEntity } from './entity/mounts.entity';
-import { PetEntity } from './entity/pet.entity';
+import { BattlePetEntity } from './entity/battle.pet.entity';
+import { WowVersionService } from '../wow-version/wow-version.service';
 
 @Injectable()
 export class CollectGalleryService {
   constructor(
     @InjectRepository(ToyEntity)
     private toyRepository: Repository<ToyEntity>,
-    @InjectRepository(PetEntity)
-    private petRepository: Repository<PetEntity>,
+    @InjectRepository(BattlePetEntity)
+    private battlePetRepository: Repository<BattlePetEntity>,
     @InjectRepository(MountEntity)
     private mountRepository: Repository<MountEntity>,
     @InjectRepository(AchievementEntity)
     private achievementRepository: Repository<AchievementEntity>,
     @InjectEntityManager()
     private entityManager: EntityManager,
+
+    private wowVersionService: WowVersionService,
   ) {}
 
-  // 统一处理所有游戏数据的创建/更新
-  async createOrUpdateCollectGallery<T extends { id: number }>(
-    entityClass: new () => T,
-    items: T[],
-    idField: string,
-  ) {
-    try {
-      return await this.entityManager.transaction(
-        async (transactionManager) => {
-          for (const item of items) {
-            const existingItem = await transactionManager.findOne(entityClass, {
-              where: { [idField]: item[idField] } as any,
-            });
+  // async createOrUpdateCollectGallery<T extends { id: number }>(
+  //   entityClass: new () => T,
+  //   items: T[],
+  //   idField: string,
+  // ) {
+  //   try {
+  //     return await this.entityManager.transaction(
+  //       async (transactionManager) => {
+  //         for (const item of items) {
+  //           const existingItem = await transactionManager.findOne(entityClass, {
+  //             where: { [idField]: item[idField] } as any,
+  //           });
 
-            if (existingItem) {
-              await transactionManager.update(
-                entityClass,
-                { [idField]: item[idField] },
-                item as any,
-              );
-            } else {
-              const newItem = new entityClass();
-              Object.assign(newItem, item);
-              await transactionManager.save(entityClass, newItem);
-            }
-          }
-          return success('处理成功');
-        },
-      );
-    } catch (error) {
-      console.error(`处理${entityClass.name}数据错误:`, error);
-      throw new ApiException(
-        `处理${entityClass.name}数据失败: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  // 特定类型数据的处理方法
-  async createToys(toys: ToyEntity[]) {
-    return this.createOrUpdateCollectGallery(ToyEntity, toys, 'toyId');
-  }
-
-  async createPets(pets: PetEntity[]) {
-    return this.createOrUpdateCollectGallery(PetEntity, pets, 'petId');
-  }
-
-  async createMounts(mounts: MountEntity[]) {
-    return this.createOrUpdateCollectGallery(MountEntity, mounts, 'mountId');
-  }
-
-  async createAchievements(achievements: AchievementEntity[]) {
-    return this.createOrUpdateCollectGallery(
-      AchievementEntity,
-      achievements,
-      'achievementId',
-    );
-  }
+  //           if (existingItem) {
+  //             await transactionManager.update(
+  //               entityClass,
+  //               { [idField]: item[idField] },
+  //               item as any,
+  //             );
+  //           } else {
+  //             const newItem = new entityClass();
+  //             Object.assign(newItem, item);
+  //             await transactionManager.save(entityClass, newItem);
+  //           }
+  //         }
+  //         return success('处理成功');
+  //       },
+  //     );
+  //   } catch (error) {
+  //     console.error(`处理${entityClass.name}数据错误:`, error);
+  //     throw new ApiException(
+  //       `处理${entityClass.name}数据失败: ${error.message}`,
+  //       HttpStatus.INTERNAL_SERVER_ERROR,
+  //     );
+  //   }
+  // }
 
   async getCollectGallery(
     type: string,
@@ -92,8 +73,8 @@ export class CollectGalleryService {
     switch (type) {
       case 'toy':
         return await this.getToyList(page, limit, user_id);
-      case 'pet':
-        return await this.getPetList(page, limit, user_id);
+      case 'battle-pet':
+        return await this.getBattlePetList(page, limit, user_id);
       case 'mount':
         return await this.getMountList(page, limit, user_id);
       default:
@@ -101,31 +82,35 @@ export class CollectGalleryService {
     }
   }
 
-  async getPetList(page: number = 1, limit: number = 10, user_id?: number) {
+  async getBattlePetList(
+    page: number = 1,
+    limit: number = 10,
+    user_id?: number,
+  ) {
     if (user_id) {
-      const queryBuilder = this.petRepository
-        .createQueryBuilder('pets')
+      const queryBuilder = this.battlePetRepository
+        .createQueryBuilder('battle-pets')
         .select([
-          'pets.id as id',
-          'pets.name as name',
-          'pets.icon_url as icon_url',
-          'pets.version as version',
-          'pets.faction as faction',
-          'pets.post_uid as post_uid',
-          'pets.post_link as post_link',
+          'battle-pets.id as id',
+          'battle-pets.name as name',
+          'battle-pets.icon_url as icon_url',
+          'battle-pets.version as version',
+          'battle-pets.faction as faction',
+          'battle-pets.post_uid as post_uid',
+          'battle-pets.post_link as post_link',
           'CASE WHEN user_collections.id IS NOT NULL THEN true ELSE false END as is_collected',
           'CASE WHEN user_favorites.id IS NOT NULL THEN true ELSE false END as is_favorited',
         ])
         .leftJoin(
           'user_collections',
           'user_collections',
-          'user_collections.target_id = pets.id AND user_collections.user_id = :userId AND user_collections.type = :type',
+          'user_collections.target_id = battle-pets.id AND user_collections.user_id = :userId AND user_collections.type = :type',
           { userId: user_id, type: 'pet' },
         )
         .leftJoin(
           'user_favorites',
           'user_favorites',
-          'user_favorites.target_id = pets.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
+          'user_favorites.target_id = battle-pets.id AND user_favorites.user_id = :userId AND user_favorites.type = :type',
           { userId: user_id, type: 'pet' },
         );
       const data = await queryBuilder
@@ -143,12 +128,12 @@ export class CollectGalleryService {
       };
     }
 
-    const list = await this.petRepository.find({
+    const list = await this.battlePetRepository.find({
       skip: (page - 1) * limit,
       take: limit,
     });
 
-    const total = await this.petRepository.count();
+    const total = await this.battlePetRepository.count();
 
     return {
       list,
@@ -284,8 +269,8 @@ export class CollectGalleryService {
     // 根据类型获取对应数据的最后更新时间和总数
     let repository: Repository<any>;
     switch (type) {
-      case 'pet':
-        repository = this.petRepository;
+      case 'battle-pet':
+        repository = this.battlePetRepository;
         break;
       case 'toy':
         repository = this.toyRepository;
@@ -324,8 +309,8 @@ export class CollectGalleryService {
     // 如果没有id 则收藏进度全部为 0
     let repository: Repository<any>;
     switch (type) {
-      case 'pet':
-        repository = this.petRepository;
+      case 'battle-pet':
+        repository = this.battlePetRepository;
         break;
       case 'toy':
         repository = this.toyRepository;
@@ -436,62 +421,144 @@ export class CollectGalleryService {
 
   async sysncData(type: string) {
     return await this.entityManager.transaction(async (transactionManager) => {
+      const versionMap = await this.wowVersionService.getVersionMap();
+
       if (type === 'toy') {
         const toys = await transactionManager.query(`
-          SELECT * FROM wowhead_toys WHERE exist != 0
+          SELECT * FROM wowhead_toys WHERE exist is NULL
         `);
 
-        // 将数据同步到 toy 表
         for (const toy of toys) {
           const existingToy = await transactionManager.findOne(ToyEntity, {
             where: { toyId: toy.id },
           });
-
+          const toyVersion = versionMap.get(toy.version.split('.')[0]);
           if (existingToy) {
             await transactionManager.update(
               ToyEntity,
               { toyId: toy.id },
               {
                 name: toy.name,
-                icon: toy.icon,
-                screenshot: toy.screenshot,
+                icon: toy.icon_local,
+                screenshot: toy.screenshot_local,
                 camp: toy.camp,
                 postUid: toy.postUid,
                 postLink: toy.postLink,
+                versionId: toyVersion,
               },
             );
           } else {
             const newToy = new ToyEntity();
             Object.assign(newToy, {
               toyId: toy.id,
-              icon: toy.icon,
-              screenshot: toy.screenshot,
+              name: toy.name,
+              icon: toy.icon_local,
+              screenshot: toy.screenshot_local,
               camp: toy.camp,
               postUid: toy.postUid,
               postLink: toy.postLink,
+              versionId: toyVersion,
             });
             await transactionManager.save(ToyEntity, newToy);
           }
         }
         return success('玩具数据同步成功');
       }
+
+      if (type === 'battle-pet') {
+        const battlePets = await transactionManager.query(`
+          SELECT * FROM wowhead_battle_pets WHERE exist is NULL
+        `);
+
+        for (const battlePet of battlePets) {
+          const existingBattlePet = await transactionManager.findOne(
+            BattlePetEntity,
+            {
+              where: { battlePetId: battlePet.id },
+            },
+          );
+          const battlePetVersion = versionMap.get(
+            battlePet.version.split('.')[0],
+          );
+          if (existingBattlePet) {
+            await transactionManager.update(
+              BattlePetEntity,
+              { battlePetId: battlePet.id },
+              {
+                name: battlePet.name,
+                battlePetId: battlePet.id,
+                icon: battlePet.icon_local,
+                screenshot: battlePet.screenshot_local,
+                camp: battlePet.camp,
+                postUid: battlePet.postUid,
+                postLink: battlePet.postLink,
+                versionId: battlePetVersion,
+              },
+            );
+          } else {
+            const newBattlePet = new BattlePetEntity();
+            Object.assign(newBattlePet, {
+              name: battlePet.name,
+              battlePetId: battlePet.id,
+              icon: battlePet.icon_local,
+              screenshot: battlePet.screenshot_local,
+              camp: battlePet.camp,
+              postUid: battlePet.postUid,
+              postLink: battlePet.postLink,
+              versionId: battlePetVersion,
+            });
+            await transactionManager.save(BattlePetEntity, newBattlePet);
+          }
+        }
+        return success('数据同步成功');
+      }
+
+      if (type === 'mount') {
+        const mounts = await transactionManager.query(`
+          SELECT * FROM wowhead_mounts WHERE exist IS NULL AND TRIM(reagents_version) <> ''
+        `);
+
+        for (const mount of mounts) {
+          const existingMount = await transactionManager.findOne(MountEntity, {
+            where: { mountId: mount.id },
+          });
+          const mountVersion = versionMap.get(
+            mount.reagents_version.split('.')[0],
+          );
+          if (existingMount) {
+            await transactionManager.update(
+              MountEntity,
+              { mountId: mount.id },
+              {
+                name: mount.name,
+                mountId: mount.id,
+                type: mount.nav3,
+                icon: mount.icon_local,
+                screenshot: mount.screenshot_local,
+                camp: mount.reagents_camp,
+                postUid: mount.postUid,
+                postLink: mount.postLink,
+                versionId: mountVersion,
+              },
+            );
+          } else {
+            const newMount = new MountEntity();
+            Object.assign(newMount, {
+              name: mount.name,
+              mountId: mount.id,
+              type: mount.nav3,
+              icon: mount.icon_local,
+              screenshot: mount.screenshot_local,
+              camp: mount.reagents_camp,
+              postUid: mount.postUid,
+              postLink: mount.postLink,
+              versionId: mountVersion,
+            });
+            await transactionManager.save(MountEntity, newMount);
+          }
+        }
+        return success('数据同步成功');
+      }
     });
   }
-
-  // 添加批量查询方法
-  // async findAllCollectGallery() {
-  //   const [toys, pets, mounts, achievements] = await Promise.all([
-  //     this.toyRepository.find(),
-  //     this.petRepository.find(),
-  //     this.mountRepository.find(),
-  //     this.achievementRepository.find(),
-  //   ]);
-
-  //   return {
-  //     toys,
-  //     pets,
-  //     mounts,
-  //     achievements,
-  //   };
-  // }
 }

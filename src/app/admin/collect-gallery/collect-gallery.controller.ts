@@ -5,9 +5,9 @@ import { CollectGalleryService } from './collect-gallery.service';
 export class CollectGalleryController {
   constructor(private readonly collectGalleryService: CollectGalleryService) {}
 
-  @Get('pet')
-  async getPetList() {
-    return await this.collectGalleryService.getPetList();
+  @Get('battle-pet')
+  async getBattlePetList() {
+    return await this.collectGalleryService.getBattlePetList();
   }
 
   @Get('toy')
@@ -26,7 +26,7 @@ export class CollectGalleryController {
   }
 
   @Get('sysnc-data')
-  async syncData(@Query() type: string) {
+  async syncData(@Query('type') type: string) {
     return await this.collectGalleryService.sysncData(type);
   }
 }

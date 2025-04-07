@@ -79,4 +79,7 @@ export class WowheadMount {
 
   @Column({ name: 'reagents_camp', nullable: true })
   reagentsCamp: string;
+
+  @Column({ nullable: true })
+  exist: boolean;
 }

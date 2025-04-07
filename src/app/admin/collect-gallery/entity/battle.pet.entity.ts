@@ -2,16 +2,16 @@ import { BasicEntity } from '@/core/database/entitys';
 import { Column, Entity, Index } from 'typeorm';
 
 @Entity({
-  name: 'data_site_pets',
+  name: 'data_site_battle_pets',
 })
-export class PetEntity extends BasicEntity {
+export class BattlePetEntity extends BasicEntity {
   @Index()
   @Column({
     type: 'int',
-    name: 'pet_id',
+    name: 'battle_pet_id',
     comment: '宠物id',
   })
-  petId: number;
+  battlePetId: number;
 
   @Index()
   @Column({
@@ -21,10 +21,10 @@ export class PetEntity extends BasicEntity {
   name: string;
 
   @Column({
-    type: 'varchar',
+    type: 'int',
     comment: '版本',
   })
-  version: string;
+  versionId: number;
 
   @Column({
     type: 'text',

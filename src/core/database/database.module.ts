@@ -14,13 +14,13 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { AchievementEntity } from '@/app/admin/collect-gallery/entity/achievement.entity';
 import { MountEntity } from '@/app/admin/collect-gallery/entity/mounts.entity';
-import { PetEntity } from '@/app/admin/collect-gallery/entity/pet.entity';
+import { BattlePetEntity } from '@/app/admin/collect-gallery/entity/battle.pet.entity';
 import { ToyEntity } from '@/app/admin/collect-gallery/entity/toy.entity';
 import { WowheadMount } from './entitys/wowhead.mount.entity';
 import { WowheadAchievement } from './entitys/wowhead.achievement.entity';
 import { WowheadBattlePet } from './entitys/wowhead.battle.pet.entity';
 import { WowheadToy } from './entitys/wowhead.toy.entity';
-import { WowVersion } from '@/app/admin/game-version/entity/index.entity';
+import { WowVersion } from '@/app/admin/wow-version/entity/index.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -46,7 +46,7 @@ import { WowVersion } from '@/app/admin/game-version/entity/index.entity';
           AchievementEntity,
           MountEntity,
           ToyEntity,
-          PetEntity,
+          BattlePetEntity,
           WowheadMount,
           WowheadAchievement,
           WowheadBattlePet,

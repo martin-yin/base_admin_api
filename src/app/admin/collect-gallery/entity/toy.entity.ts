@@ -21,10 +21,10 @@ export class ToyEntity extends BasicEntity {
   name: string;
 
   @Column({
-    type: 'varchar',
+    type: 'int',
     comment: '版本',
   })
-  version: string;
+  versionId: number;
 
   @Column({
     type: 'text',

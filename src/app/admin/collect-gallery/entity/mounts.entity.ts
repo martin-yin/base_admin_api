@@ -25,13 +25,13 @@ export class MountEntity extends BasicEntity {
     length: 50,
     comment: '类别 飞行坐骑 陆地坐骑 水下坐骑',
   })
-  category: string;
+  type: string;
 
   @Column({
-    type: 'varchar',
+    type: 'int',
     comment: '版本',
   })
-  version: string;
+  versionId: number;
 
   @Column({
     type: 'text',

@@ -88,4 +88,7 @@ export class WowheadBattlePet {
 
   @Column({ name: 'extra_content', type: 'text', nullable: true })
   extraContent: string;
+
+  @Column({ nullable: true })
+  exist: boolean;
 }
