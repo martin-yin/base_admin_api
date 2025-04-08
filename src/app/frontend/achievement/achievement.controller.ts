@@ -1,4 +1,4 @@
-import { AchievementService } from '@/app/admin/achievement/achievement.service';
+import { AchievementService } from '@/shared/achievement/achievement.service';
 import { Controller, Get } from '@nestjs/common';
 
 @Controller('achievement')

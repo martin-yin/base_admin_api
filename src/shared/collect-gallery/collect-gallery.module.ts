@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ToyEntity } from './entitys/toy.entity';
 import { BattlePetEntity } from './entitys/battle.pet.entity';
 import { MountEntity } from './entitys/mounts.entity';
-import { CollectGalleryController } from './collect-gallery.controller';
+// import { CollectGalleryController } from './collect-gallery.controller';
 import { WowVersionModule } from '../wow-version/wow-version.module';
 
 @Module({
@@ -12,7 +12,7 @@ import { WowVersionModule } from '../wow-version/wow-version.module';
     TypeOrmModule.forFeature([ToyEntity, BattlePetEntity, MountEntity]),
     WowVersionModule,
   ],
-  controllers: [CollectGalleryController],
+  controllers: [],
   providers: [CollectGalleryService],
   exports: [CollectGalleryService],
 })

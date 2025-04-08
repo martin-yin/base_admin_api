@@ -9,8 +9,8 @@ import { WowVersionModule } from '../wow-version/wow-version.module';
 
 @Module({
   imports: [
-    WowVersionModule,
     TypeOrmModule.forFeature([AchievementEntity, AchievementCategoryEntity]),
+    WowVersionModule,
   ],
   controllers: [],
   providers: [AchievementService],
