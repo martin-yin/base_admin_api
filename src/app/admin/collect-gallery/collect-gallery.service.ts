@@ -5,7 +5,6 @@ import { success } from '@/core/utils/handle';
 import { ApiException } from '@/core/exceptions/api.exception';
 import { HttpStatus } from '@nestjs/common';
 import { ToyEntity } from './entitys/toy.entity';
-import { AchievementEntity } from './entitys/achievement.entity';
 import { MountEntity } from './entitys/mounts.entity';
 import { BattlePetEntity } from './entitys/battle.pet.entity';
 import { WowVersionService } from '../wow-version/wow-version.service';
@@ -19,8 +18,6 @@ export class CollectGalleryService {
     private battlePetRepository: Repository<BattlePetEntity>,
     @InjectRepository(MountEntity)
     private mountRepository: Repository<MountEntity>,
-    @InjectRepository(AchievementEntity)
-    private achievementRepository: Repository<AchievementEntity>,
     @InjectEntityManager()
     private entityManager: EntityManager,
 
@@ -266,9 +263,6 @@ export class CollectGalleryService {
       case 'mount':
         repository = this.mountRepository;
         break;
-      case 'achievement':
-        repository = this.achievementRepository;
-        break;
       default:
         throw new ApiException('不支持的类型', HttpStatus.BAD_REQUEST);
     }
@@ -401,10 +395,6 @@ export class CollectGalleryService {
             : 0,
       })),
     };
-  }
-
-  async getAchievementList() {
-    return await this.achievementRepository.find();
   }
 
   async sysncData(type: string) {

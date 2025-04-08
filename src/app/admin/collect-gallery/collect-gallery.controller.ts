@@ -20,11 +20,6 @@ export class CollectGalleryController {
     return await this.collectGalleryService.getMountList();
   }
 
-  @Get('achievement')
-  async getAchievementList() {
-    return await this.collectGalleryService.getAchievementList();
-  }
-
   @Get('sysnc-data')
   async syncData(@Query('type') type: string) {
     return await this.collectGalleryService.sysncData(type);
