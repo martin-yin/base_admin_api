@@ -1,13 +1,9 @@
-import { WordpressUserEntity } from '@/core/database/entitys/wordpress.user.entity';
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { UserEntity } from '@/app/admin/user/entitys/user.entity';
-
+import { UserModule as AdminUserModule } from '@/app/admin/user/user.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([WordpressUserEntity, UserEntity])],
+  imports: [AdminUserModule],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [],
 })
 export class UserModule {}
