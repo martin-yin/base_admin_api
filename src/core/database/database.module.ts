@@ -21,7 +21,10 @@ import { WowheadBattlePet } from './entitys/wowhead.battle.pet.entity';
 import { WowheadToy } from './entitys/wowhead.toy.entity';
 import { WowVersion } from '@/app/admin/wow-version/entity/index.entity';
 import { WordpressUserEntity } from './entitys/wordpress.user.entity';
-import { AchievementCategoryEntity, AchievementEntity } from '@/app/admin/achievement/entitys/index.entity';
+import {
+  AchievementCategoryEntity,
+  AchievementEntity,
+} from '@/app/admin/achievement/entitys/index.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -30,10 +33,10 @@ import { AchievementCategoryEntity, AchievementEntity } from '@/app/admin/achiev
         configService: ConfigService,
       ): Promise<TypeOrmModuleOptions> => ({
         type: configService.get('DATABASE_TYPE') as any,
-        host: '10.0.12.2',
-        port: 3306,
-        username: 'root',
-        password: 'we#%WDxoiip1522',
+        host: configService.get('DATABASE_HOST') as string,
+        port: configService.get('DATABASE_PORT') as number,
+        username: configService.get('DATABASE_USER') as string,
+        password: configService.get('DATABASE_PWD') as string,
         database: configService.get('DATABASE_DB') as any,
         entities: [
           RoleEntity,
@@ -65,11 +68,11 @@ import { AchievementCategoryEntity, AchievementEntity } from '@/app/admin/achiev
         configService: ConfigService,
       ): Promise<TypeOrmModuleOptions> => ({
         type: configService.get('DATABASE_TYPE') as any,
-        host: '10.0.12.2',
-        port: 3306,
-        username: 'root',
-        password: 'we#%WDxoiip1522',
-        database: 'wordpresstest_db',
+        host: configService.get('DATABASE_HOST') as string,
+        port: configService.get('DATABASE_PORT') as number,
+        username: configService.get('DATABASE_USER') as string,
+        password: configService.get('DATABASE_PWD') as string,
+        database: configService.get('DATABASE_DB_WORDPRESS') as string,
         entities: [WordpressUserEntity],
         synchronize: false,
       }),

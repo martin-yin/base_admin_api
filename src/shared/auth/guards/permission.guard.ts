@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from '@/app/admin/system/auth/auth.service';
 import { AUTHORIZE_METADATA } from '@/shared/constants/api-authorize';

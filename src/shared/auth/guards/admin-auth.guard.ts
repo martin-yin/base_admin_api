@@ -23,7 +23,10 @@ export class AdminJwtAuthGuard extends AuthGuard('admin-jwt') {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest();
 
-    if (request.originalUrl.includes("/login") || !request.originalUrl.includes("admin")) {
+    if (
+      request.originalUrl.includes('/login') ||
+      !request.originalUrl.includes('admin')
+    ) {
       return true;
     }
     const permissionList = this.reflector.get<

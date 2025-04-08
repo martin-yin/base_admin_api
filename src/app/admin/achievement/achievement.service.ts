@@ -143,7 +143,6 @@ export class AchievementService extends DataBasicService<AchievementEntity> {
           await Promise.all(
             batch.map(async (element: WowheadAchievement) => {
               const version = versionMap.get(element['version'].split('.')[0]);
-              console.log(version, 'versionversionversion')
               let categoryId = 0;
               // 优先使用最具体的分类
               if (element.nav4 && categoryMap.has(element.nav4)) {

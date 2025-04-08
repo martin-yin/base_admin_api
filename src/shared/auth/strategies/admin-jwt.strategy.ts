@@ -19,6 +19,6 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
   }
 
   async validate(payload: AdminJwtPayload) {
-    return payload
+    return payload;
   }
 }
