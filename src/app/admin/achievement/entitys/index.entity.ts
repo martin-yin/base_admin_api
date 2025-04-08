@@ -21,10 +21,10 @@ export class AchievementEntity extends BasicEntity {
   categoryId: number;
 
   @Column({
-    type: 'varchar',
+    type: 'int',
     comment: '版本',
   })
-  version: string;
+  versionId: number;
 
   @Column({
     type: 'text',
@@ -83,6 +83,8 @@ export class AchievementCategoryEntity extends BasicRichEntity {
   @Column({
     name: 'name',
     type: 'varchar',
+    length: 100,
+    unique: true, // 唯一性约束
     comment: '成就分类名称',
   })
   name: string;
