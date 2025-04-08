@@ -17,8 +17,8 @@ import { FrontendModule } from './frontend/frontend.module';
         limit: 1000,
       },
     ]),
-    AdminModule,
     FrontendModule,
+    AdminModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'upload'),
       serveRoot: '/upload',

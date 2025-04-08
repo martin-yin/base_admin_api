@@ -22,12 +22,14 @@ export class AdminJwtAuthGuard extends AuthGuard('admin-jwt') {
   async canActivate(context: ExecutionContext): Promise<any> {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest();
-    if (request.originalUrl.includes('/login')) {
+
+    if (request.originalUrl.includes("/login") || !request.originalUrl.includes("admin")) {
       return true;
     }
     const permissionList = this.reflector.get<
       Array<string | Array<string | null>>
     >(AUTHORIZE_METADATA, context.getHandler());
+
     if (!permissionList) {
       return super.canActivate(context);
     }
