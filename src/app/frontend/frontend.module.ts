@@ -15,10 +15,10 @@ import { AchievementModule } from './achievement/achievement.module';
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: UserAuthGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: UserAuthGuard,
+    // },
   ],
 })
 export class FrontendModule {}

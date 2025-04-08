@@ -41,7 +41,7 @@ export class UserEntity extends BasicEntity {
   @Column({
     type: 'text',
     name: 'avatar',
-    default: '',
+    nullable: true,
   })
   avatar: string;
 }

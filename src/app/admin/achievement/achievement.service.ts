@@ -143,8 +143,7 @@ export class AchievementService extends DataBasicService<AchievementEntity> {
           await Promise.all(
             batch.map(async (element: WowheadAchievement) => {
               const version = versionMap.get(element['version'].split('.')[0]);
-
-              // 确定分类ID
+              console.log(version, 'versionversionversion')
               let categoryId = 0;
               // 优先使用最具体的分类
               if (element.nav4 && categoryMap.has(element.nav4)) {
@@ -169,10 +168,10 @@ export class AchievementService extends DataBasicService<AchievementEntity> {
                 achievementEntity.achievementId = element.id;
                 achievementEntity.categoryId = categoryId; // 使用找到的分类ID
                 achievementEntity.versionId = version || 0; // 修正：这里应该是achievementEntity而不是achievement
-                achievementEntity.icon = element.icon;
+                achievementEntity.icon = element.iconLocal;
                 achievementEntity.name = element.name;
                 achievementEntity.points = element.points;
-                achievementEntity.screenshot = element.screenshot;
+                achievementEntity.screenshot = element.screenshotLocal;
                 achievementEntity.description = element.description;
                 achievementEntity.camp = element.camp;
                 achievementEntity.isshared = element.isShared;
@@ -188,10 +187,10 @@ export class AchievementService extends DataBasicService<AchievementEntity> {
                 // 更新现有成就
                 achievement.categoryId = categoryId; // 使用找到的分类ID
                 achievement.versionId = version || 0;
-                achievement.icon = element.icon;
+                achievement.icon = element.iconLocal;
                 achievement.name = element.name;
                 achievement.points = element.points;
-                achievement.screenshot = element.screenshot;
+                achievement.screenshot = element.screenshotLocal;
                 achievement.description = element.description;
                 achievement.camp = element.camp;
                 achievement.isshared = element.isShared;

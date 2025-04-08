@@ -12,7 +12,6 @@ import {
   UserFavoriteEntity,
 } from '@/app/admin/user/entitys/user.entity';
 import { ConfigService } from '@nestjs/config';
-import { AchievementEntity } from '@/app/admin/collect-gallery/entitys/achievement.entity';
 import { MountEntity } from '@/app/admin/collect-gallery/entitys/mounts.entity';
 import { BattlePetEntity } from '@/app/admin/collect-gallery/entitys/battle.pet.entity';
 import { ToyEntity } from '@/app/admin/collect-gallery/entitys/toy.entity';
@@ -22,6 +21,7 @@ import { WowheadBattlePet } from './entitys/wowhead.battle.pet.entity';
 import { WowheadToy } from './entitys/wowhead.toy.entity';
 import { WowVersion } from '@/app/admin/wow-version/entity/index.entity';
 import { WordpressUserEntity } from './entitys/wordpress.user.entity';
+import { AchievementCategoryEntity, AchievementEntity } from '@/app/admin/achievement/entitys/index.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -45,6 +45,7 @@ import { WordpressUserEntity } from './entitys/wordpress.user.entity';
           UserCollection,
           UserFavoriteEntity,
           AchievementEntity,
+          AchievementCategoryEntity,
           MountEntity,
           ToyEntity,
           BattlePetEntity,
