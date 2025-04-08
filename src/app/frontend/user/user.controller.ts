@@ -45,7 +45,6 @@ export class UserController {
 
           proxyRes.on('end', () => {
             try {
-              // 解析WordPress返回的用户数据
               const userData = JSON.parse(data);
               resolve(userData);
             } catch (error) {
@@ -60,7 +59,6 @@ export class UserController {
       });
 
       const userData = await proxyRequest;
-      console.log(userData);
       const data = this.userService.processWordpressUserData(userData);
       res.status(HttpStatus.OK).json(data);
     } catch (error) {
