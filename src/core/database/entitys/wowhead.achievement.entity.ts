@@ -76,4 +76,7 @@ export class WowheadAchievement {
 
   @Column({ name: 'screenshot_local', nullable: true })
   screenshotLocal: string;
+
+  @Column({ nullable: true })
+  exist: boolean;
 }

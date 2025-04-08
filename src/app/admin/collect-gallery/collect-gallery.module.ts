@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CollectGalleryService } from './collect-gallery.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ToyEntity } from './entity/toy.entity';
-import { BattlePetEntity } from './entity/battle.pet.entity';
-import { MountEntity } from './entity/mounts.entity';
-import { AchievementEntity } from './entity/achievement.entity';
+import { ToyEntity } from './entitys/toy.entity';
+import { BattlePetEntity } from './entitys/battle.pet.entity';
+import { MountEntity } from './entitys/mounts.entity';
+import { AchievementEntity } from './entitys/achievement.entity';
 import { CollectGalleryController } from './collect-gallery.controller';
 import { WowVersionModule } from '../wow-version/wow-version.module';
 

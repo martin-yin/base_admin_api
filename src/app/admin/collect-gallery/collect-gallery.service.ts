@@ -4,10 +4,10 @@ import { Repository, EntityManager } from 'typeorm';
 import { success } from '@/core/utils/handle';
 import { ApiException } from '@/core/exceptions/api.exception';
 import { HttpStatus } from '@nestjs/common';
-import { ToyEntity } from './entity/toy.entity';
-import { AchievementEntity } from './entity/achievement.entity';
-import { MountEntity } from './entity/mounts.entity';
-import { BattlePetEntity } from './entity/battle.pet.entity';
+import { ToyEntity } from './entitys/toy.entity';
+import { AchievementEntity } from './entitys/achievement.entity';
+import { MountEntity } from './entitys/mounts.entity';
+import { BattlePetEntity } from './entitys/battle.pet.entity';
 import { WowVersionService } from '../wow-version/wow-version.service';
 
 @Injectable()

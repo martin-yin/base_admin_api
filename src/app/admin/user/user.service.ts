@@ -62,7 +62,7 @@ export class UserService extends DataBasicService<UserEntity> {
       let user = await this.userRepository.findOne({
         where: { id: Number(wpUser.ID) },
       });
-      
+
       if (!user) {
         user = new UserEntity();
         user.id = Number(wpUser.ID);
@@ -73,7 +73,7 @@ export class UserService extends DataBasicService<UserEntity> {
       user.userEmail = wpUser.user_email;
       user.displayName = wpUser.display_name;
       user.avatar = wpUser?.avatar || '';
-      
+
       // 保存用户并返回保存后的实体
       return await this.userRepository.save(user);
     } catch (error) {
