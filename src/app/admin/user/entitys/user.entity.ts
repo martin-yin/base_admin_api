@@ -1,5 +1,5 @@
 import { BasicEntity } from '@/core/database/entitys';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn , CreateDateColumn } from 'typeorm';
 
 @Entity({
   name: 'data_site_users',
@@ -45,7 +45,7 @@ export class UserEntity extends BasicEntity {
   })
   point: number;
 
-  @Column({
+  @CreateDateColumn({
     type: 'timestamp',
     name: 'banned_to_time',
   })
@@ -57,13 +57,13 @@ export class UserEntity extends BasicEntity {
   })
   createdBy: string;
 
-  @Column({
+  @CreateDateColumn({
     type: 'timestamp',
     name: 'created_time',
   })
   createdTime: Date;
 
-  @Column({
+  @CreateDateColumn({
     type: 'timestamp',
     name: 'nickname_last_updated_time',
   })
