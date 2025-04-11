@@ -4,10 +4,16 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { UserEntity, UserFavoriteEntity } from './entitys/user.entity';
+import {
+  UserAchievementEntity,
+  UserCollectionEntity,
+  UserEntity,
+  UserFavoriteEntity,
+} from './entitys/user.entity';
 import { FavoriteDto } from '@/app/frontend/user/dto/index.dto';
 import { ApiException } from '@/core/exceptions';
 import { UserCharacterEntity } from './entitys/character.entity';
+import { CharacterDto, UpdateUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService extends DataBasicService<UserEntity> {
@@ -17,6 +23,12 @@ export class UserService extends DataBasicService<UserEntity> {
 
     @InjectRepository(UserFavoriteEntity)
     private readonly userFavoriteEntity: Repository<UserFavoriteEntity>,
+
+    @InjectRepository(UserCollectionEntity)
+    private readonly userCollectionEntity: Repository<UserCollectionEntity>,
+
+    @InjectRepository(UserAchievementEntity)
+    private readonly userAchievementEntity: Repository<UserAchievementEntity>,
 
     @InjectRepository(WordpressUserEntity, 'wordpress_db')
     private wordpressUser: Repository<WordpressUserEntity>,
@@ -62,7 +74,7 @@ export class UserService extends DataBasicService<UserEntity> {
    * @param characterData
    * @returns
    */
-  async updateUserCharacter(userId: number, characterData: any) {
+  async updateUserCharacter(userId: number, characterData: CharacterDto) {
     const userCharacter = await this.userCharacterEntity.findOne({
       where: { userId: userId, uniqueID: characterData.uniqueID },
     });
@@ -72,8 +84,216 @@ export class UserService extends DataBasicService<UserEntity> {
       return await this.userCharacterEntity.save(userCharacter);
     }
     // 创建新的用户角色
-    const newCharacter = this.userCharacterEntity.create(characterData);
+    const newCharacter = this.userCharacterEntity.create({
+      userId: userId,
+      name: characterData.name,
+      realm: characterData.realm,
+      class: characterData.class,
+      faction: characterData.faction,
+      uniqueID: characterData.uniqueID,
+      bnetID: characterData.bnetID,
+      itemLevel: characterData.itemLevel,
+      achievementPoints: characterData.achievementPoints,
+      mythicScore: characterData.mythicScore,
+      dungeonScores: characterData.dungeonScores,
+    });
     return await this.userCharacterEntity.save(newCharacter);
+  }
+
+  /**
+   * @description: 更新用户的信息
+   * @param userData
+   */
+  async updateUserInfo(userId: number, userData: UpdateUserDto) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+    if (!user) {
+      return new ApiException('用户不存在', HttpStatus.NOT_FOUND);
+    }
+
+    // 使用事务确保数据一致性
+    return await this.userRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        try {
+          // 更新用户基本信息
+          await transactionalEntityManager.update(
+            UserEntity,
+            { id: userId },
+            {
+              battleNetId: userData.characters.bnetID,
+              ...user,
+            },
+          );
+
+          // 更新用户角色信息
+          const userCharacter = userData.characters;
+          if (userCharacter) {
+            const existingCharacter = await transactionalEntityManager.findOne(
+              UserCharacterEntity,
+              {
+                where: { userId: userId, uniqueID: userCharacter.uniqueID },
+              },
+            );
+
+            if (existingCharacter) {
+              // 更新已存在的用户角色
+              Object.assign(existingCharacter, userCharacter);
+              await transactionalEntityManager.save(
+                UserCharacterEntity,
+                existingCharacter,
+              );
+            } else {
+              // 创建新的用户角色
+              const newCharacter = new UserCharacterEntity();
+              newCharacter.userId = userId;
+              newCharacter.name = userCharacter.name;
+              newCharacter.realm = userCharacter.realm;
+              newCharacter.class = userCharacter.class;
+              newCharacter.faction = userCharacter.faction;
+              newCharacter.uniqueID = userCharacter.uniqueID;
+              newCharacter.bnetID = userCharacter.bnetID;
+              newCharacter.itemLevel = userCharacter.itemLevel;
+              newCharacter.achievementPoints = userCharacter.achievementPoints;
+              newCharacter.mythicScore = userCharacter.mythicScore;
+              newCharacter.dungeonScores = userCharacter.dungeonScores;
+              await transactionalEntityManager.save(
+                UserCharacterEntity,
+                newCharacter,
+              );
+            }
+          }
+
+          // 更新用户的宠物、坐骑、玩具、成就
+          const { mounts, pets, achievements, toys } = userData;
+
+          // 更新用户的坐骑
+          if (mounts) {
+            const existingMounts = await transactionalEntityManager.findOne(
+              UserCollectionEntity,
+              {
+                where: { userId: userId, type: 'mounts' },
+              },
+            );
+
+            if (existingMounts) {
+              existingMounts.collectionIds = mounts
+                .map((mount) => mount.name)
+                .join(',');
+              await transactionalEntityManager.save(
+                UserCollectionEntity,
+                existingMounts,
+              );
+            } else {
+              const newMounts = new UserCollectionEntity();
+              newMounts.userId = userId;
+              newMounts.type = 'mounts';
+              newMounts.collectionIds = mounts
+                .map((mount) => mount.name)
+                .join(',');
+              await transactionalEntityManager.save(
+                UserCollectionEntity,
+                newMounts,
+              );
+            }
+          }
+
+          // 更新用户的宠物
+          if (pets) {
+            const existingPets = await transactionalEntityManager.findOne(
+              UserCollectionEntity,
+              {
+                where: { userId: userId, type: 'battle-pet' },
+              },
+            );
+
+            if (existingPets) {
+              existingPets.collectionIds = pets
+                .map((pet) => pet.name)
+                .join(',');
+              await transactionalEntityManager.save(
+                UserCollectionEntity,
+                existingPets,
+              );
+            } else {
+              const newPets = new UserCollectionEntity();
+              newPets.userId = userId;
+              newPets.type = 'battle-pet';
+              newPets.collectionIds = pets.map((pet) => pet.name).join(',');
+              await transactionalEntityManager.save(
+                UserCollectionEntity,
+                newPets,
+              );
+            }
+          }
+
+          // 更新用户的玩具
+          if (toys) {
+            const existingToys = await transactionalEntityManager.findOne(
+              UserCollectionEntity,
+              {
+                where: { userId: userId, type: 'toy' },
+              },
+            );
+
+            if (existingToys) {
+              existingToys.collectionIds = toys
+                .map((toy) => toy.name)
+                .join(',');
+              await transactionalEntityManager.save(
+                UserCollectionEntity,
+                existingToys,
+              );
+            } else {
+              const newToys = new UserCollectionEntity();
+              newToys.userId = userId;
+              newToys.type = 'toy';
+              newToys.collectionIds = toys.map((toy) => toy.name).join(',');
+              await transactionalEntityManager.save(
+                UserCollectionEntity,
+                newToys,
+              );
+            }
+          }
+
+          // 更新用户的成就
+          if (achievements) {
+            const existingAchievements =
+              await transactionalEntityManager.findOne(UserAchievementEntity, {
+                where: { userId: userId },
+              });
+
+            if (existingAchievements) {
+              existingAchievements.achievementIds = achievements
+                .map((achievement) => achievement.achievementId)
+                .join(',');
+              await transactionalEntityManager.save(
+                UserAchievementEntity,
+                existingAchievements,
+              );
+            } else {
+              const newAchievements = new UserAchievementEntity();
+              newAchievements.userId = userId;
+              newAchievements.achievementIds = achievements
+                .map((achievement) => achievement.achievementId)
+                .join(',');
+              await transactionalEntityManager.save(
+                UserAchievementEntity,
+                newAchievements,
+              );
+            }
+          }
+
+          return { success: true, message: '用户信息更新成功' };
+        } catch (error) {
+          console.error('更新用户信息失败:', error);
+          throw new ApiException(
+            '更新用户信息失败',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        }
+      },
+    );
   }
 
   async favorite(userId: number, body: FavoriteDto) {
