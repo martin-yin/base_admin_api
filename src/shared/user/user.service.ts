@@ -112,6 +112,7 @@ export class UserService extends DataBasicService<UserEntity> {
       return new ApiException('用户不存在', HttpStatus.NOT_FOUND);
     }
 
+    console.log(userData, 'userData');
     // 使用事务确保数据一致性
     return await this.userRepository.manager.transaction(
       async (transactionalEntityManager) => {
@@ -121,13 +122,13 @@ export class UserService extends DataBasicService<UserEntity> {
             UserEntity,
             { id: userId },
             {
-              battleNetId: userData.characters.bnetID,
+              battleNetId: userData.character.bnetID,
               ...user,
             },
           );
 
           // 更新用户角色信息
-          const userCharacter = userData.characters;
+          const userCharacter = userData.character;
           if (userCharacter) {
             const existingCharacter = await transactionalEntityManager.findOne(
               UserCharacterEntity,
@@ -151,6 +152,8 @@ export class UserService extends DataBasicService<UserEntity> {
               newCharacter.realm = userCharacter.realm;
               newCharacter.class = userCharacter.class;
               newCharacter.faction = userCharacter.faction;
+              newCharacter.race = userCharacter.race;
+              newCharacter.level = userCharacter.level;
               newCharacter.uniqueID = userCharacter.uniqueID;
               newCharacter.bnetID = userCharacter.bnetID;
               newCharacter.itemLevel = userCharacter.itemLevel;
@@ -172,13 +175,13 @@ export class UserService extends DataBasicService<UserEntity> {
             const existingMounts = await transactionalEntityManager.findOne(
               UserCollectionEntity,
               {
-                where: { userId: userId, type: 'mounts' },
+                where: { userId: userId, type: 'mount' },
               },
             );
 
             if (existingMounts) {
               existingMounts.collectionIds = mounts
-                .map((mount) => mount.name)
+                .map((mount) => mount.spellID)
                 .join(',');
               await transactionalEntityManager.save(
                 UserCollectionEntity,
@@ -187,9 +190,9 @@ export class UserService extends DataBasicService<UserEntity> {
             } else {
               const newMounts = new UserCollectionEntity();
               newMounts.userId = userId;
-              newMounts.type = 'mounts';
+              newMounts.type = 'mount';
               newMounts.collectionIds = mounts
-                .map((mount) => mount.name)
+                .map((mount) => mount.spellID)
                 .join(',');
               await transactionalEntityManager.save(
                 UserCollectionEntity,
@@ -203,13 +206,13 @@ export class UserService extends DataBasicService<UserEntity> {
             const existingPets = await transactionalEntityManager.findOne(
               UserCollectionEntity,
               {
-                where: { userId: userId, type: 'battle-pet' },
+                where: { userId: userId, type: 'battlePet' },
               },
             );
 
             if (existingPets) {
               existingPets.collectionIds = pets
-                .map((pet) => pet.name)
+                .map((pet) => pet.speciesID)
                 .join(',');
               await transactionalEntityManager.save(
                 UserCollectionEntity,
@@ -218,8 +221,10 @@ export class UserService extends DataBasicService<UserEntity> {
             } else {
               const newPets = new UserCollectionEntity();
               newPets.userId = userId;
-              newPets.type = 'battle-pet';
-              newPets.collectionIds = pets.map((pet) => pet.name).join(',');
+              newPets.type = 'battlePet';
+              newPets.collectionIds = pets
+                .map((pet) => pet.speciesID)
+                .join(',');
               await transactionalEntityManager.save(
                 UserCollectionEntity,
                 newPets,
@@ -237,9 +242,7 @@ export class UserService extends DataBasicService<UserEntity> {
             );
 
             if (existingToys) {
-              existingToys.collectionIds = toys
-                .map((toy) => toy.name)
-                .join(',');
+              existingToys.collectionIds = toys.map((toy) => toy.id).join(',');
               await transactionalEntityManager.save(
                 UserCollectionEntity,
                 existingToys,
@@ -248,7 +251,7 @@ export class UserService extends DataBasicService<UserEntity> {
               const newToys = new UserCollectionEntity();
               newToys.userId = userId;
               newToys.type = 'toy';
-              newToys.collectionIds = toys.map((toy) => toy.name).join(',');
+              newToys.collectionIds = toys.map((toy) => toy.id).join(',');
               await transactionalEntityManager.save(
                 UserCollectionEntity,
                 newToys,
@@ -265,7 +268,7 @@ export class UserService extends DataBasicService<UserEntity> {
 
             if (existingAchievements) {
               existingAchievements.achievementIds = achievements
-                .map((achievement) => achievement.achievementId)
+                .map((achievement) => achievement.id)
                 .join(',');
               await transactionalEntityManager.save(
                 UserAchievementEntity,
@@ -275,7 +278,7 @@ export class UserService extends DataBasicService<UserEntity> {
               const newAchievements = new UserAchievementEntity();
               newAchievements.userId = userId;
               newAchievements.achievementIds = achievements
-                .map((achievement) => achievement.achievementId)
+                .map((achievement) => achievement.id)
                 .join(',');
               await transactionalEntityManager.save(
                 UserAchievementEntity,
@@ -283,7 +286,6 @@ export class UserService extends DataBasicService<UserEntity> {
               );
             }
           }
-
           return { success: true, message: '用户信息更新成功' };
         } catch (error) {
           console.error('更新用户信息失败:', error);

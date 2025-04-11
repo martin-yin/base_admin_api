@@ -88,22 +88,22 @@ export class AchievementDto {
   @IsString()
   name: string;
 
-  @IsString()
-  achievementId: string;
+  @IsNumber()
+  id: number;
 }
 
 export class ToyDto {
   @IsString()
   name: string;
 
-  @IsString()
-  id: string;
+  @IsNumber()
+  id: number;
 }
 
 export class UpdateUserDto {
   @ValidateNested()
   @Type(() => CharacterDto)
-  characters: CharacterDto;
+  character: CharacterDto;
 
   @IsArray()
   @ValidateNested({ each: true })

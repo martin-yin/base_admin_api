@@ -47,7 +47,7 @@ export class LoggerService extends WinstonLogger {
     if (error instanceof AxiosError) {
       errorMsg = error.message;
     } else {
-      if (error.stack) errorMsg = error.stack.split('at ')[1];
+      if (error?.stack) errorMsg = error.stack.split('at ')[1];
     }
 
     const logFormat = `${req.method} 请求地址: ${req.originalUrl} 请求IP: ${

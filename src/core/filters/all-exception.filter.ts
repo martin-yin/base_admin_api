@@ -20,12 +20,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
+
+    console.log(exception);
     const data = {
       code,
       status: false,
       time: get_current_time(),
       path: req.url,
-      error: exception.message,
+      error: exception?.message,
     };
 
     this.loggerService.setContext(AllExceptionsFilter.name);
