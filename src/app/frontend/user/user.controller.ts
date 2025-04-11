@@ -1,18 +1,24 @@
-import { UserService } from '@/app/admin/user/user.service';
 import { User } from '@/shared/auth/decorators';
-import { Controller, Get, Req, Res, HttpStatus } from '@nestjs/common';
+import { UserService } from '@/shared/user/user.service';
+import { Controller, Get, Req, Res, HttpStatus, Post, Body } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as https from 'https';
+import { FavoriteDto } from './dto/index.dto';
 
 @Controller('user')
 export class UserController {
   private readonly TARGET_DOMAIN = 'discusstest.wowdata.cn';
 
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('user-info')
   async getUserInfo(@User() user) {
     return user;
+  }
+
+  @Post("favorite")
+  async favorite(@User() user, @Body() body: FavoriteDto) {
+    return await this.userService.favorite(user.id, body)
   }
 
   @Get('proxylogin')

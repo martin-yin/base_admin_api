@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CollectGalleryService } from '../collect-gallery/collect-gallery.service';
-
 @Injectable()
 export class UploadService {
-  constructor(private readonly collectGalleryService: CollectGalleryService) {}
 
   // async createMounts(mounts: any[]) {
   //   const data = mounts.map((item) => {

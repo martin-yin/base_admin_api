@@ -1,7 +1,7 @@
 import { success } from '@/core/utils/handle';
 import { Result } from '@/core/types';
 
-import { DataBasicService } from '@/core/database/services/basic.service';
+import { DataBasicService } from '@/shared/database/services/basic.service';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
@@ -15,7 +15,7 @@ import {
   ManagementRoleEntity,
 } from './entity/management.entity';
 import { ApiException } from '@/core/exceptions';
-import { generateSalt, hashPassword, verifyPassword } from '@/shared/utils';
+import { generateSalt, hashPassword, verifyPassword } from '@/utils';
 
 @Injectable()
 export class ManagementService extends DataBasicService<ManagementEntity> {
@@ -96,8 +96,6 @@ export class ManagementService extends DataBasicService<ManagementEntity> {
       .andWhere('roles.status = :status', { status: 1 })
       .andWhere('roles.is_delete = :isDelete', { isDelete: 0 })
       .groupBy('managements.id');
-
-    console.log('username', username);
 
     if (username) {
       queryBuilder.andWhere('managements.username LIKE :username', {

@@ -7,10 +7,12 @@ import { join } from 'path';
 import { ValidationProvider } from '@/core/validation';
 import { CoreModule } from '@/core';
 import { FrontendModule } from './frontend/frontend.module';
+import { SharedModule } from '@/shared/share.module';
 
 @Module({
   imports: [
     CoreModule.forRoot(),
+    SharedModule,
     ThrottlerModule.forRoot([
       {
         ttl: 6000,

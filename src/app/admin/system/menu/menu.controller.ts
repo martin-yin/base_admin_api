@@ -12,7 +12,7 @@ import { MenuService } from './menu.service';
 import { MenuEntity } from './entity';
 import { CreateMenuDto } from './dto';
 
-@Controller('menu')
+@Controller('admin/system/menu')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 

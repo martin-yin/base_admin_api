@@ -22,9 +22,5 @@ export const verifyPassword = (
   salt: string,
   hashVal: string,
 ) => {
-  console.log('password', password);
-  console.log('salt', salt);
-  console.log('hashVal', hashVal);
-  console.log(hashPassword(password, salt), 'hashPassword(password, salt)');
   return hashPassword(password, salt) === hashVal;
 };

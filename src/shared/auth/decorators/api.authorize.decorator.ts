@@ -1,4 +1,4 @@
-import { AUTHORIZE_METADATA } from '@/shared/constants/api-authorize';
+import { AUTHORIZE_METADATA } from '@/constants/api-authorize';
 import { SetMetadata } from '@nestjs/common';
 
 export const ApiAuthorize = (

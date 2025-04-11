@@ -1,22 +1,23 @@
 import { Module } from '@nestjs/common';
 import {
-  UserCollection,
+  UserAchievementsEntity,
+  UserCollectionEntity,
   UserEntity,
   UserFavoriteEntity,
 } from './entitys/user.entity';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WordpressUserEntity } from '@/core/database/entitys/wordpress.user.entity';
-import { UserAuthModule } from '@/shared/auth/user-auth.module';
+import { WordpressUserEntity } from '@/shared/database/entitys/wordpress.user.entity';
+import { UserAuthModule } from '../auth/user-auth.module';
 
 @Module({
   imports: [
     UserAuthModule,
-    TypeOrmModule.forFeature([UserEntity, UserFavoriteEntity, UserCollection]),
+    TypeOrmModule.forFeature([UserEntity, UserFavoriteEntity, UserCollectionEntity, UserAchievementsEntity]),
     TypeOrmModule.forFeature([WordpressUserEntity], 'wordpress_db'),
   ],
   controllers: [],
   providers: [UserService],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule { }

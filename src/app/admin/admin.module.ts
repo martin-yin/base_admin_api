@@ -6,8 +6,6 @@ import { AdminAuthModule } from '@/shared/auth/admin-auth.module';
 import { AdminJwtAuthGuard } from '@/shared/auth/guards/admin-auth.guard';
 import { PermissionGuard } from '@/shared/auth/guards/permission.guard';
 import { SharedModule } from '@/shared/share.module';
-// import { CollectGalleryModule } from './collect-gallery/collect-gallery.module';
-// import { WowVersionModule } from './wow-version/wow-version.module';
 
 @Module({
   imports: [
@@ -15,8 +13,6 @@ import { SharedModule } from '@/shared/share.module';
     SystemModule,
     UploadModule,
     SharedModule,
-    // CollectGalleryModule,
-    // WowVersionModule,
   ],
   controllers: [],
   providers: [
@@ -24,10 +20,10 @@ import { SharedModule } from '@/shared/share.module';
       provide: APP_GUARD,
       useClass: AdminJwtAuthGuard,
     },
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: PermissionGuard,
+    // },
   ],
 })
 export class AdminModule {}

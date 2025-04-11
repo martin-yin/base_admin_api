@@ -1,4 +1,4 @@
-import { BasicEntity } from '@/core/database/entitys';
+import { BasicEntity } from '@/shared/database/entitys';
 import { Column, Entity, Index } from 'typeorm';
 
 @Entity({

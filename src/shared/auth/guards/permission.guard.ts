@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from '@/app/admin/system/auth/auth.service';
-import { AUTHORIZE_METADATA } from '@/shared/constants/api-authorize';
+import { AUTHORIZE_METADATA } from '@/constants/api-authorize';
 import { ApiException } from '@/core/exceptions';
 
 @Injectable()

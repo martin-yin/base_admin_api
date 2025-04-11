@@ -1,4 +1,4 @@
-import { BasicRichEntity } from '@/core/database/entitys';
+import { BasicRichEntity } from '@/shared/database/entitys';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('data_site_roles')

@@ -16,4 +16,4 @@ import { WowVersionModule } from '../wow-version/wow-version.module';
   providers: [AchievementService],
   exports: [AchievementService],
 })
-export class AchievementsModule {}
+export class AchievementModule {}

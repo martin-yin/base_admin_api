@@ -12,7 +12,7 @@ import { dateFormat } from '../utils';
 
 @Injectable()
 export class WinstonConfigService implements WinstonModuleOptionsFactory {
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) { }
 
   createWinstonModuleOptions(): WinstonModuleOptions {
     const LOGGER_FILE = this.configService.get('LOGGER_FILE');
@@ -62,7 +62,6 @@ export class WinstonConfigService implements WinstonModuleOptionsFactory {
           silent: LOGGER_CONSOLE != 'true',
           format: format.combine(
             format.printf((info) => {
-              console.log(info);
               // 信息格式处理
               const messages =
                 info.message ||

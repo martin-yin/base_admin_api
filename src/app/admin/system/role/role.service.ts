@@ -3,7 +3,7 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { RoleEntity, RoleMenuEntity } from './entity';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
-import { DataBasicService } from '@/core/database/services/basic.service';
+import { DataBasicService } from '@/shared/database/services/basic.service';
 import { RoleInfo } from './types';
 import { ApiException } from '@/core/exceptions';
 
@@ -92,7 +92,6 @@ export class RoleService extends DataBasicService<RoleEntity> {
     const roleMenu = await this.repository.find({
       where: { id },
     });
-    console.log(roleMenu);
     return [];
   }
 }

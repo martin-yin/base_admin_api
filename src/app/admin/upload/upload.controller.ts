@@ -16,9 +16,9 @@ import { ApiException } from '@/core/exceptions/api.exception';
 import * as XLSX from 'xlsx';
 import { UploadService } from './upload.service';
 
-@Controller('upload')
+@Controller('admin/upload')
 export class UploadController {
-  constructor(private uploadService: UploadService) {}
+  constructor(private uploadService: UploadService) { }
 
   @Post('excel')
   @UseInterceptors(
@@ -57,7 +57,6 @@ export class UploadController {
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
       const excelJsonData = XLSX.utils.sheet_to_json(worksheet);
-      console.log(excelJsonData);
       // if (type === 'mount') {
       //   return this.uploadService.createMounts(excelJsonData);
       // }

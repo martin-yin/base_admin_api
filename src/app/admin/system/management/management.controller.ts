@@ -14,7 +14,7 @@ import {
   AUTHORIZE_USER_DELETE,
   AUTHORIZE_USER_GETALL,
   AUTHORIZE_USER_UPDATE,
-} from '@/shared/constants/api-authorize';
+} from '@/constants/api-authorize';
 import { ManagementService } from './management.service';
 import {
   CreateManagementDto,
@@ -22,7 +22,7 @@ import {
   UpdateManagementDto,
 } from './dto';
 
-@Controller('management')
+@Controller('admin/system/management')
 export class ManagementController {
   constructor(private readonly managementService: ManagementService) {}
 

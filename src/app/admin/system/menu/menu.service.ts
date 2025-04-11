@@ -1,4 +1,4 @@
-import { DataBasicService } from '@/core/database/services/basic.service';
+import { DataBasicService } from '@/shared/database/services/basic.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

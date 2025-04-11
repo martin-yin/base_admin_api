@@ -1,4 +1,4 @@
-import { BasicEntity, BasicRichEntity } from '@/core/database/entitys';
+import { BasicEntity, BasicRichEntity } from '@/shared/database/entitys';
 import { Column, Entity } from 'typeorm';
 
 @Entity({
@@ -84,10 +84,18 @@ export class AchievementCategoryEntity extends BasicRichEntity {
     name: 'name',
     type: 'varchar',
     length: 100,
-    unique: true, // 唯一性约束
     comment: '成就分类名称',
   })
   name: string;
+
+  @Column({
+    name: 'uniqueCode',
+    type: 'varchar',
+    length: 100,
+    unique: true,
+    comment: '成就分类名称',
+  })
+  uniqueCode: string;
 
   @Column({
     name: 'parent_id',

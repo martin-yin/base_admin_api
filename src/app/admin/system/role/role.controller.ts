@@ -12,7 +12,7 @@ import { RoleEntity } from './entity';
 import { RoleService } from './role.service';
 import { RoleInfo } from './types';
 
-@Controller('role')
+@Controller('admin/system/role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 

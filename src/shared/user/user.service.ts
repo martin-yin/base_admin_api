@@ -1,16 +1,21 @@
-import { UserEntity } from '@/app/admin/user/entitys/user.entity';
-import { WordpressUserEntity } from '@/core/database/entitys/wordpress.user.entity';
-import { DataBasicService } from '@/core/database/services/basic.service';
-import { Injectable } from '@nestjs/common';
+import { WordpressUserEntity } from '@/shared/database/entitys/wordpress.user.entity';
+import { DataBasicService } from '@/shared/database/services/basic.service';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { UserEntity, UserFavoriteEntity } from './entitys/user.entity';
+import { FavoriteDto } from '@/app/frontend/user/dto/index.dto';
+import { ApiException } from '@/core/exceptions';
 
 @Injectable()
 export class UserService extends DataBasicService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+
+    @InjectRepository(UserFavoriteEntity)
+    private readonly userFavoriteEntity: Repository<UserFavoriteEntity>,
 
     @InjectRepository(WordpressUserEntity, 'wordpress_db')
     private wordpressUser: Repository<WordpressUserEntity>,
@@ -24,11 +29,37 @@ export class UserService extends DataBasicService<UserEntity> {
     return await this.wordpressUser.find();
   }
 
+  async favorite(userId: number, body: FavoriteDto) {
+    if (!userId) {
+      return new ApiException("请先登录", HttpStatus.UNAUTHORIZED);
+    }
+
+    const existingFavorite = await this.userFavoriteEntity.findOne({
+      where: {
+        userId: userId,
+        type: body.type,
+        targetId: body.id
+      }
+    });
+
+    if (existingFavorite) {
+      await this.userFavoriteEntity.remove(existingFavorite);
+      return { success: true, message: '已取消收藏', is_favorited: false };
+    } else {
+      const newFavorite = this.userFavoriteEntity.create({
+        userId: userId,
+        type: body.type,
+        targetId: body.id,
+      });
+      await this.userFavoriteEntity.save(newFavorite);
+      return { success: true, message: '收藏成功', is_favorited: true };
+    }
+  }
+
   processWordpressUserData(wordpressUserData: any) {
+    console.log(wordpressUserData, 'wordpressUserData')
     if (
-      !wordpressUserData ||
-      wordpressUserData.error ||
-      !wordpressUserData.is_logged_in
+      Array.isArray(wordpressUserData.user_data)
     ) {
       return {
         success: false,

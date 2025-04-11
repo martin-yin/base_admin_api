@@ -1,4 +1,4 @@
-import { BasicEntity } from '@/core/database/entitys';
+import { BasicEntity } from '@/shared/database/entitys';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
@@ -50,7 +50,7 @@ export class UserEntity extends BasicEntity {
   name: 'data_site_user_collections',
   comment: '用户已经完成的收藏',
 })
-export class UserCollection extends BasicEntity {
+export class UserCollectionEntity extends BasicEntity {
   @Column({
     type: 'bigint',
     name: 'user_id',
@@ -58,16 +58,36 @@ export class UserCollection extends BasicEntity {
   userId: number;
 
   @Column({
-    type: 'bigint',
-    name: 'target_id',
+    type: 'text',
+    name: 'collection_ids',
+    comment: "收藏ids"
   })
-  targetId: number;
+  collectionIds: string;
 
   @Column({
     type: 'varchar',
     name: 'type',
   })
   type: string;
+}
+
+@Entity({
+  name: 'data_site_user_achievements',
+  comment: '用户已经完成的成就表',
+})
+export class UserAchievementsEntity extends BasicEntity {
+  @Column({
+    type: 'bigint',
+    name: 'user_id',
+    unique: true,
+  })
+  userId: number;
+
+  @Column({
+    type: 'text',
+    name: 'achievement_ids',
+  })
+  achievementIds: string;
 }
 
 @Entity('data_site_user_favorites')

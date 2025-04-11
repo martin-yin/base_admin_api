@@ -9,7 +9,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import * as _ from 'lodash';
 import { ApiException } from '@/core/exceptions/api.exception';
-import { AUTHORIZE_METADATA } from '@/shared/constants/api-authorize';
+import { AUTHORIZE_METADATA } from '@/constants/api-authorize';
 @Injectable()
 export class AdminJwtAuthGuard extends AuthGuard('admin-jwt') {
   constructor(
@@ -24,7 +24,6 @@ export class AdminJwtAuthGuard extends AuthGuard('admin-jwt') {
     const request = ctx.getRequest();
 
     if (
-      request.originalUrl.includes('/login') ||
       !request.originalUrl.includes('admin')
     ) {
       return true;

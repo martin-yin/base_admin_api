@@ -16,7 +16,7 @@ export interface FindWhere {
 }
 
 export abstract class DataBasicService<T> {
-  constructor(protected repository: Repository<T>) {}
+  constructor(protected repository: Repository<T>) { }
 
   async findOne(id: string | number | FindOneOptions<T>): Promise<T> {
     const record = await this.repository.findOne({ where: { id: id } } as any);
@@ -33,7 +33,6 @@ export abstract class DataBasicService<T> {
     } catch (error) {
       if (error.code === 'ER_DUP_ENTRY')
         throw new ApiException('数据已经存在', HttpStatus.CONFLICT);
-      console.log(error, '===========');
       throw new ApiException('新增数据失败', HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -86,7 +85,6 @@ export abstract class DataBasicService<T> {
         return await this.repository.delete(criteria);
       }
     } catch (e) {
-      console.log(e, '=');
       throw new ApiException(`删除数据失败`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -96,10 +94,8 @@ export abstract class DataBasicService<T> {
     partialEntity: QueryDeepPartialEntity<T>,
   ): Promise<UpdateResult | T> {
     try {
-      console.log(id, partialEntity, '===');
       return await this.repository.update(id, partialEntity);
     } catch (e) {
-      console.log(e, '==');
       throw new ApiException('修改数据失败', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
