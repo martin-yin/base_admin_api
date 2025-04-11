@@ -19,17 +19,10 @@ export class UserEntity extends BasicEntity {
 
   @Column({
     type: 'varchar',
-    name: 'user_login',
+    name: 'battle_net_id',
     length: 255,
   })
-  userLogin: string;
-
-  @Column({
-    type: 'varchar',
-    name: 'userEmail',
-    length: 255,
-  })
-  userEmail: string;
+  battleNetId: string;
 
   @Column({
     type: 'varchar',
@@ -60,7 +53,7 @@ export class UserCollectionEntity extends BasicEntity {
   @Column({
     type: 'text',
     name: 'collection_ids',
-    comment: "收藏ids"
+    comment: '收藏ids',
   })
   collectionIds: string;
 
@@ -75,7 +68,7 @@ export class UserCollectionEntity extends BasicEntity {
   name: 'data_site_user_achievements',
   comment: '用户已经完成的成就表',
 })
-export class UserAchievementsEntity extends BasicEntity {
+export class UserAchievementEntity extends BasicEntity {
   @Column({
     type: 'bigint',
     name: 'user_id',
